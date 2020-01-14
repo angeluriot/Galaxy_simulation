@@ -10,7 +10,7 @@
 #include <thread>
 #include <vector>
 #include <cmath>
-#include <time.h>
+#include <time.h> 
 
 
 
@@ -33,7 +33,7 @@ Block::Block()
 
 
 
-// Construit un bloc à partir d'un autre bloc
+// Construit un bloc Ã  partir d'un autre bloc
 
 Block::Block(const Block& block)
 {
@@ -71,7 +71,7 @@ void Block::operator=(const Block& block)
 
 
 
-// Met à jour les étoiles contenues dans le bloc
+// Met Ã  jour les Ã©toiles contenues dans le bloc
 
 void Block::stars_maj(std::vector<Star>& galaxy, std::vector<Block>& blocks)
 {
@@ -92,7 +92,7 @@ void Block::stars_maj(std::vector<Star>& galaxy, std::vector<Block>& blocks)
 
 
 
-// Met à jour le centre de gravité et la masse du bloc
+// Met Ã  jour le centre de gravitÃ© et la masse du bloc
 
 void Block::mass_center_and_mass_maj(const std::vector<Star>& galaxy)
 {
@@ -198,7 +198,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 
 
 
-// Dit si l'étoile est dans le bloc
+// Dit si l'Ã©toile est dans le bloc
 
 bool is_in(const Block& block, const Star& star)
 {
@@ -209,7 +209,7 @@ bool is_in(const Block& block, const Star& star)
 
 
 
-// Crée le premier bloc
+// CrÃ©e le premier bloc
 
 void initialise_blocks(int& index_value, const double& area, std::vector<Star>& galaxy, std::vector<Block>& blocks)
 {
@@ -240,7 +240,7 @@ void initialise_blocks(int& index_value, const double& area, std::vector<Star>& 
 
 
 
-// Génère les blocs (l'utilisation de "blocks_temp" ne sert qu'à augmenter la limite des "std:::vector<>" pour pouvoir mettre plus d'étoiles)
+// GÃ©nÃ¨re les blocs (l'utilisation de "blocks_temp" ne sert qu'Ã  augmenter la limite des "std:::vector<>" pour pouvoir mettre plus d'Ã©toiles)
 
 void create_blocks(const double& area, std::vector<Block>& blocks, std::vector<Star>& galaxy, std::vector<Block>& blocks_temp)
 {
