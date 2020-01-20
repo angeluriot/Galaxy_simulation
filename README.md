@@ -108,6 +108,16 @@ recherche Windows)*, cliquez ensuite sur **All Packages** en haut à gauche :
 
 <br/>
 
+Puis descendez dans la liste des modules à installer jusqu'à arriver à **mingw32-gcc-bin** et sélectionnez tous les modules commençant 
+par **mingw32-gcc-** :
 
+<br/>
 
+<p align="center">
+	<img src="https://i.imgur.com/3wgbhyt.png" width="500">
+</p>
+
+<br/>
+
+<br/>
 
