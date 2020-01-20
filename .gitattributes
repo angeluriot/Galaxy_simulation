@@ -1,2 +1,1 @@
-* linguist-vendored
-*.Cpp linguist-vendored=false
+* sdl/ linguist-vendored
