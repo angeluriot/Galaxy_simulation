@@ -14,7 +14,7 @@ est spécifiquement conçue pour la modélisation de galaxies.
 <br/>
 
 <p align="center">
-    <img src="https://i.imgur.com/yTRdyJa.png" width="700">
+	<img src="https://i.imgur.com/yTRdyJa.png" width="700">
 </p>
 
 <br/>
@@ -52,16 +52,16 @@ time_t  simulation_time = 3600;     // Temps de simulation (en seconde)
 
 # Installation
 
-&nbsp; • &nbsp; Si vous possédez déjà le compilateur **MinGW** et de quoi utiliser un Makefile
+* Si vous possédez déjà le compilateur **MinGW** et de quoi utiliser un Makefile
 sur Windows, il vous suffit de télécharger l'intégralité du dépôt et de faire la commande **`make`** dans le répertoire correspondant.
 
 <br/>
 
-&nbsp; • &nbsp; Si ce n'est pas le cas, cliquez sur l'aide dont vous avez besoin :
+* Si ce n'est pas le cas, cliquez sur l'aide dont vous avez besoin :
 
-&nbsp; &nbsp; &nbsp; - &nbsp; [Mode d'emploi pour installer **MinGW**.](#installer-mingw)
+  * [Mode d'emploi pour installer **MinGW**.](#installer-mingw)
 
-&nbsp; &nbsp; &nbsp; - &nbsp; [Mode d'emploi pour utiliser **`make`**.](#utiliser-make)
+  * [Mode d'emploi pour utiliser **`make`**.](#utiliser-make)
 
 <br/>
 
@@ -76,7 +76,7 @@ En ouvrant l'installeur, vous devriez avoir cette fenêtre :
 <br/>
 
 <p align="center">
-    <img src="https://i.imgur.com/jMztODh.png" width="400">
+	<img src="https://i.imgur.com/jMztODh.png" width="400">
 </p>
 
 <br/>
@@ -88,7 +88,7 @@ Cliquez sur **Install**, puis, après avoir choisi le répertoire d'installation
 <br/>
 
 <p align="center">
-<img src="https://i.imgur.com/bhKNOqt.png" width="400">
+	<img src="https://i.imgur.com/bhKNOqt.png" width="400">
 </p>
 
 <br/>
@@ -101,7 +101,7 @@ recherche Windows)*, cliquez ensuite sur **All Packages** en haut à gauche :
 <br/>
 
 <p align="center">
-<img src="https://i.imgur.com/qvcvS4C.png" width="300">
+	<img src="https://i.imgur.com/qvcvS4C.png" width="300">
 </p>
 
 <br/>
