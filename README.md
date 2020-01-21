@@ -65,7 +65,20 @@ sur Windows, il vous suffit de télécharger l'intégralité du dépôt et de fa
 
 <br/>
 
-## Installer MinGW
+# Releases
+
+Vous pouvez tester directement le programme sans installation en consultant les [Releases](https://github.com/angeluriot/Galaxy_simulation/releases)
+
+<br/>
+
+# Crédits
+
+* [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
+* [Gabin Lefranc](https://github.com/glcraft) : Aide pour l'amélioration des performances.
+
+<br/>
+
+# Installer MinGW
 
 Dans un premier temps, téléchargez l'installeur de **MinGW** en utilisant ce lien :&nbsp; [[télécharger MinGW]](http://www.mediafire.com/file/zeac28nmd3rh03m/mingw-get-setup.exe/file)
 
@@ -188,7 +201,7 @@ Et voilà ! Il vous faut maintenant de quoi utiliser `make`, si vous n'en avez p
 
 <br/>
 
-## Utiliser make
+# Utiliser make
 
 Pour cela nous allons utiliser **GnuWin**, téléchargez l'installeur en utilisant ce lien :&nbsp; [[télécharger GnuWin]](http://www.mediafire.com/file/wqde0ge7cy62u8e/make-3.81.exe/file)
 
@@ -272,8 +285,3 @@ Et voilà ! Il vous faut maintenant **MinGW**, si vous ne l'avez pas, vous trouv
 * [Mode d'emploi pour installer **MinGW**.](#installer-mingw)
 
 <br/>
-
-# Crédits
-
-* [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
-* [Gabin Lefranc](https://github.com/glcraft) : Aide pour l'amélioration des performances.
