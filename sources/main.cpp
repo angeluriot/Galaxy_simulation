@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
 	double	area = 500.;				// Taille de la zone d'apparition des étoiles (en années lumière)
 	double	galaxy_thickness = 0.05;	// Epaisseur de la galaxie (en "area")
-	double	precision = 0.5;			// Précision du calcul de l'accélération (algorithme de Barnes�Hut)
+	double	precision = 0.5;			// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
 	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
 	int		stars_number = 30000;		// Nombre d'étoiles (Limité à 30 000 par les std::vector<>)
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	bool	real_colors = false;		// Activer la couleur réelle des étoiles
 	bool	show_blocks = false;		// Afficher les blocs
 
-	double	step = 200000.;				// Pas de temps de la simulation (en ann�es)
+	double	step = 200000.;				// Pas de temps de la simulation (en années)
 	time_t	simulation_time = 3600;		// Temps de simulation (en seconde)
 
 
