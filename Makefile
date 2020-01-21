@@ -1,6 +1,6 @@
 NAME = Galaxy_simulation.exe
 CC = g++
-CFLAGS = -w -Wl,-subsystem,windows
+CFLAGS = -std=c++11 -w -Wl,-subsystem,windows
 
 SRCS_NAME = main.cpp star.cpp vector.cpp utils.cpp block.cpp
 SRCS_DIR = sources/
