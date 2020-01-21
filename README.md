@@ -37,7 +37,7 @@ double  initial_speed = 2500.;      // Vitesse initiale des d'étoiles (en mètr
 double  black_hole_mass = 0.;       // Masse du trou noir (en masses solaires)
 bool    is_black_hole = false;      // Présence d'un trou noir
 
-View    view = default_view;        // Type de vue
+View    view = default_view;        // Type de vue (default_view, xy, xz ou yz)
 double  zoom = 800.;                // Taille de "area" (en pixel)
 bool    real_colors = false;        // Activer la couleur réelle des étoiles
 bool    show_blocks = false;        // Afficher les blocs
