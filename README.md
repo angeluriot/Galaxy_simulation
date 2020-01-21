@@ -53,7 +53,7 @@ time_t  simulation_time = 3600;     // Temps de simulation (en seconde)
 # Installation
 
 * Si vous possédez déjà le compilateur **MinGW** et de quoi utiliser un Makefile
-sur Windows, il vous suffit de télécharger l'intégralité du dépôt et de faire la commande **`make`** dans le répertoire correspondant.
+sur Windows, il vous suffit de télécharger l'intégralité du dépôt et de faire la commande **`make`** à la racine du projet.
 
 <br/>
 
