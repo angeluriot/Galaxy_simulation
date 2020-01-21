@@ -39,7 +39,7 @@ bool    is_black_hole = false;      // Présence d'un trou noir
 
 View    view = default_view;        // Type de vue
 double  zoom = 800.;                // Taille de "area" (en pixel)
-bool  real_colors = false;        // Activer la couleur réelle des étoiles
+bool    real_colors = false;        // Activer la couleur réelle des étoiles
 bool    show_blocks = false;        // Afficher les blocs
 
 double  step = 200000.;             // Pas de temps de la simulation (en années)
