@@ -109,7 +109,7 @@ recherche Windows)*, cliquez ensuite sur **All Packages** en haut à gauche :
 <br/>
 
 Puis descendez dans la liste des modules à installer jusqu'à arriver à **mingw32-gcc-bin** et sélectionnez tous les modules commençant 
-par **mingw32-gcc-** :
+par **mingw32-gcc** :
 
 <br/>
 
@@ -121,3 +121,159 @@ par **mingw32-gcc-** :
 
 <br/>
 
+Enfin, faites **Apply Changes** :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/Ozr7IMX.png" width="300">
+</p>
+
+<br/>
+
+<br/>
+
+**MinGW** est maintenant intallé sur votre machine, la dernière chose à faire est d'ajouter une variable d'environnement. Allez 
+dans **Modifier les variables d'environnement système** à l'aide de la recherche Windows :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/8iJBkn6.png" width="300">
+</p>
+
+<br/>
+
+<br/>
+
+Puis dans **Variables d'environnement...** :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/Qd0iC8q.png" width="300">
+</p>
+
+<br/>
+
+<br/>
+
+Cherchez ensuite **Path** dans la liste du bas et faites **Modifier...** :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/dM1AJX3.png" width="500">
+</p>
+
+<br/>
+
+<br/>
+
+Enfin, ajoutez le chemin copié plus tôt suivi de **\bin** dans la liste :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/ReExJcG.png" width="500">
+</p>
+
+<br/>
+
+<br/>
+
+Et voilà ! Il vous faut maintenant de quoi utiliser `make`, si vous n'en avez pas, vous trouverez comment faire ici :
+
+* [Mode d'emploi pour utiliser **`make`**.](#utiliser-make)
+
+<br/>
+
+## Utiliser make
+
+Pour cela nous allons utiliser **GnuWin**, téléchargez l'installeur en utilisant ce lien :&nbsp; [[télécharger GnuWin]](http://www.mediafire.com/file/wqde0ge7cy62u8e/make-3.81.exe/file)
+
+<br/>
+
+En ouvrant l'installeur, vous devriez avoir cette fenêtre :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/aUCXBMj.png" width="400">
+</p>
+
+<br/>
+
+<br/>
+
+Cliquez sur **Next**, puis, après avoir choisi le répertoire d'installation, copiez le chemin, ce sera utile pour la suite :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/aoAfOSZ.png" width="400">
+</p>
+
+<br/>
+
+<br/>
+
+Une fois l'installation de **GnuWin** terminée, la dernière chose à faire est d'ajouter une variable d'environnement. Allez 
+dans **Modifier les variables d'environnement système** à l'aide de la recherche Windows :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/8iJBkn6.png" width="300">
+</p>
+
+<br/>
+
+<br/>
+
+Puis dans **Variables d'environnement...** :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/Qd0iC8q.png" width="300">
+</p>
+
+<br/>
+
+<br/>
+
+Cherchez ensuite **Path** dans la liste du bas et faites **Modifier...** :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/dM1AJX3.png" width="500">
+</p>
+
+<br/>
+
+<br/>
+
+Enfin, ajoutez le chemin copié plus tôt suivi de **\bin** dans la liste :
+
+<br/>
+
+<p align="center">
+	<img src="https://i.imgur.com/mI4alUv.png" width="500">
+</p>
+
+<br/>
+
+<br/>
+
+Et voilà ! Il vous faut maintenant **MinGW**, si vous ne l'avez pas, vous trouverez comment faire ici :
+
+* [Mode d'emploi pour installer **MinGW**.](#installer-mingw)
+
+<br/>
+
+# Crédits
+
+* [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
+* [Gabin Lefranc](https://github.com/glcraft) : Aide pour l'amélioration des performances.
