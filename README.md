@@ -74,7 +74,6 @@ Vous pouvez tester directement le programme sans installation en consultant les 
 # Crédits
 
 * [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
-* [Gabin Lefranc](https://github.com/glcraft) : Aide pour l'amélioration des performances.
 
 <br/>
 
