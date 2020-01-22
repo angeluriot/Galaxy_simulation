@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
 	double	area = 500.;				// Taille de la zone d'apparition des étoiles (en années lumière)
 	double	galaxy_thickness = 0.1;		// Epaisseur de la galaxie (en "area")
-	double	precision = 0.5;				// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
+	double	precision = 1.;				// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
 	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
 	int		stars_number = 30000;		// Nombre d'étoiles (Limité à 30 000 par les std::vector<>)
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	double	black_hole_mass = 0.;		// Masse du trou noir (en masses solaires)
 	bool	is_black_hole = false;		// Présence d'un trou noir
 
-	View	view = default_view;		// Type de vue (default_view, xy, xz ou yz)
+	View	view = xy;		// Type de vue (default_view, xy, xz ou yz)
 	double	zoom = 800.;				// Taille de "area" (en pixel)
 	bool	real_colors = false;		// Activer la couleur réelle des étoiles
 	bool	show_blocks = false;		// Afficher les blocs

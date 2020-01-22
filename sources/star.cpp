@@ -111,7 +111,7 @@ void Star::acceleration_and_density_maj(const double& precision, const std::vect
 	density = 0.;
 	double max_acceleration = 0.0000000005; // Permet de limiter l'erreur due au pas de temps (à régler en fonction du pas de temps)
 
-	acceleration = force_and_density_calculation(precision, *this, blocks, 0); // Pas de division par la masse de l'étoile (c.f. ligne 131)
+	acceleration = force_and_density_calculation(precision, *this, blocks, 0); // Pas de division par la masse de l'étoile (c.f. ligne 122)
 
 	if (acceleration.get_radius() > max_acceleration)
 		acceleration = create_spherical(max_acceleration, acceleration.get_phi(), acceleration.get_theta());
@@ -126,15 +126,18 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 	Vector force = Vector(0., 0., 0.);
 	double distance = get_distance(star.position, blocks.at(index).mass_center);
 
-	if (!(blocks.at(index).stars.size() == 1) and index != star.block_index)
+	if (blocks.at(index).stars.size() == 1)
 	{
-		force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
-		star.density += 1. / (distance / LIGHT_YEAR);
+		if (distance != 0.)
+		{
+			force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
+			star.density += 1. / (distance / LIGHT_YEAR);
+		}
 	}
 
-	if (blocks.at(index).as_children and index != star.block_index)
+	else if (blocks.at(index).stars.size() != 0)
 	{
-		if (blocks.at(index).size / distance > precision)
+		if (blocks.at(index).size / distance < precision)
 		{
 			force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
 			star.density += blocks.at(index).stars.size() / (distance / LIGHT_YEAR);
@@ -144,7 +147,7 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				if (blocks.at(i).as_stars)
+				if (blocks.at(blocks.at(index).children.at(i)).as_stars)
 					force += force_and_density_calculation(precision, star, blocks, blocks.at(index).children.at(i));
 			}
 		}
