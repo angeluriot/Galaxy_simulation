@@ -79,7 +79,7 @@ void Star::operator=(const Star& star)
 
 // Met à jour la position
 
-void Star::position_maj(const double& step, const bool& verlet_integration)
+void Star::update_position(const double& step, const bool& verlet_integration)
 {
 	if (verlet_integration)
 	{
@@ -97,7 +97,7 @@ void Star::position_maj(const double& step, const bool& verlet_integration)
 
 // Met à jour la vitesse
 
-void Star::speed_maj(const double& step, const double& area)
+void Star::update_speed(const double& step, const double& area)
 {
 	speed += acceleration * step;
 }
@@ -106,7 +106,7 @@ void Star::speed_maj(const double& step, const double& area)
 
 // Met à jour l'accélération et la densité
 
-void Star::acceleration_and_density_maj(const double& precision, const std::vector<Star>& galaxy, const std::vector<Block>& blocks)
+void Star::update_acceleration_and_density(const double& precision, const std::vector<Star>& galaxy, const std::vector<Block>& blocks)
 {
 	density = 0.;
 	double max_acceleration = 0.0000000005; // Permet de limiter l'erreur due au pas de temps (à régler en fonction du pas de temps)
@@ -124,31 +124,31 @@ void Star::acceleration_and_density_maj(const double& precision, const std::vect
 Vector force_and_density_calculation(const double& precision, Star& star, const std::vector<Block>& blocks, int index)
 {
 	Vector force = Vector(0., 0., 0.);
-	double distance = get_distance(star.position, blocks.at(index).mass_center);
+	double distance = get_distance(star.position, blocks[index].mass_center);
 
-	if (blocks.at(index).stars.size() == 1)
+	if (blocks[index].stars.size() == 1)
 	{
 		if (distance != 0.)
 		{
-			force += ((star.position - blocks.at(index).mass_center) / distance) * ( -(G * blocks.at(index).mass) / (distance * distance));
+			force += ((star.position - blocks[index].mass_center) / distance) * ( -(G * blocks[index].mass) / (distance * distance));
 			star.density += 1. / (distance / LIGHT_YEAR);
 		}
 	}
 
-	else if (blocks.at(index).stars.size() != 0)
+	else if (blocks[index].stars.size() != 0)
 	{
-		if (blocks.at(index).size / distance < precision)
+		if (blocks[index].size / distance < precision)
 		{
-			force += ((star.position - blocks.at(index).mass_center) / distance) * (-(G * blocks.at(index).mass) / (distance * distance));
-			star.density += blocks.at(index).stars.size() / (distance / LIGHT_YEAR);
+			force += ((star.position - blocks[index].mass_center) / distance) * (-(G * blocks[index].mass) / (distance * distance));
+			star.density += blocks[index].stars.size() / (distance / LIGHT_YEAR);
 		}
 
 		else
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				if (blocks.at(blocks.at(index).children.at(i)).as_stars)
-					force += force_and_density_calculation(precision, star, blocks, blocks.at(index).children.at(i));
+				if (blocks[blocks[index].children[i]].as_stars)
+					force += force_and_density_calculation(precision, star, blocks, blocks[index].children[i]);
 			}
 		}
 	}
@@ -160,7 +160,7 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 
 // Met à jour la couleur
 
-void Star::color_maj()
+void Star::update_color()
 {
 	int color_nb = density / 3.;
 
@@ -183,58 +183,58 @@ void initialize_galaxy(std::vector<Star>& galaxy, const int& stars_number, const
 	for (int i = 0; i <= stars_number * 0.764; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(0.08, 0.45) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(255, 10, 10);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(0.08, 0.45) * SOLAR_MASS;
+		galaxy.back().color = RGB(255, 10, 10);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	for (int i = 0; i <= stars_number * 0.121; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(0.45, 0.8) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(255, 127, 10);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(0.45, 0.8) * SOLAR_MASS;
+		galaxy.back().color = RGB(255, 127, 10);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	for (int i = 0; i <= stars_number * 0.076; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(0.8, 1.04) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(255, 255, 10);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(0.8, 1.04) * SOLAR_MASS;
+		galaxy.back().color = RGB(255, 255, 10);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	for (int i = 0; i <= stars_number * 0.030; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(1.04, 1.4) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(255, 255, 127);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(1.04, 1.4) * SOLAR_MASS;
+		galaxy.back().color = RGB(255, 255, 127);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	for (int i = 0; i <= stars_number * 0.006; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(1.4, 2.1) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(255, 255, 255);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(1.4, 2.1) * SOLAR_MASS;
+		galaxy.back().color = RGB(255, 255, 255);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	for (int i = 0; i <= stars_number * 0.0013; i++)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).mass = random_double(2.1, 16) * SOLAR_MASS;
-		galaxy.at(galaxy.size() - 1).color = RGB(50, 255, 255);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().mass = random_double(2.1, 16) * SOLAR_MASS;
+		galaxy.back().color = RGB(50, 255, 255);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 
 	if (is_black_hole)
 	{
 		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
-		galaxy.at(galaxy.size() - 1).position = Vector(0., 0., 0.);
-		galaxy.at(galaxy.size() - 1).speed = Vector(0., 0., 0.);
-		galaxy.at(galaxy.size() - 1).mass = black_hole_mass;
-		galaxy.at(galaxy.size() - 1).color = RGB(0, 0, 0);
-		galaxy.at(galaxy.size() - 1).index = galaxy.size() - 1;
+		galaxy.back().position = Vector(0., 0., 0.);
+		galaxy.back().speed = Vector(0., 0., 0.);
+		galaxy.back().mass = black_hole_mass;
+		galaxy.back().color = RGB(0, 0, 0);
+		galaxy.back().index = galaxy.size() - 1;
 	}
 }

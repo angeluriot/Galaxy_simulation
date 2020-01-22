@@ -12,7 +12,7 @@ Block::Block()
 	index = 0;
 	as_children = false;
 	as_parents = false;
-	parents.clear();
+	parent = 0;
 	children.clear();
 	position = Vector(0., 0., 0.);
 	mass = 0.;
@@ -31,7 +31,7 @@ Block::Block(const Block& block)
 	index = block.index;
 	as_children = block.as_children;
 	as_parents = block.as_parents;
-	parents = block.parents;
+	parent = block.parent;
 	children = block.children;
 	position = block.position;
 	mass = block.mass;
@@ -50,7 +50,7 @@ void Block::operator=(const Block& block)
 	index = block.index;
 	as_children = block.as_children;
 	as_parents = block.as_parents;
-	parents = block.parents;
+	parent = block.parent;
 	children = block.children;
 	position = block.position;
 	mass = block.mass;
@@ -61,16 +61,16 @@ void Block::operator=(const Block& block)
 
 // Met à jour les étoiles contenues dans le bloc
 
-void Block::stars_maj(std::vector<Star>& galaxy, std::vector<Block>& blocks)
+void Block::update_stars(std::vector<Star>& galaxy, std::vector<Block>& blocks)
 {
 	stars.clear();
 
-	for (int i = 0; i < blocks.at(parents.at(parents.size() - 1)).stars.size(); i++)
+	for (int i = 0; i < blocks[parent].stars.size(); i++)
 	{
-		if (is_in(*this, galaxy.at(blocks.at(parents.at(parents.size() - 1)).stars.at(i))))
+		if (is_in(*this, galaxy[blocks[parent].stars[i]]))
 		{
-			stars.push_back(blocks.at(parents.at(parents.size() - 1)).stars.at(i));
-			galaxy.at(blocks.at(parents.at(parents.size() - 1)).stars.at(i)).block_index = index;
+			stars.push_back(blocks[parent].stars[i]);
+			galaxy[blocks[parent].stars[i]].block_index = index;
 
 			if (!(as_stars))
 				as_stars = true;
@@ -80,20 +80,38 @@ void Block::stars_maj(std::vector<Star>& galaxy, std::vector<Block>& blocks)
 
 
 
-// Met à jour le centre de gravité et la masse du bloc
+// Met à jour la masse et le centre de gravité de chaque blocks
 
-void Block::mass_center_and_mass_maj(const std::vector<Star>& galaxy)
+void update_mass_center_and_mass(Block& block, std::vector<Star>& galaxy, std::vector<Block>& blocks)
 {
-	mass_center = Vector(0., 0., 0.);
-	mass = 0.;
-
-	for (int i = 0; i < stars.size(); i++)
+	if (block.stars.size() == 0.)
 	{
-		mass_center += galaxy.at(stars.at(i)).position * galaxy.at(stars.at(i)).mass;
-		mass += galaxy.at(stars.at(i)).mass;
+		block.mass = 0.;
+		block.mass_center = block.position;
 	}
 
-	mass_center = mass_center / mass;
+	else if (block.stars.size() == 1.)
+	{
+		block.mass = galaxy[block.stars[0]].mass;
+		block.mass_center = galaxy[block.stars[0]].position;
+	}
+
+	else
+	{
+		block.mass = 0.;
+		block.mass_center = Vector(0., 0., 0.);
+
+		for (int i = 0; i < 8; i++)
+		{
+			update_mass_center_and_mass(blocks[block.children[i]], galaxy, blocks);
+			block.mass += blocks[block.children[i]].mass;
+
+			if (blocks[block.children[i]].stars.size() > 0)
+				block.mass_center += blocks[block.children[i]].mass_center;
+		}
+
+		block.mass_center /= block.mass;
+	}
 }
 
 
@@ -107,8 +125,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	Block block;
 
 	block.as_parents = true;
-	block.parents = parents;
-	block.parents.push_back(index);
+	block.parent = index;
 	block.size = size / 2.;
 
 	// bloc 1
@@ -116,8 +133,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 2
@@ -125,8 +141,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 3
@@ -134,8 +149,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 4
@@ -143,8 +157,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 5
@@ -152,8 +165,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 6
@@ -161,8 +173,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 7
@@ -170,8 +181,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 
 	// bloc 8
@@ -179,8 +189,7 @@ void Block::divide(int& index_value, std::vector<Star>& galaxy, std::vector<Bloc
 	block.index = index_value;
 	index_value++;
 	children.push_back(block.index);
-	block.stars_maj(galaxy, blocks);
-	block.mass_center_and_mass_maj(galaxy);
+	block.update_stars(galaxy, blocks);
 	blocks_temp.push_back(block);
 }
 
@@ -209,20 +218,19 @@ void initialise_blocks(int& index_value, const double& area, std::vector<Star>& 
 
 	for (int i = 0; i < galaxy.size(); i++)
 	{
-		if (is_in(block, galaxy.at(i)))
+		if (is_in(block, galaxy[i]))
 		{
 			block.stars.push_back(i);
-			galaxy.at(i).block_index = block.index;
+			galaxy[i].block_index = block.index;
 
 			if (!(block.as_stars))
 				block.as_stars = true;
 		}
 
 		else
-			galaxy.at(i).is_alive = false;
+			galaxy[i].is_alive = false;
 	}
 
-	block.mass_center_and_mass_maj(galaxy);
 	blocks.push_back(block);
 }
 
@@ -239,15 +247,17 @@ void create_blocks(const double& area, std::vector<Block>& blocks, std::vector<S
 
 	for (int i = 0; i < blocks.size(); i++)
 	{
-		if (blocks.at(i).stars.size() > 1)
-			blocks.at(i).divide(index_value, galaxy, blocks, blocks_temp);
+		if (blocks[i].stars.size() > 1)
+			blocks[i].divide(index_value, galaxy, blocks, blocks_temp);
 
 		if (blocks_temp.size() > 0)
 		{
 			for (int j = 0; j < blocks_temp.size(); j++)
-				blocks.push_back(blocks_temp.at(j));
+				blocks.push_back(blocks_temp[j]);
 
 			blocks_temp.clear();
 		}
 	}
+
+	update_mass_center_and_mass(blocks[0], galaxy, blocks);
 }

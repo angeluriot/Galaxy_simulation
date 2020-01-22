@@ -18,7 +18,7 @@ public:
 	int					index;			// Indice du bloc
 	bool				as_children;	// Présence de blocs enfants
 	bool				as_parents;		// Présence de blocs parents
-	std::vector<int>	parents;		// Indice des blocs parents
+	int					parent;			// Indice des blocs parents
 	std::vector<int>	children;		// Indice des blocs enfants
 	Vector				position;		// Position du bloc
 	double				mass;			// Masse contenue dans le bloc (en kilogrames)
@@ -29,11 +29,11 @@ public:
 
 	void operator=(const Block& block);
 
-	void stars_maj(std::vector<Star>& galaxy, std::vector<Block>& blocks);
-	void mass_center_and_mass_maj(const std::vector<Star>& galaxy);
+	void update_stars(std::vector<Star>& galaxy, std::vector<Block>& blocks);
 	void divide(int& index_value, std::vector<Star>& galaxy, std::vector<Block>& blocks, std::vector<Block>& blocks_temp);
 };
 
+void update_mass_center_and_mass(Block& block, std::vector<Star>& galaxy, std::vector<Block>& blocks);
 bool is_in(const Block& block, const Star& star);
 void initialise_blocks(int& index_value, const double& area, std::vector<Star>& galaxy, std::vector<Block>& blocks);
 void create_blocks(const double& area, std::vector<Block>& blocks, std::vector<Star>& galaxy, std::vector<Block>& blocks_temp);

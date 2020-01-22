@@ -36,10 +36,10 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.cpp
 
 clean:
 	@echo $(GRAY)[Galaxy]$(STG_RED) Suppression des binaires$(RESET)
-	@rmdir /S /Q "$(OBJS_DIR)" 2> nul
+	@rmdir /S /Q "$(OBJS_DIR)" 2> nul || :
 
 fclean: clean
 	@echo $(GRAY)[Galaxy]$(STG_RED) Suppression de l'executable$(RESET)
-	@del /f /q $(NAME) 2> nul
+	@del /f /q $(NAME) 2> nul || :
 
 re: fclean all

@@ -14,16 +14,16 @@ int main(int argc, char* argv[])
 	// ------------------------- Paramètres de la simulation -------------------------
 
 	double	area = 500.;				// Taille de la zone d'apparition des étoiles (en années lumière)
-	double	galaxy_thickness = 0.1;		// Epaisseur de la galaxie (en "area")
-	double	precision = 1.;				// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
+	double	galaxy_thickness = 0.05;	// Epaisseur de la galaxie (en "area")
+	double	precision = 10.;			// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
 	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
 	int		stars_number = 30000;		// Nombre d'étoiles (Limité à 30 000 par les std::vector<>)
-	double	initial_speed = 2500.;		// Vitesse initiale des d'étoiles (en mètres par seconde)
+	double	initial_speed = 2000.;		// Vitesse initiale des d'étoiles (en mètres par seconde)
 	double	black_hole_mass = 0.;		// Masse du trou noir (en masses solaires)
 	bool	is_black_hole = false;		// Présence d'un trou noir
 
-	View	view = xy;		// Type de vue (default_view, xy, xz ou yz)
+	View	view = xy;					// Type de vue (default_view, xy, xz ou yz)
 	double	zoom = 800.;				// Taille de "area" (en pixel)
 	bool	real_colors = false;		// Activer la couleur réelle des étoiles
 	bool	show_blocks = false;		// Afficher les blocs
@@ -79,17 +79,17 @@ int main(int argc, char* argv[])
 
 		for (int i = 0; i < galaxy.size(); i++) // Boucle sur les étoiles de la galaxie
 		{
-			if (galaxy.at(i).is_alive)
+			if (galaxy[i].is_alive)
 			{
-				galaxy.at(i).acceleration_and_density_maj(precision, galaxy, blocks);
+				galaxy[i].update_acceleration_and_density(precision, galaxy, blocks);
 
 				if (!(verlet_integration))
-					galaxy.at(i).speed_maj(step, area);
+					galaxy[i].update_speed(step, area);
 
-				galaxy.at(i).position_maj(step, verlet_integration);
+				galaxy[i].update_position(step, verlet_integration);
 
 				if (!(real_colors))
-					galaxy.at(i).color_maj();
+					galaxy[i].update_color();
 			}
 
 			// Affichage
@@ -105,10 +105,10 @@ int main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
 
-		draw_stars(galaxy, blocks.at(0).mass_center, area, zoom, view);
+		draw_stars(galaxy, blocks[0].mass_center, area, zoom, view);
 
 		if (show_blocks)
-			draw_blocks(blocks, blocks.at(0).mass_center, area, zoom, view);
+			draw_blocks(blocks, blocks[0].mass_center, area, zoom, view);
 
 		SDL_RenderPresent(renderer);
 	}

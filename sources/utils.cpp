@@ -34,14 +34,14 @@ void draw_stars(std::vector<Star>& galaxy, const Vector& mass_center, const doub
 
 	for (int i = 0; i < galaxy.size(); i++)
 	{
-		if (galaxy.at(i).is_alive)
+		if (galaxy[i].is_alive)
 		{
 			if (view == default_view)
 			{
-				x = (galaxy.at(i).position - mass_center).x;
-				y = (galaxy.at(i).position - mass_center).y / 3. - (galaxy.at(i).position - mass_center).z / 1.5;
+				x = (galaxy[i].position - mass_center).x;
+				y = (galaxy[i].position - mass_center).y / 3. - (galaxy[i].position - mass_center).z / 1.5;
 
-				screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(galaxy.at(i).position, camera)), Vector(x, y, 0.).get_phi(), Vector(x, y, 0.).get_theta());
+				screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(galaxy[i].position, camera)), Vector(x, y, 0.).get_phi(), Vector(x, y, 0.).get_theta());
 
 				x = screen_position.x * zoom + WIDTH / 2.;
 				y = screen_position.y * zoom + HEIGHT / 2.;
@@ -49,23 +49,23 @@ void draw_stars(std::vector<Star>& galaxy, const Vector& mass_center, const doub
 
 			if (view == xy)
 			{
-				x = (galaxy.at(i).position - mass_center).x / (area / zoom) + WIDTH / 2.;
-				y = (galaxy.at(i).position - mass_center).y / (area / zoom) + HEIGHT / 2.;
+				x = (galaxy[i].position - mass_center).x / (area / zoom) + WIDTH / 2.;
+				y = (galaxy[i].position - mass_center).y / (area / zoom) + HEIGHT / 2.;
 			}
 
 			if (view == xz)
 			{
-				x = (galaxy.at(i).position - mass_center).x / (area / zoom) + WIDTH / 2.;
-				y = (galaxy.at(i).position - mass_center).z / (area / zoom) + HEIGHT / 2.;
+				x = (galaxy[i].position - mass_center).x / (area / zoom) + WIDTH / 2.;
+				y = (galaxy[i].position - mass_center).z / (area / zoom) + HEIGHT / 2.;
 			}
 
 			if (view == yz)
 			{
-				x = (galaxy.at(i).position - mass_center).y / (area / zoom) + WIDTH / 2.;
-				y = (galaxy.at(i).position - mass_center).z / (area / zoom) + HEIGHT / 2.;
+				x = (galaxy[i].position - mass_center).y / (area / zoom) + WIDTH / 2.;
+				y = (galaxy[i].position - mass_center).z / (area / zoom) + HEIGHT / 2.;
 			}
 
-			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy.at(i).color), GetGValue(galaxy.at(i).color), GetBValue(galaxy.at(i).color), SDL_ALPHA_OPAQUE);
+			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy[i].color), GetGValue(galaxy[i].color), GetBValue(galaxy[i].color), SDL_ALPHA_OPAQUE);
 
 			SDL_RenderDrawPoint(renderer, x - 1, y);
 			SDL_RenderDrawPoint(renderer, x, y - 1);
@@ -73,7 +73,7 @@ void draw_stars(std::vector<Star>& galaxy, const Vector& mass_center, const doub
 			SDL_RenderDrawPoint(renderer, x, y + 1);
 			SDL_RenderDrawPoint(renderer, x + 1, y);
 
-			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy.at(i).color), GetGValue(galaxy.at(i).color), GetBValue(galaxy.at(i).color), SDL_ALPHA_OPAQUE / 2.);
+			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy[i].color), GetGValue(galaxy[i].color), GetBValue(galaxy[i].color), SDL_ALPHA_OPAQUE / 2.);
 
 			SDL_RenderDrawPoint(renderer, x - 1, y - 1);
 			SDL_RenderDrawPoint(renderer, x - 1, y + 1);
@@ -102,29 +102,29 @@ void draw_blocks(const std::vector<Block>& blocks, const Vector& mass_center, co
 	{
 		if (view == default_view)
 		{
-			x = ((blocks.at(i).position - mass_center).x - blocks.at(i).size / 2.) / (area / zoom) + WIDTH / 2.;
-			y = (((blocks.at(i).position - mass_center).y - blocks.at(i).size / 2.) / (area / zoom)) / 2. - (((blocks.at(i).position - mass_center).z - blocks.at(i).size / 2.) / (area / zoom)) / 2. + HEIGHT / 2.;
+			x = ((blocks[i].position - mass_center).x - blocks[i].size / 2.) / (area / zoom) + WIDTH / 2.;
+			y = (((blocks[i].position - mass_center).y - blocks[i].size / 2.) / (area / zoom)) / 2. - (((blocks[i].position - mass_center).z - blocks[i].size / 2.) / (area / zoom)) / 2. + HEIGHT / 2.;
 		}
 
 		if (view == xy)
 		{
-			x = ((blocks.at(i).position - mass_center).x - blocks.at(i).size / 2.) / (area / zoom) + WIDTH / 2.;
-			y = ((blocks.at(i).position - mass_center).y - blocks.at(i).size / 2.) / (area / zoom) + HEIGHT / 2.;
+			x = ((blocks[i].position - mass_center).x - blocks[i].size / 2.) / (area / zoom) + WIDTH / 2.;
+			y = ((blocks[i].position - mass_center).y - blocks[i].size / 2.) / (area / zoom) + HEIGHT / 2.;
 		}
 
 		if (view == xz)
 		{
-			x = ((blocks.at(i).position - mass_center).x - blocks.at(i).size / 2.) / (area / zoom) + WIDTH / 2.;
-			y = ((blocks.at(i).position - mass_center).z - blocks.at(i).size / 2.) / (area / zoom) + HEIGHT / 2.;
+			x = ((blocks[i].position - mass_center).x - blocks[i].size / 2.) / (area / zoom) + WIDTH / 2.;
+			y = ((blocks[i].position - mass_center).z - blocks[i].size / 2.) / (area / zoom) + HEIGHT / 2.;
 		}
 
 		if (view == yz)
 		{
-			x = ((blocks.at(i).position - mass_center).y - blocks.at(i).size / 2.) / (area / zoom) + WIDTH / 2.;
-			y = ((blocks.at(i).position - mass_center).z - blocks.at(i).size / 2.) / (area / zoom) + HEIGHT / 2.;
+			x = ((blocks[i].position - mass_center).y - blocks[i].size / 2.) / (area / zoom) + WIDTH / 2.;
+			y = ((blocks[i].position - mass_center).z - blocks[i].size / 2.) / (area / zoom) + HEIGHT / 2.;
 		}
 
-		block_size = blocks.at(i).size / (area / zoom);
+		block_size = blocks[i].size / (area / zoom);
 
 		for (int j = 0; j < block_size; j++)
 		{

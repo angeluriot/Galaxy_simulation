@@ -31,10 +31,10 @@ public:
 
 	void operator=(const Star& star);
 
-	void position_maj(const double& step, const bool& verlet_integration);
-	void speed_maj(const double& step, const double& area);
-	void acceleration_and_density_maj(const double& precision, const std::vector<Star>& galaxy, const std::vector<Block>& blocks);
-	void color_maj();
+	void update_position(const double& step, const bool& verlet_integration);
+	void update_speed(const double& step, const double& area);
+	void update_acceleration_and_density(const double& precision, const std::vector<Star>& galaxy, const std::vector<Block>& blocks);
+	void update_color();
 };
 
 Vector force_and_density_calculation(const double& precision, Star& star, const std::vector<Block>& blocks, int index);
