@@ -130,7 +130,7 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 	{
 		if (distance != 0.)
 		{
-			force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
+			force += ((star.position - blocks.at(index).mass_center) / distance) * ( -(G * blocks.at(index).mass) / (distance * distance));
 			star.density += 1. / (distance / LIGHT_YEAR);
 		}
 	}
@@ -139,7 +139,7 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 	{
 		if (blocks.at(index).size / distance < precision)
 		{
-			force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
+			force += ((star.position - blocks.at(index).mass_center) / distance) * (-(G * blocks.at(index).mass) / (distance * distance));
 			star.density += blocks.at(index).stars.size() / (distance / LIGHT_YEAR);
 		}
 

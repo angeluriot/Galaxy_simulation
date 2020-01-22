@@ -8,7 +8,7 @@
 
 <br/>
 
-Ce dépôt contient le code source d'une simulation de type n-body utilisant l'algorithme de Barnes-Hut pour l'optimisation, elle 
+Ce dépôt contient le code source d'une simulation de type n-body utilisant l'algorithme de Barnes-Hut pour l'optimisation, elle
 est spécifiquement conçue pour la modélisation de galaxies.
 
 <br/>
@@ -21,7 +21,7 @@ est spécifiquement conçue pour la modélisation de galaxies.
 
 # Utilisation
 
-Vous trouverez dans le fichier [main.cpp](https://github.com/angeluriot/Galaxy_simulation/blob/master/sources/main.cpp) le morceau 
+Vous trouverez dans le fichier [main.cpp](https://github.com/angeluriot/Galaxy_simulation/blob/master/sources/main.cpp) le morceau
 de code permettant de modifier les différents paramètres de la simulation :
 
 ```cpp
@@ -75,6 +75,8 @@ Vous pouvez tester directement le programme sans installation en consultant les 
 
 * [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
 
+* [Gabin Lefranc](https://github.com/glcraft) : Aide à l'optimisation.
+
 <br/>
 
 # Installer MinGW
@@ -107,7 +109,7 @@ Cliquez sur **Install**, puis, après avoir choisi le répertoire d'installation
 
 <br/>
 
-Après avoir fini l'installation, la fenêtre **MinGW Installation Manager** va se lancer *(si ce n'est pas le cas, ouvrez-là avec la 
+Après avoir fini l'installation, la fenêtre **MinGW Installation Manager** va se lancer *(si ce n'est pas le cas, ouvrez-là avec la
 recherche Windows)*, cliquez ensuite sur **All Packages** en haut à gauche :
 
 <br/>
@@ -120,7 +122,7 @@ recherche Windows)*, cliquez ensuite sur **All Packages** en haut à gauche :
 
 <br/>
 
-Puis descendez dans la liste des modules à installer jusqu'à arriver à **mingw32-gcc-bin** et sélectionnez tous les modules commençant 
+Puis descendez dans la liste des modules à installer jusqu'à arriver à **mingw32-gcc-bin** et sélectionnez tous les modules commençant
 par **mingw32-gcc** :
 
 <br/>
@@ -145,7 +147,7 @@ Enfin, faites **Apply Changes** :
 
 <br/>
 
-**MinGW** est maintenant intallé sur votre machine, la dernière chose à faire est d'ajouter une variable d'environnement. Allez 
+**MinGW** est maintenant intallé sur votre machine, la dernière chose à faire est d'ajouter une variable d'environnement. Allez
 dans **Modifier les variables d'environnement système** à l'aide de la recherche Windows :
 
 <br/>
@@ -230,7 +232,7 @@ Cliquez sur **Next**, puis, après avoir choisi le répertoire d'installation, c
 
 <br/>
 
-Une fois l'installation de **GnuWin** terminée, la dernière chose à faire est d'ajouter une variable d'environnement. Allez 
+Une fois l'installation de **GnuWin** terminée, la dernière chose à faire est d'ajouter une variable d'environnement. Allez
 dans **Modifier les variables d'environnement système** à l'aide de la recherche Windows :
 
 <br/>
