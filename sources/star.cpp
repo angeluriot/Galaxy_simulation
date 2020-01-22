@@ -126,10 +126,10 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 	Vector force = Vector(0., 0., 0.);
 	double distance = get_distance(star.position, blocks.at(index).mass_center);
 
-	if (!(blocks.at(index).as_children) and index != star.block_index)
+	if (!(blocks.at(index).stars.size() == 1) and index != star.block_index)
 	{
 		force += create_spherical(-(G * blocks.at(index).mass) / (distance * distance), get_phi(star.position, blocks.at(index).mass_center), get_theta(star.position, blocks.at(index).mass_center));
-		star.density += blocks.at(index).stars.size() / (distance / LIGHT_YEAR);
+		star.density += 1. / (distance / LIGHT_YEAR);
 	}
 
 	if (blocks.at(index).as_children and index != star.block_index)
@@ -142,8 +142,11 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 
 		else
 		{
-			for (int i = 0; i < blocks.at(index).children.size(); i++)
-				force += force_and_density_calculation(precision, star, blocks, blocks.at(index).children.at(i));
+			for (int i = 0; i < 8; i++)
+			{
+				if (blocks.at(i).as_stars)
+					force += force_and_density_calculation(precision, star, blocks, blocks.at(index).children.at(i));
+			}
 		}
 	}
 
