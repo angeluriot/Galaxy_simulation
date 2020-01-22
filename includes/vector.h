@@ -1,13 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
 #include <cmath>
+#include <vector>
 
 
 

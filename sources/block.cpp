@@ -1,16 +1,4 @@
 #include "block.h"
-#include "utils.h"
-#include "vector.h"
-#include "star.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
-#include <time.h>
 
 
 

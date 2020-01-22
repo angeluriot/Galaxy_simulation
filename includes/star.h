@@ -1,14 +1,7 @@
 #ifndef STAR_H
 #define STAR_H
-#include "Vector.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include "vector.h"
 #include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
 
 class Block;
 
@@ -41,7 +34,7 @@ public:
 	void position_maj(const double& step, const bool& verlet_integration);
 	void speed_maj(const double& step, const double& area);
 	void acceleration_and_density_maj(const double& precision, const std::vector<Star>& galaxy, const std::vector<Block>& blocks);
-	void color_maj(const std::vector <Star>& galaxy, const double& zoom, double& area, const std::vector<Block>& blocks);
+	void color_maj();
 };
 
 Vector force_and_density_calculation(const double& precision, Star& star, const std::vector<Block>& blocks, int index);

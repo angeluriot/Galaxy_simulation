@@ -1,16 +1,8 @@
-#include "block.h"
-#include "utils.h"
-#include "vector.h"
 #include "star.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
-#include <time.h>#include "SDL.h"
+#include "vector.h"
+#include "utils.h"
+#include "block.h"
+#include <time.h>
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -19,33 +11,31 @@ int main(int argc, char* argv[])
 {
 
 
-	// ------------------------- Paramètres de la simulation -------------------------
+	// ------------------------- ParamÃ¨tres de la simulation -------------------------
 
+	double	area = 500.;				// Taille de la zone d'apparition des Ã©toiles (en annÃ©es lumiÃ¨re)
+	double	galaxy_thickness = 0.1;		// Epaisseur de la galaxie (en "area")
+	double	precision = 0.5;			// PrÃ©cision du calcul de l'accÃ©lÃ©ration (algorithme de Barnes-Hut)
+	bool	verlet_integration = true;	// Utiliser l'intÃ©gration de Verlet au lieu de la mÃ©thode d'Euler
 
-
-	double	area = 500.;				// Taille de la zone d'apparition des étoiles (en années lumière)
-	double	galaxy_thickness = 0.05;	// Epaisseur de la galaxie (en "area")
-	double	precision = 0.5;			// Précision du calcul de l'accélération (algorithme de Barnes–Hut)
-	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
-
-	int		stars_number = 30000;		// Nombre d'étoiles (Limité à 30 000 par les std::vector<>)
-	double	initial_speed = 2500.;		// Vitesse initiale des d'étoiles (en mètres par seconde)
+	int		stars_number = 30000;		// Nombre d'Ã©toiles (LimitÃ© Ã  30 000 par les std::vector<>)
+	double	initial_speed = 2500.;		// Vitesse initiale des d'Ã©toiles (en mÃ¨tres par seconde)
 	double	black_hole_mass = 0.;		// Masse du trou noir (en masses solaires)
-	bool	is_black_hole = false;		// Présence d'un trou noir
+	bool	is_black_hole = false;		// PrÃ©sence d'un trou noir
 
-	View	view = default_view;		// Type de vue
+	View	view = default_view;		// Type de vue (default_view, xy, xz ou yz)
 	double	zoom = 800.;				// Taille de "area" (en pixel)
-	double	real_colors = false;		// Activer la couleur réelle des étoiles
+	bool	real_colors = false;		// Activer la couleur rÃ©elle des Ã©toiles
 	bool	show_blocks = false;		// Afficher les blocs
 
-	double	step = 200000.;				// Pas de temps de la simulation (en années)
+	double	step = 200000.;				// Pas de temps de la simulation (en annÃ©es)
 	time_t	simulation_time = 3600;		// Temps de simulation (en seconde)
 
 
 
 	// -------------------------------------------------------------------------------
 
-
+	
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -58,7 +48,7 @@ int main(int argc, char* argv[])
 	SDL_Event event;
 
 	if (area < 0.1) area = 0.1;
-	if (galaxy_thickness < 0.1) galaxy_thickness = 0.1;
+	if (galaxy_thickness > 1.) galaxy_thickness = 1.;
 	if (precision < 0.) precision = 0.;
 	if (precision > 1.) precision = 1.;
 	if (stars_number < 1.) stars_number = 1.;
@@ -88,7 +78,7 @@ int main(int argc, char* argv[])
 	{
 		create_blocks(area, blocks, galaxy, blocks_temp);
 
-		for (int i = 0; i < galaxy.size(); i++) // Boucle sur les étoiles de la galaxie
+		for (int i = 0; i < galaxy.size(); i++) // Boucle sur les Ã©toiles de la galaxie
 		{
 			if (galaxy.at(i).is_alive)
 			{
@@ -100,7 +90,7 @@ int main(int argc, char* argv[])
 				galaxy.at(i).position_maj(step, verlet_integration);
 
 				if (!(real_colors))
-					galaxy.at(i).color_maj(galaxy, zoom, area, blocks);
+					galaxy.at(i).color_maj();
 			}
 
 			// Affichage

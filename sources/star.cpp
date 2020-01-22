@@ -1,15 +1,6 @@
-#include "block.h"
-#include "utils.h"
-#include "vector.h"
 #include "star.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
+#include "utils.h"
+#include "block.h"
 
 
 
@@ -163,7 +154,7 @@ Vector force_and_density_calculation(const double& precision, Star& star, const 
 
 // Met à jour la couleur
 
-void Star::color_maj(const std::vector <Star>& galaxy, const double& zoom, double& area, const std::vector<Block>& blocks)
+void Star::color_maj()
 {
 	int color_nb = density / 3.;
 

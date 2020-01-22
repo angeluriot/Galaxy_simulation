@@ -1,16 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
-#include "Vector.h"
-#include "Star.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
-#include <time.h>
+#include "vector.h"
+#include "star.h"
 
 
 

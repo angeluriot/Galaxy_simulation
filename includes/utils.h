@@ -1,14 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
-#include "Star.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <vector>
-#include <cmath>
+#include "star.h"
 #include "SDL.h"
 
 #define LIGHT_YEAR	(9.461 * pow(10, 15))	// Année lumière (en mètres)
