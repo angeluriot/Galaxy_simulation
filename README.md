@@ -27,23 +27,22 @@ de code permettant de modifier les différents paramètres de la simulation :
 ```cpp
 // ------------------------- Paramètres de la simulation -------------------------
 
-double  area = 500.;                // Taille de la zone d'apparition des étoiles (en années lumière)
+double  area = 1000.;               // Taille de la zone d'apparition des étoiles (en années lumière)
 double  galaxy_thickness = 0.05;    // Epaisseur de la galaxie (en "area")
-double  precision = 0.5;            // Précision du calcul de l'accélération (algorithme de Barnes–Hut)
+
+int     stars_number = 50000;       // Nombre d'étoiles
+double  initial_speed = 10000.;     // Vitesse initiale des d'étoiles (en mètres par seconde)
+
+bool    is_black_hole = false;      // Présence d'un trou noir
+double  black_hole_mass = 0.;       // Masse du trou noir (en masses solaires)
+
+double  step = 100000.;             // Pas de temps de la simulation (en années de simulation)
+double  precision = 1.;             // Précision du calcul de l'accélération (algorithme de Barnes-Hut)
 bool    verlet_integration = true;  // Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
-int     stars_number = 30000;       // Nombre d'étoiles (Limité à 30 000 par les std::vector<>)
-double  initial_speed = 2500.;      // Vitesse initiale des d'étoiles (en mètres par seconde)
-double  black_hole_mass = 0.;       // Masse du trou noir (en masses solaires)
-bool    is_black_hole = false;      // Présence d'un trou noir
-
-View    view = default_view;        // Type de vue (default_view, xy, xz ou yz)
+View    view = xy;                  // Type de vue (default_view, xy, xz ou yz)
 double  zoom = 800.;                // Taille de "area" (en pixel)
 bool    real_colors = false;        // Activer la couleur réelle des étoiles
-bool    show_blocks = false;        // Afficher les blocs
-
-double  step = 200000.;             // Pas de temps de la simulation (en années)
-time_t  simulation_time = 3600;     // Temps de simulation (en seconde)
 
 // -------------------------------------------------------------------------------
 ```

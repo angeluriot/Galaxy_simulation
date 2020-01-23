@@ -24,12 +24,11 @@ Star::Star()
 
 // Construit une étoile à des coordonnées aléatoires dans la zone
 
-Star::Star(const double& initial_speed, const double& area, const double& step, const double& galaxy_thickness, const double& total_mass)
+Star::Star(const double& initial_speed, const double& area, const double& step, const double& galaxy_thickness)
 {
 	is_alive = true;
 	position = create_spherical((sqrt(random_double(0., 1.)) - 0.5) * area, random_double(0., 2. * PI), PI / 2.);
 	position.z = ((random_double(0., 1.) - 0.5) * (area * galaxy_thickness));
-	//speed = create_spherical(((area * 30) - position.get_radius()) / (area * 30) * initial_speed, position.get_phi() + PI / 2., PI / 2.);
 	speed = create_spherical(initial_speed, position.get_phi() + PI / 2., PI / 2.);
 	previous_position = position - speed * step;
 	acceleration = Vector(0., 0., 0.);
@@ -80,7 +79,7 @@ void Star::operator=(const Star& star)
 
 // Met à jour la position
 
-void Star::update_position(const double& step, const bool& verlet_integration)
+void Star::update_position(const double& step, bool verlet_integration)
 {
 	if (verlet_integration)
 	{
@@ -189,11 +188,11 @@ void Star::update_color()
 
 // Initialise la galaxie
 
-void initialize_galaxy(Star::container& galaxy, const int& stars_number, const double& area, const double& initial_speed, const double& step, const bool& is_black_hole, const double& black_hole_mass, const double& galaxy_thickness, const double& total_mass)
+void initialize_galaxy(Star::container& galaxy, int stars_number, const double& area, const double& initial_speed, const double& step, bool is_black_hole, const double& black_hole_mass, const double& galaxy_thickness)
 {
 	for (int i = 0; i <= stars_number * 0.764; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(0.08, 0.45) * SOLAR_MASS;
 		galaxy.back().color = RGB(255, 10, 10);
 		galaxy.back().index = galaxy.size() - 1;
@@ -201,7 +200,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	for (int i = 0; i <= stars_number * 0.121; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(0.45, 0.8) * SOLAR_MASS;
 		galaxy.back().color = RGB(255, 127, 10);
 		galaxy.back().index = galaxy.size() - 1;
@@ -209,7 +208,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	for (int i = 0; i <= stars_number * 0.076; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(0.8, 1.04) * SOLAR_MASS;
 		galaxy.back().color = RGB(255, 255, 10);
 		galaxy.back().index = galaxy.size() - 1;
@@ -217,7 +216,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	for (int i = 0; i <= stars_number * 0.030; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(1.04, 1.4) * SOLAR_MASS;
 		galaxy.back().color = RGB(255, 255, 127);
 		galaxy.back().index = galaxy.size() - 1;
@@ -225,7 +224,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	for (int i = 0; i <= stars_number * 0.006; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(1.4, 2.1) * SOLAR_MASS;
 		galaxy.back().color = RGB(255, 255, 255);
 		galaxy.back().index = galaxy.size() - 1;
@@ -233,7 +232,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	for (int i = 0; i <= stars_number * 0.0013; i++)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().mass = random_double(2.1, 16) * SOLAR_MASS;
 		galaxy.back().color = RGB(50, 255, 255);
 		galaxy.back().index = galaxy.size() - 1;
@@ -241,7 +240,7 @@ void initialize_galaxy(Star::container& galaxy, const int& stars_number, const d
 
 	if (is_black_hole)
 	{
-		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness, total_mass));
+		galaxy.push_back(Star(initial_speed, area, step, galaxy_thickness));
 		galaxy.back().position = Vector(0., 0., 0.);
 		galaxy.back().speed = Vector(0., 0., 0.);
 		galaxy.back().mass = black_hole_mass * SOLAR_MASS;

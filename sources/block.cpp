@@ -1,6 +1,7 @@
 #include "block.h"
 
 
+
 std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot)
 {
 	std::array<std::function<bool(const Star & star)>, 3> testStarAxis =
@@ -136,7 +137,8 @@ void Block::divide(Star::range stars)
 		block.as_parents = true;
 		block.set_size(halfsize);
 
-		Vector posis[] = {
+		Vector posis[] =
+		{
 			{position.x - size / 4., position.y - size / 4., position.z - size / 4.},
 			{position.x - size / 4., position.y - size / 4., position.z + size / 4.},
 			{position.x - size / 4., position.y + size / 4., position.z - size / 4.},
@@ -155,11 +157,8 @@ void Block::divide(Star::range stars)
 
 		for (int ibloc = 0; ibloc < 8; ibloc++)
 		{
-			// bloc 1
 			myblocks[ibloc] = block;
 			myblocks[ibloc].position = posis[ibloc];
-			// block.stars_maj(galaxy, blocks);
-			//myblocks[ibloc].mass_center_and_mass_maj(partitions_stars[ibloc]);
 			myblocks[ibloc].divide(partitions_stars[ibloc]);
 
 			if (myblocks[ibloc].nb_stars > 0)
@@ -176,11 +175,15 @@ void Block::divide(Star::range stars)
 }
 
 
-void Block::set_size(double size)
+
+// Met à jour la taille du block
+
+void Block::set_size(const double& size)
 {
 	this->size = size;
 	this->halfsize = size / static_cast<double>(2.);
 }
+
 
 
 // Dit si l'étoile est dans le bloc

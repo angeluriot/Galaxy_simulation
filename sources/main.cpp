@@ -16,18 +16,18 @@ template <size_t N>
 
 void make_partitions(std::array<MutexRange, N>& mutparts, Star::range alive_galaxy, size_t total)
 {
-	const size_t nPerPart = total / N;
-	auto currentIt = alive_galaxy.begin, prevIt = alive_galaxy.begin;
+	const size_t n_per_part = total / N;
+	auto current_it = alive_galaxy.begin, prev_it = alive_galaxy.begin;
 	for (size_t i = 0; i < N - 1; ++i)
 	{
-		for (size_t iIt = 0; iIt < nPerPart; ++iIt, ++currentIt);
+		for (size_t i_it = 0; i_it < n_per_part; ++i_it, ++current_it);
 
-		mutparts[i].part = { prevIt, currentIt };
+		mutparts[i].part = { prev_it, current_it };
 		mutparts[i].ready = 1;
 
-		prevIt = currentIt;
+		prev_it = current_it;
 	}
-	mutparts.back().part = { currentIt, alive_galaxy.end };
+	mutparts.back().part = { current_it, alive_galaxy.end };
 	mutparts.back().ready = 1;
 }
 
@@ -37,23 +37,24 @@ int main(int argc, char* argv[])
 
 	// ------------------------- Paramètres de la simulation -------------------------
 
+
+
 	double	area = 1000.;				// Taille de la zone d'apparition des étoiles (en années lumière)
 	double	galaxy_thickness = 0.05;	// Epaisseur de la galaxie (en "area")
-	double	precision = 1.;				// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
-	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
 	int		stars_number = 50000;		// Nombre d'étoiles
-	double	initial_speed = 9000.;		// Vitesse initiale des d'étoiles (en mètres par seconde)
-	double	black_hole_mass = 0.;		// Masse du trou noir (en masses solaires)
+	double	initial_speed = 10000.;		// Vitesse initiale des d'étoiles (en mètres par seconde)
+
 	bool	is_black_hole = false;		// Présence d'un trou noir
+	double	black_hole_mass = 0.;		// Masse du trou noir (en masses solaires)
+
+	double	step = 100000.;				// Pas de temps de la simulation (en années de simulation)
+	double	precision = 1.;				// Précision du calcul de l'accélération (algorithme de Barnes-Hut)
+	bool	verlet_integration = true;	// Utiliser l'intégration de Verlet au lieu de la méthode d'Euler
 
 	View	view = xy;					// Type de vue (default_view, xy, xz ou yz)
 	double	zoom = 800.;				// Taille de "area" (en pixel)
 	bool	real_colors = false;		// Activer la couleur réelle des étoiles
-	bool	show_blocks = false;		// Afficher les blocs
-
-	double	step = 100000.;				// Pas de temps de la simulation (en années)
-	time_t	simulation_time = 3600;		// Temps de simulation (en seconde)
 
 
 
@@ -70,7 +71,7 @@ int main(int argc, char* argv[])
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetWindowTitle(window, "Galaxy simulation");
 	SDL_Event event;
-	constexpr size_t nThread = 4;
+	constexpr size_t n_thread = 4;
 
 	if (area < 0.1) area = 0.1;
 	if (galaxy_thickness > 1.) galaxy_thickness = 1.;
@@ -80,7 +81,6 @@ int main(int argc, char* argv[])
 	if (black_hole_mass < 0.) black_hole_mass = 0.;
 	if (zoom < 1.) zoom = 1.;
 	if (step < 0.) step = 0.;
-	if (simulation_time < 1) simulation_time = 1;
 
 	area *= LIGHT_YEAR;
 	step *= YEAR;
@@ -88,57 +88,54 @@ int main(int argc, char* argv[])
 	Star::container galaxy;
 	Block block;
 
-	double total_mass = stars_number * (0.764 * ((0.08 + 0.45) / 2.) + 0.121 * ((0.45 + 0.8) / 2.) + 0.076 * ((0.8 + 1.04) / 2.) + 0.030 * ((1.04 + 1.4) / 2.) + 0.006 * ((1.4 + 2.1) / 2.) + 0.0013 * ((2.1 + 16) / 2.) + is_black_hole * black_hole_mass) * SOLAR_MASS;
-
-	initialize_galaxy(galaxy, stars_number, area, initial_speed, step, is_black_hole, black_hole_mass, galaxy_thickness, total_mass);
+	initialize_galaxy(galaxy, stars_number, area, initial_speed, step, is_black_hole, black_hole_mass, galaxy_thickness);
 
 	Star::range alive_galaxy = { galaxy.begin(), galaxy.end() };
-	float step2 = step * step;
-	double currentStep = static_cast<double>(1.);
-	bool stopThreads = false;
+	double current_step = static_cast<double>(1.);
+	bool stop_threads = false;
 
-	auto updateStars = [&block, precision, verlet_integration, step, area, real_colors, &stopThreads, &currentStep](MutexRange* mutpart)
+	auto update_stars = [&block, precision, verlet_integration, step, area, real_colors, &stop_threads, &current_step](MutexRange* mutpart)
 	{
 		using namespace std::chrono_literals;
 
 		while (mutpart->ready != 1)
 			std::this_thread::sleep_for(2ms);
 
-		while (!stopThreads)
+		while (!stop_threads)
 		{
-			for (auto itStar = mutpart->part.begin; itStar != mutpart->part.end; ++itStar) // Boucle sur les étoiles de la galaxie
+			for (auto it_star = mutpart->part.begin; it_star != mutpart->part.end; ++it_star) // Boucle sur les étoiles de la galaxie
 			{
-				itStar->update_acceleration_and_density(precision, block);
+				it_star->update_acceleration_and_density(precision, block);
 
 				if (!(verlet_integration))
-					itStar->update_speed(step * currentStep, area);
+					it_star->update_speed(step * current_step, area);
 
-				itStar->update_position(step * currentStep, verlet_integration);
+				it_star->update_position(step * current_step, verlet_integration);
 
-				if (!is_in(block, *itStar))
-					itStar->is_alive = false;
+				if (!is_in(block, *it_star))
+					it_star->is_alive = false;
 
 				else if (!(real_colors))
-					itStar->update_color();
+					it_star->update_color();
 			}
 
 			mutpart->ready = 2;
 
-			while (mutpart->ready != 1 && !stopThreads)
+			while (mutpart->ready != 1 && !stop_threads)
 				std::this_thread::sleep_for(2ms);
 		}
 	};
 
-	std::array<std::thread, nThread> mythreads;
-	std::array<MutexRange, nThread> mutparts;
+	std::array<std::thread, n_thread> mythreads;
+	std::array<MutexRange, n_thread> mutparts;
 
 	for (int i = 0; i < mythreads.size(); ++i)
 	{
 		mutparts[i].ready = 0;
-		mythreads[i] = std::thread(updateStars, &mutparts[i]);
+		mythreads[i] = std::thread(update_stars, &mutparts[i]);
 	}
 
-	auto totalGalaxy = std::distance(alive_galaxy.begin, alive_galaxy.end);
+	auto total_galaxy = std::distance(alive_galaxy.begin, alive_galaxy.end);
 	auto t0 = std::chrono::steady_clock::now();
 
 	while (true) // Boucle du pas de temps de la simulation
@@ -146,14 +143,14 @@ int main(int argc, char* argv[])
 		using namespace std::chrono_literals;
 		create_blocks(area, block, alive_galaxy);
 
-		make_partitions<nThread >(mutparts, alive_galaxy, totalGalaxy);
+		make_partitions<n_thread >(mutparts, alive_galaxy, total_galaxy);
 		for (auto& mp : mutparts)
 			while (mp.ready != 2)
 				std::this_thread::sleep_for(1ms);
 		{
-			auto prevEnd = alive_galaxy.end;
+			auto prev_end = alive_galaxy.end;
 			alive_galaxy.end = std::partition(alive_galaxy.begin, alive_galaxy.end, [](const Star& star) { return star.is_alive; });
-			totalGalaxy -= std::distance(alive_galaxy.end, prevEnd);
+			total_galaxy -= std::distance(alive_galaxy.end, prev_end);
 		}
 
 		SDL_PollEvent(&event);
@@ -161,7 +158,6 @@ int main(int argc, char* argv[])
 		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 			break;
 
-		
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
 
@@ -173,10 +169,10 @@ int main(int argc, char* argv[])
 		auto t1 = std::chrono::steady_clock::now();
 		std::chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
 		t0 = t1;
-		currentStep = duree.count();
+		current_step = duree.count();
 	}
 
-	stopThreads = true;
+	stop_threads = true;
 
 	for (auto& thr : mythreads)
 		thr.join();

@@ -34,18 +34,18 @@ public:
 	int			block_index;		// Indice du bloc
 
 	Star();
-	Star(const double& speed_initial, const double& area, const double& step, const double& galaxy_thickness, const double& total_mass);
+	Star(const double& speed_initial, const double& area, const double& step, const double& galaxy_thickness);
 	Star(const Star& star);
 
 	void operator=(const Star& star);
 
-	void update_position(const double& step, const bool& verlet_integration);
+	void update_position(const double& step, bool verlet_integration);
 	void update_speed(const double& step, const double& area);
 	void update_acceleration_and_density(const double& precision, const Block& block);
 	void update_color();
 };
 
 Vector force_and_density_calculation(const double& precision, Star& star, const Block& block);
-void initialize_galaxy(Star::container& galaxy, const int& stars_number, const double& area, const double& initial_speed, const double& step, const bool& is_black_hole, const double& black_hole_mass, const double& galaxy_thickness, const double& total_mass);
+void initialize_galaxy(Star::container& galaxy, int stars_number, const double& area, const double& initial_speed, const double& step, bool is_black_hole, const double& black_hole_mass, const double& galaxy_thickness);
 
 #endif

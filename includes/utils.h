@@ -18,8 +18,8 @@ class Block;
 constexpr double LIGHT_YEAR = (9.461 * const_pow<double>(10, 15));	// Année lumière (en mètres)
 constexpr double PI = 3.14159265;									// Pi
 constexpr double G = 0.00000000006674;								// Constante gravitationnelle (en newton mètre carré par kilogramme carré)
-constexpr double HEIGHT = 1080.;							// Hauteur de la fenêtre (en pixels)
-constexpr double WIDTH = 1920.;							// Largeur de la fenêtre (en pixels)
+constexpr double HEIGHT = 1080.;									// Hauteur de la fenêtre (en pixels)
+constexpr double WIDTH = 1920.;										// Largeur de la fenêtre (en pixels)
 constexpr double SOLAR_MASS = (1.989 * const_pow<double>(10, 30));	// Masse solaire (en kilogrammes)
 constexpr double YEAR = 31536000.;									// Année (en secondes)
 
@@ -29,7 +29,6 @@ extern SDL_Renderer* renderer;
 
 int random_int(const int& min, const int& max);
 double random_double(const double& min, const double& max);
-void draw_stars(Star::range& alive_galaxy, const Vector& mass_center, const double& area, const double& zoom, const View& view);
-//void draw_blocks(const std::vector<Block>& blocks, const Vector& mass_center, const double& area, const double& zoom, const View& view);
+void draw_stars(Star::range& alive_galaxy, const Vector& mass_center, const double& area, const double& zoom, View view);
 
 #endif
