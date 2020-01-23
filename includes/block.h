@@ -12,30 +12,31 @@ class Block
 
 public:
 
-	bool				as_stars;		// Présence d'étoiles dans le bloc
-	std::vector<int>	stars;			// Les indices des étoiles présentes dans le bloc
-	Vector				mass_center;	// Centre de gravité du bloc
-	int					index;			// Indice du bloc
-	bool				as_children;	// Présence de blocs enfants
-	bool				as_parents;		// Présence de blocs parents
-	int					parent;			// Indice des blocs parents
-	std::vector<int>	children;		// Indice des blocs enfants
-	Vector				position;		// Position du bloc
-	double				mass;			// Masse contenue dans le bloc (en kilogrames)
-	double				size;			// Taille du bloc (en mètres)
+	bool	as_stars;		// Présence d'étoiles dans le bloc
+	bool	as_children;	// Présence de blocs enfants
+	bool	as_parents;		// Présence de blocs parents
+	int		parent;			// Indice des blocs parents
+	Vector	position;		// Position du bloc
+	double	mass;			// Masse contenue dans le bloc (en kilogrames)
+	Vector	mass_center;	// Centre de gravité du bloc
+	size_t 	nb_stars;		// Nombre d'étoile contenu dans le block
+	double	size, halfsize;	// Taille du bloc (en mètres)
+
+	std::variant<Star::container::iterator, std::vector<Block>> contains;
 	
 	Block();
 	Block(const Block& block);
 
 	void operator=(const Block& block);
 
-	void update_stars(std::vector<Star>& galaxy, std::vector<Block>& blocks);
-	void divide(int& index_value, std::vector<Star>& galaxy, std::vector<Block>& blocks, std::vector<Block>& blocks_temp);
+	// void stars_maj(Star::range& stars, std::vector<Block>& blocks);
+	void update_mass_center_and_mass(const Star::range& stars);
+	void divide(Star::range galaxy);
+	void set_size(double size);
 };
 
-void update_mass_center_and_mass(Block& block, std::vector<Star>& galaxy, std::vector<Block>& blocks);
 bool is_in(const Block& block, const Star& star);
-void initialise_blocks(int& index_value, const double& area, std::vector<Star>& galaxy, std::vector<Block>& blocks);
-void create_blocks(const double& area, std::vector<Block>& blocks, std::vector<Star>& galaxy, std::vector<Block>& blocks_temp);
+//void initialise_blocks(int& index_value, const double& area, Star::container& galaxy, std::vector<Block>& blocks);
+void create_blocks(const double& area, Block& block, Star::range& galaxy);
 
 #endif

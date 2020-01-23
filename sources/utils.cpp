@@ -23,63 +23,66 @@ double random_double(const double& min, const double& max)
 
 // Affiche les étoiles de la galaxie
 
-void draw_stars(std::vector<Star>& galaxy, const Vector& mass_center, const double& area, const double& zoom, const View& view)
+void draw_stars(Star::range& alive_galaxy, const Vector& mass_center, const double& area, const double& zoom, const View& view)
 {
 	double x;
 	double y;
 	double z;
 	Vector screen_position;
-
 	Vector camera = Vector(0., area / 2., area / 2.);
+	double  coef = 1. / (area / zoom);
 
-	for (int i = 0; i < galaxy.size(); i++)
+	for (auto itStar = alive_galaxy.begin; itStar != alive_galaxy.end; ++itStar)
 	{
-		if (galaxy[i].is_alive)
+		switch (view)
 		{
-			if (view == default_view)
-			{
-				x = (galaxy[i].position - mass_center).x;
-				y = (galaxy[i].position - mass_center).y / 3. - (galaxy[i].position - mass_center).z / 1.5;
+		case default_view:
 
-				screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(galaxy[i].position, camera)), Vector(x, y, 0.).get_phi(), Vector(x, y, 0.).get_theta());
+			x = (itStar->position - mass_center).x;
+			y = (itStar->position - mass_center).y / 3. - (itStar->position - mass_center).z / 1.5;
 
-				x = screen_position.x * zoom + WIDTH / 2.;
-				y = screen_position.y * zoom + HEIGHT / 2.;
-			}
+			screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(itStar->position, camera)), Vector(x, y, 0.).get_phi(), Vector(x, y, 0.).get_theta());
 
-			if (view == xy)
-			{
-				x = (galaxy[i].position - mass_center).x / (area / zoom) + WIDTH / 2.;
-				y = (galaxy[i].position - mass_center).y / (area / zoom) + HEIGHT / 2.;
-			}
+			x = screen_position.x * zoom + WIDTH / 2.;
+			y = screen_position.y * zoom + HEIGHT / 2.;
+			break;
 
-			if (view == xz)
-			{
-				x = (galaxy[i].position - mass_center).x / (area / zoom) + WIDTH / 2.;
-				y = (galaxy[i].position - mass_center).z / (area / zoom) + HEIGHT / 2.;
-			}
+		case xy:
 
-			if (view == yz)
-			{
-				x = (galaxy[i].position - mass_center).y / (area / zoom) + WIDTH / 2.;
-				y = (galaxy[i].position - mass_center).z / (area / zoom) + HEIGHT / 2.;
-			}
+			x = (itStar->position - mass_center).x * coef + WIDTH / 2.;
+			y = (itStar->position - mass_center).y * coef + HEIGHT / 2.;
+			break;
 
-			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy[i].color), GetGValue(galaxy[i].color), GetBValue(galaxy[i].color), SDL_ALPHA_OPAQUE);
+		case xz:
 
-			SDL_RenderDrawPoint(renderer, x - 1, y);
-			SDL_RenderDrawPoint(renderer, x, y - 1);
-			SDL_RenderDrawPoint(renderer, x, y);
-			SDL_RenderDrawPoint(renderer, x, y + 1);
-			SDL_RenderDrawPoint(renderer, x + 1, y);
+			x = (itStar->position - mass_center).x * coef + WIDTH / 2.;
+			y = (itStar->position - mass_center).z * coef + HEIGHT / 2.;
+			break;
 
-			SDL_SetRenderDrawColor(renderer, GetRValue(galaxy[i].color), GetGValue(galaxy[i].color), GetBValue(galaxy[i].color), SDL_ALPHA_OPAQUE / 2.);
+		case yz:
 
-			SDL_RenderDrawPoint(renderer, x - 1, y - 1);
-			SDL_RenderDrawPoint(renderer, x - 1, y + 1);
-			SDL_RenderDrawPoint(renderer, x + 1, y - 1);
-			SDL_RenderDrawPoint(renderer, x + 1, y + 1);
+			x = (itStar->position - mass_center).y * coef + WIDTH / 2.;
+			y = (itStar->position - mass_center).z * coef + HEIGHT / 2.;
+			break;
 		}
+
+		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE);
+
+		SDL_RenderDrawPoint(renderer, x, y);
+
+		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE * 0.5);
+
+		SDL_RenderDrawPoint(renderer, x - 1, y);
+		SDL_RenderDrawPoint(renderer, x, y - 1);
+		SDL_RenderDrawPoint(renderer, x, y + 1);
+		SDL_RenderDrawPoint(renderer, x + 1, y);
+
+		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE * 0.25);
+
+		SDL_RenderDrawPoint(renderer, x - 1, y - 1);
+		SDL_RenderDrawPoint(renderer, x - 1, y + 1);
+		SDL_RenderDrawPoint(renderer, x + 1, y - 1);
+		SDL_RenderDrawPoint(renderer, x + 1, y + 1);
 	}
 }
 

@@ -151,7 +151,7 @@ bool operator!=(const Vector& vector_1, const Vector& vector_2)
 
 // Donne la norme du vecteur (en mètres)
 
-double Vector::get_radius()
+double Vector::get_radius() const
 {
 	return sqrt(x * x + y * y + z * z);
 }
@@ -160,7 +160,7 @@ double Vector::get_radius()
 
 // Donne l'angle phi du vecteur (en radiants)
 
-double Vector::get_phi()
+double Vector::get_phi() const
 {
 	Vector vector = *this;
 
@@ -177,7 +177,7 @@ double Vector::get_phi()
 
 // Donne l'angle theta du vecteur (en radiants)
 
-double Vector::get_theta()
+double Vector::get_theta() const
 {
 	return acos(z / get_radius());
 }
@@ -234,4 +234,13 @@ double get_phi(const Vector& point_1, const Vector& point_2)
 double get_theta(const Vector& point_1, const Vector& point_2)
 {
 	return (point_1 - point_2).get_theta();
+}
+
+
+
+// Donne le vecteur normalisé
+
+Vector normalize(const Vector& vector)
+{
+	return vector / vector.get_radius();
 }
