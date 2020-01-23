@@ -1,6 +1,6 @@
 # Galaxy simulation
 
-![release](https://img.shields.io/badge/release-v2.0-blueviolet)
+![release](https://img.shields.io/badge/release-v2.1-blueviolet)
 ![language](https://img.shields.io/badge/language-C%2B%2B-0052cf)
 ![library](https://img.shields.io/badge/library-SDL2-00cf2c)
 ![size](https://img.shields.io/badge/size-76%20Mo-f12222)
