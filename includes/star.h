@@ -3,17 +3,12 @@
 
 #include "vector.h"
 
-#define GLM_FORCE_INLINE
-#define GLM_FORCE_SIZE_T_LENGTH
-
-#include <glm/vec3.hpp>
-
 class Block;
 
-
-
-// Classe définissant une étoile
-
+/**
+ * \class Star
+ * \brief Définit une étoile.
+ */
 class Star {
 
 public:
@@ -25,16 +20,26 @@ public:
 		container::iterator end;
 	};
 
-	Vector previous_position{ 0, 0, 0 };    // Position d'avant
-	Vector position{ 0, 0, 0 };            // Position
-	Vector speed{ 0, 0, 0 };                // Vitesse
-	Vector acceleration{ 0, 0, 0 };        // Accélération
-	double mass{ 0 };                // Masse (en kilogrames)
-	double density{ 0 };            // Densité autour de l'étoile
-	glm::u8vec3 color;                // Couleur, x, y, z et r, g, b sont deux structures dans une union. Les données se confondent.
-	std::size_t index{ 0 };                // Indice
-	std::size_t block_index{ 0 };        // Indice du bloc
-	bool is_alive{ false };            // Indique si l'étoile est prise en compte
+	//! Position d'avant
+	glm::dvec3 previous_position{ 0, 0, 0 };
+	//! Position
+	glm::dvec3 position{ 0, 0, 0 };
+	//! La vitesse
+	glm::dvec3 speed{ 0, 0, 0 };
+	//! L'accélération
+	glm::dvec3 acceleration{ 0, 0, 0 };
+	//! Masse en kilogramme
+	double mass{ 0 };
+	//! Densité autour de l'étoile
+	double density{ 0 };
+	//! La couleur de l'étoile
+	glm::u8vec3 color{ 0, 0, 0 };
+	//! Indice de l'étoile
+	std::size_t index{ 0 };
+	//! Indice du bloc
+	std::size_t block_index{ 0 };
+	//! Flag pour la prise en compte de l'étoile.
+	bool is_alive{ false };
 
 	Star() = default;
 
@@ -44,7 +49,11 @@ public:
 
 	Star(const Star &star) = default;
 
+	Star(Star &&star) = default;
+
 	Star &operator=(const Star &star) = default;
+
+	Star &operator=(Star &&star) = default;
 
 	void update_position(const double &step, bool verlet_integration);
 
@@ -55,7 +64,7 @@ public:
 	void update_color();
 };
 
-Vector force_and_density_calculation(const double &precision, Star &star, const Block &block);
+glm::dvec3 force_and_density_calculation(const double &precision, Star &star, const Block &block);
 
 void initialize_galaxy(Star::container &galaxy,
 					   int stars_number,

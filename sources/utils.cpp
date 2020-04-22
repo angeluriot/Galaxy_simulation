@@ -21,22 +21,22 @@ double random_double(const double &min, const double &max) {
 
 // Affiche les étoiles de la galaxie
 
-void draw_stars(Star::range &alive_galaxy, const Vector &mass_center, const double &area, const double &zoom, View view) {
+void draw_stars(Star::range &alive_galaxy, const glm::dvec3 &mass_center, const double &area, const double &zoom, View view) {
 	double x, y, z;
 //	Vector screen_position;
 	const double coef = 1. / (area / zoom);
 
 	for (auto itStar = alive_galaxy.begin; itStar != alive_galaxy.end; ++itStar) {
-		const Vector tmp = itStar->position - mass_center;
+		const auto tmp = itStar->position - mass_center;
 		switch (view) {
 			case default_view: { // Portée obligatoire : initialisation d'une variable à l'intérieur d'un case.
 				x = tmp.x;
 				y = tmp.y / 3. - tmp.z / 1.5;
 
-				const Vector camera(0., area / 2., area / 2.);
-				const auto screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(itStar->position, camera)),
-															  Vector(x, y, 0.).get_phi(),
-															  Vector(x, y, 0.).get_theta());
+				const glm::dvec3 camera(0., area * 0.5, area * 0.5);
+				const auto screen_position = create_spherical(glm::length(glm::dvec3{ x, y, 0. }) / glm::distance(itStar->position, camera),
+															  glm::get_phi(glm::dvec3{ x, y, 0. }),
+															  glm::get_theta(glm::dvec3{ x, y, 0. }));
 
 				x = screen_position.x * zoom + WIDTH * 0.5;
 				y = screen_position.y * zoom + HEIGHT * 0.5;

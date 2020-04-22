@@ -1,7 +1,7 @@
 #include "block.h"
 
 
-std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot) {
+std::array<Star::range, 8> set_octree(Star::range stars, glm::dvec3 pivot) {
 	const std::array<std::function<bool(const Star &star)>, 3> testStarAxis{
 			[&pivot](const Star &star) { return star.position.x < pivot.x; }, // 3 double c'est plus lourd qu'une référence.
 			[&pivot](const Star &star) { return star.position.y < pivot.y; },
@@ -31,22 +31,7 @@ std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot) {
 
 // Construit un bloc
 
-Block::Block() {
-	as_stars = false;
-	mass_center = Vector(0., 0., 0.);
-	as_children = false;
-	as_parents = false;
-	position = Vector(0., 0., 0.);
-	mass = 0.;
-	size = halfsize = 0.;
-	nb_stars = 0;
-}
-
-
-
-// Construit un bloc � partir d'un autre bloc
-// Mais ton truc il est pété ? o_O
-/*Block::Block(const Block &block) {
+/*Block::Block() {
 	as_stars = false;
 	mass_center = Vector(0., 0., 0.);
 	as_children = false;
@@ -56,8 +41,6 @@ Block::Block() {
 	size = halfsize = 0.;
 	nb_stars = 0;
 }*/
-
-
 
 // Assignation
 
@@ -80,7 +63,7 @@ Block::Block() {
 // Met à jour la masse et le centre de gravit� de chaque blocks
 
 void Block::update_mass_center_and_mass(const Star::range &galaxy) {
-	mass_center = Vector(0., 0., 0.);
+	mass_center = { 0., 0., 0. };
 	mass = 0.;
 
 	for (auto it = galaxy.begin; it != galaxy.end; ++it) {
@@ -100,7 +83,7 @@ void Block::divide(Star::range stars) {
 		contains = stars.begin; // pas tr�s utile, permet de clear la memoire de array<Block, 8> si c'�tait sa valeur pr�c�dente
 		nb_stars = 0;
 		mass = 0.;
-		mass_center = Vector(0., 0., 0.);
+		mass_center = { 0., 0., 0. };
 		as_children = false;
 	} else if (std::next(stars.begin) == stars.end) // une étoile
 	{
@@ -121,7 +104,7 @@ void Block::divide(Star::range stars) {
 		block.as_parents = true;
 		block.set_size(halfsize);
 
-		Vector posis[] =
+		const glm::dvec3 posis[] =
 				{
 						{ position.x - size / 4., position.y - size / 4., position.z - size / 4. },
 						{ position.x - size / 4., position.y - size / 4., position.z + size / 4. },
@@ -136,10 +119,10 @@ void Block::divide(Star::range stars) {
 		auto &myblocks = std::get<1>(contains);
 		auto partitions_stars = set_octree(stars, position);
 		double new_mass = 0.;
-		Vector new_mass_center = Vector(0., 0., 0.);
-		int i_add = 0;
+		auto new_mass_center = glm::dvec3(0., 0., 0.);
+		std::size_t i_add = 0;
 
-		for (int ibloc = 0; ibloc < 8; ibloc++) {
+		for (std::size_t ibloc = 0; ibloc < 8; ++ibloc) {
 			myblocks[ibloc] = block;
 			myblocks[ibloc].position = posis[ibloc];
 			myblocks[ibloc].divide(partitions_stars[ibloc]);
@@ -147,7 +130,7 @@ void Block::divide(Star::range stars) {
 			if (myblocks[ibloc].nb_stars > 0) {
 				new_mass += myblocks[ibloc].mass;
 				new_mass_center += myblocks[ibloc].mass_center * myblocks[ibloc].mass;
-				i_add++;
+				++i_add;
 			}
 		}
 

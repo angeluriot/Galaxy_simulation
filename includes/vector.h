@@ -14,72 +14,25 @@
 #include <functional>
 
 
+#define GLM_FORCE_INLINE
+#define GLM_FORCE_SIZE_T_LENGTH
 
-// Classe définissant un vecteur
+#include <glm/vec3.hpp>
+#include <glm/geometric.hpp>
+#include <glm/trigonometric.hpp>
 
-class Vector {
+glm::dvec3 create_spherical(const double &radius, const double &phi, const double &theta);
 
-public:
+double get_x(const double radius, const double phi, const double theta);
 
-	double x; // coordonnée x (en mètres)
-	double y; // coordonnée y (en mètres)
-	double z; // coordonnée z (en mètres)
+double get_y(const double radius, const double phi, const double theta);
 
-	Vector();
+double get_z(const double radius, const double phi, const double theta);
 
-	Vector(const Vector &vector);
+namespace glm {
+	[[nodiscard]] double get_phi(const glm::dvec3 &vecteur);
 
-	Vector(const double &x, const double &y, const double &z);
-
-	Vector &operator=(const Vector &vector) = default;
-
-	void operator+=(const Vector &vector);
-
-	void operator-=(const Vector &vector);
-
-	void operator*=(const double &number);
-
-	void operator/=(const double &number);
-
-	[[nodiscard]] double get_radius() const;
-
-	[[nodiscard]] double get_phi() const;
-
-	[[nodiscard]] double get_theta() const;
-};
-
-Vector create_spherical(const double &radius, const double &phi, const double &theta);
-
-Vector operator+(const Vector &vector_1, const Vector &vector_2);
-
-Vector operator-(const Vector &vector_1, const Vector &vector_2);
-
-Vector operator*(const Vector &vector, const double &number);
-
-Vector operator*(const double &number, const Vector &vector);
-
-double operator*(const Vector &vector_1, const Vector &vector_2);
-
-Vector operator^(const Vector &vector_1, const Vector &vector_2);
-
-Vector operator/(const Vector &vector, const double &number);
-
-bool operator==(const Vector &vector_1, const Vector &vector_2);
-
-bool operator!=(const Vector &vector_1, const Vector &vector_2);
-
-double get_x(const double &radius, const double &phi, const double &theta);
-
-double get_y(const double &radius, const double &phi, const double &theta);
-
-double get_z(const double &radius, const double &phi, const double &theta);
-
-double get_distance(const Vector &point_1, const Vector &point_2);
-
-double get_phi(const Vector &point_1, const Vector &point_2);
-
-double get_theta(const Vector &point_1, const Vector &point_2);
-
-Vector normalize(const Vector &vector);
+	[[nodiscard]] double get_theta(const glm::dvec3 &vecteur);
+}
 
 #endif

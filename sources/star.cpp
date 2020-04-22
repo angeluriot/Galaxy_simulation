@@ -10,9 +10,9 @@ Star::Star(const double &initial_speed, const double &area, const double &step, 
 								random_double(0., 2. * PI),
 								PI * 0.5); // Multiplication plus rapide qu'une division.
 	position.z = ((random_double(0., 1.) - 0.5) * (area * galaxy_thickness));
-	speed = create_spherical(initial_speed, position.get_phi() + PI * 0.5, PI * 0.5);
+	speed = create_spherical(initial_speed, glm::get_phi(position) + PI * 0.5, PI * 0.5);
 	previous_position = position - speed * step;
-	acceleration = Vector(0., 0., 0.);
+	acceleration = { 0., 0., 0. };
 	color = { 0, 0, 0 };
 	mass = 0.;
 	density = 0.;
@@ -20,33 +20,11 @@ Star::Star(const double &initial_speed, const double &area, const double &step, 
 	block_index = 0;
 }
 
-
-
-// Assignation
-
-/*Star &Star::operator=(const Star &star) {
-	if (this != &star) {
-		is_alive = star.is_alive;
-		previous_position = star.previous_position;
-		position = star.position;
-		speed = star.speed;
-		acceleration = star.acceleration;
-		mass = star.mass;
-		density = star.density;
-		color = star.color;
-		index = star.index;
-		block_index = star.block_index;
-	}
-	return *this;
-}*/
-
-
-
 // Met à jour la position
 
 void Star::update_position(const double &step, bool verlet_integration) {
 	if (verlet_integration) {
-		Vector temp = position;
+		auto temp = position;
 
 		position = 2. * position - previous_position + acceleration * step * step; // Intégration de Verlet
 		previous_position = temp;
@@ -70,9 +48,10 @@ void Star::update_acceleration_and_density(const double &precision, const Block 
 	density = 0.;
 	double max_acceleration = 0.0000000005; // Permet de limiter l'erreur due au pas de temps (à régler en fonction du pas de temps)
 
-	acceleration = force_and_density_calculation(precision, *this, block); // Pas de division par la masse de l'étoile (c.f. ligne 122)
+	// Pas de division par la masse de l'étoile (c.f. ligne 122) EDIT : trouver un autre moyen de référence que la ligne de code.
+	acceleration = force_and_density_calculation(precision, *this, block); // Fonction récursive… Il faut éviter.
 
-	if (acceleration.get_radius() > max_acceleration)
+	if (glm::length(acceleration) > max_acceleration)
 		acceleration = max_acceleration * normalize(acceleration);
 }
 
@@ -80,10 +59,10 @@ void Star::update_acceleration_and_density(const double &precision, const Block 
 
 // Calcule la densité et la force exercée sur une étoile (divisée par la masse de l'étoile pour éviter des calculs inutiles)
 
-Vector force_and_density_calculation(const double &precision, Star &star, const Block &block) {
-	Vector force = Vector(0., 0., 0.);
-	Vector star_to_mass = (star.position - block.mass_center);
-	double distance = get_distance(star.position, block.mass_center);
+glm::dvec3 force_and_density_calculation(const double &precision, Star &star, const Block &block) {
+	glm::dvec3 force(0); // Tous les champs à 0.
+	const auto star_to_mass = (star.position - block.mass_center);
+	double distance = glm::distance(star.position, block.mass_center);
 
 	if (block.nb_stars == 1) {
 		Star::container::iterator itStar = std::get<0>(block.contains);
@@ -103,7 +82,7 @@ Vector force_and_density_calculation(const double &precision, Star &star, const 
 			auto &blocks = std::get<1>(block.contains);
 			for (int i = 0; i < 8; ++i) {
 				if (blocks[i].nb_stars > 0)
-					force += force_and_density_calculation(precision, star, blocks[i]);
+					force += force_and_density_calculation(precision, star, blocks[i]); // WTF ?! PAS DE RÉCURSIF, PERTE DE PERF
 			}
 		}
 	}
@@ -188,8 +167,8 @@ void initialize_galaxy(Star::container &galaxy,
 
 	if (is_black_hole) {
 		galaxy.emplace_back(initial_speed, area, step, galaxy_thickness);
-		galaxy.back().position = Vector(0., 0., 0.);
-		galaxy.back().speed = Vector(0., 0., 0.);
+		galaxy.back().position = { 0., 0., 0. };
+		galaxy.back().speed = { 0., 0., 0. };
 		galaxy.back().mass = black_hole_mass * SOLAR_MASS;
 		galaxy.back().color = { 0, 0, 0 };
 		galaxy.back().index = galaxy.size() - 1;

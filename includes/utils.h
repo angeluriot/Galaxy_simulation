@@ -30,6 +30,6 @@ int random_int(const int &min, const int &max);
 
 double random_double(const double &min, const double &max);
 
-void draw_stars(Star::range &alive_galaxy, const Vector &mass_center, const double &area, const double &zoom, View view);
+void draw_stars(Star::range &alive_galaxy, const glm::dvec3 &mass_center, const double &area, const double &zoom, View view);
 
 #endif
