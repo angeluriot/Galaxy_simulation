@@ -91,10 +91,8 @@ int main(int argc, char *argv[]) {
 	Star::range alive_galaxy = { galaxy.begin(), galaxy.end() };
 	double current_step = 1.;
 	bool stop_threads = false;
-
 	const auto update_stars = [&block, precision, verlet_integration, step, area, real_colors, &stop_threads, &current_step](MutexRange *mutpart) {
 		using namespace std::chrono_literals;
-
 		while (mutpart->ready != 1)
 			std::this_thread::sleep_for(2ms);
 
@@ -133,46 +131,44 @@ int main(int argc, char *argv[]) {
 	auto total_galaxy = std::distance(alive_galaxy.begin, alive_galaxy.end);
 	auto t0 = std::chrono::steady_clock::now();
 
-	do // Boucle du pas de temps de la simulation
+	while (true) // Boucle du pas de temps de la simulation
 	{
-		using namespace std::chrono_literals;
-		namespace chrono = std::chrono;
-		create_blocks(area, block, alive_galaxy);
+		if (SDL_PollEvent(&event) == 0) {
+			using namespace std::chrono_literals;
+			namespace chrono = std::chrono;
+			create_blocks(area, block, alive_galaxy);
 
-		make_partitions<n_thread>(mutparts, alive_galaxy, total_galaxy);
-		for (auto &mp : mutparts) {
-			while (mp.ready != 2)
-				std::this_thread::sleep_for(1ms);
-		}
-		{
-			const auto prev_end = alive_galaxy.end;
-			alive_galaxy.end = std::partition(alive_galaxy.begin, alive_galaxy.end, [](const Star &star) { return star.is_alive; });
-			total_galaxy -= std::distance(alive_galaxy.end, prev_end);
-		}
+			make_partitions<n_thread>(mutparts, alive_galaxy, total_galaxy);
+			for (auto &mp : mutparts) {
+				while (mp.ready != 2)
+					std::this_thread::sleep_for(1ms);
+			}
+			{
+				const auto prev_end = alive_galaxy.end;
+				alive_galaxy.end = std::partition(alive_galaxy.begin, alive_galaxy.end, [](const Star &star) { return star.is_alive; });
+				total_galaxy -= std::distance(alive_galaxy.end, prev_end);
+			}
 
-		SDL_PollEvent(&event);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+			SDL_RenderClear(renderer);
 
-//		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
-//			break;
+			draw_stars(alive_galaxy, block.mass_center, area, zoom, view);
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(renderer);
+			SDL_RenderPresent(renderer);
+			SDL_GL_SwapWindow(window);
 
-		draw_stars(alive_galaxy, block.mass_center, area, zoom, view);
-
-		SDL_RenderPresent(renderer);
-		SDL_GL_SwapWindow(window);
-
-		auto t1 = chrono::steady_clock::now();
-		chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
-		t0 = t1;
-		current_step = duree.count();
-	} while (event.type != SDL_QUIT && (event.type != SDL_KEYDOWN && event.key.keysym.scancode != SDL_SCANCODE_ESCAPE));
+			auto t1 = chrono::steady_clock::now();
+			chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
+			t0 = t1;
+			current_step = duree.count();
+		} else if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
+			break;
+	}
 
 	stop_threads = true;
-
-	for (auto &thr : mythreads)
+	for (auto &thr : mythreads) {
 		thr.join();
+	}
 
 	if (renderer)
 		SDL_DestroyRenderer(renderer);
