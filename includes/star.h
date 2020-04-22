@@ -3,17 +3,10 @@
 
 #include "vector.h"
 
-#if defined(_WIN32) || defined(WIN32)
-
-#include <Windows.h>
-
-#else
 #define GLM_FORCE_INLINE
 #define GLM_FORCE_SIZE_T_LENGTH
 
 #include <glm/vec3.hpp>
-
-#endif
 
 class Block;
 
