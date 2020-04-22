@@ -53,6 +53,8 @@ int main(int argc, char *argv[]) {
 	constexpr double zoom = 800.;                // Taille de "area" (en pixel)
 	constexpr bool real_colors = false;        // Activer la couleur réelle des étoiles
 
+	constexpr std::size_t n_thread = 4; // Le nombre de thread utilisé pour le calcul.
+
 
 
 	// -------------------------------------------------------------------------------
@@ -68,7 +70,6 @@ int main(int argc, char *argv[]) {
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetWindowTitle(window, "Galaxy simulation");
 	SDL_Event event;
-	constexpr size_t n_thread = 4;
 /* Inutile -> il vaut mieux laisser en commentaire et laisser à l'utilisateur le contrôle. Tant pis pour lui si ça foire. */
 //	if (area < 0.1) area = 0.1;
 //	if (galaxy_thickness > 1.) galaxy_thickness = 1.;
