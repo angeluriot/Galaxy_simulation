@@ -136,6 +136,7 @@ int main(int argc, char *argv[]) {
 	do // Boucle du pas de temps de la simulation
 	{
 		using namespace std::chrono_literals;
+		namespace chrono = std::chrono;
 		create_blocks(area, block, alive_galaxy);
 
 		make_partitions<n_thread>(mutparts, alive_galaxy, total_galaxy);
@@ -162,8 +163,8 @@ int main(int argc, char *argv[]) {
 		SDL_RenderPresent(renderer);
 		SDL_GL_SwapWindow(window);
 
-		auto t1 = std::chrono::steady_clock::now();
-		std::chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
+		auto t1 = chrono::steady_clock::now();
+		chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
 		t0 = t1;
 		current_step = duree.count();
 	} while (event.type != SDL_QUIT && (event.type != SDL_KEYDOWN && event.key.keysym.scancode != SDL_SCANCODE_ESCAPE));
