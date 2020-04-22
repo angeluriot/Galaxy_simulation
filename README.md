@@ -64,7 +64,7 @@ sur Windows, il vous suffit de télécharger l'intégralité du dépôt et de fa
 
 <br/>
 
-* Si vous êtes sous Linux, vous trouverez un fichier `CMakeLists.txt` utilisable avec CMake. Il vous est nécessaire de posséder les paquets de la SDL2, ainsi que le compilateur `g++`.
+* Si vous êtes sous Linux, vous trouverez un fichier `CMakeLists.txt` utilisable avec CMake. Il vous est nécessaire de posséder les paquets de la SDL2, la bibliothèque [GLM](https://github.com/g-truc/glm/), ainsi que le compilateur `g++`.
 * La marche à suivre dans le répertoire du projet :
 	* `mkdir build`
 	* `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++ -G "CodeBlocks - Unix Makefiles" ../`
