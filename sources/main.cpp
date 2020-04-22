@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	window = NULL;
-	renderer = NULL;
+//	window = nullptr; // useless : déjà fait auparavant.
+//	renderer = nullptr; // même raison.
 
 	SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 			{
 				it_star->update_acceleration_and_density(precision, block);
 
-				if (!(verlet_integration))
+				if (!verlet_integration)
 					it_star->update_speed(step * current_step, area);
 
 				it_star->update_position(step * current_step, verlet_integration);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 				if (!is_in(block, *it_star))
 					it_star->is_alive = false;
 
-				else if (!(real_colors))
+				else if (!real_colors)
 					it_star->update_color();
 			}
 
@@ -133,25 +133,26 @@ int main(int argc, char *argv[]) {
 	auto total_galaxy = std::distance(alive_galaxy.begin, alive_galaxy.end);
 	auto t0 = std::chrono::steady_clock::now();
 
-	while (true) // Boucle du pas de temps de la simulation
+	do // Boucle du pas de temps de la simulation
 	{
 		using namespace std::chrono_literals;
 		create_blocks(area, block, alive_galaxy);
 
 		make_partitions<n_thread>(mutparts, alive_galaxy, total_galaxy);
-		for (auto &mp : mutparts)
+		for (auto &mp : mutparts) {
 			while (mp.ready != 2)
 				std::this_thread::sleep_for(1ms);
+		}
 		{
-			auto prev_end = alive_galaxy.end;
+			const auto prev_end = alive_galaxy.end;
 			alive_galaxy.end = std::partition(alive_galaxy.begin, alive_galaxy.end, [](const Star &star) { return star.is_alive; });
 			total_galaxy -= std::distance(alive_galaxy.end, prev_end);
 		}
 
 		SDL_PollEvent(&event);
 
-		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
-			break;
+//		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
+//			break;
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
@@ -165,7 +166,7 @@ int main(int argc, char *argv[]) {
 		std::chrono::duration<double, std::ratio<1, 60>> duree = t1 - t0;
 		t0 = t1;
 		current_step = duree.count();
-	}
+	} while (event.type != SDL_QUIT && (event.type != SDL_KEYDOWN && event.key.keysym.scancode != SDL_SCANCODE_ESCAPE));
 
 	stop_threads = true;
 
