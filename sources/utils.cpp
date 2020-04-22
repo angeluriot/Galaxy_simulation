@@ -3,85 +3,83 @@
 
 
 
-// Donne un int al�atoire entre deux bornes
+// Donne un int aléatoire entre deux bornes
 
-int random_int(const int& min, const int& max)
-{
+int random_int(const int &min, const int &max) {
 	return rand() % (max - min) + min;
 }
 
 
 
-// Donne un double al�atoire entre deux bornes
+// Donne un double aléatoire entre deux bornes
 
-double random_double(const double& min, const double& max)
-{
+double random_double(const double &min, const double &max) {
 	return (double(rand()) / double(RAND_MAX)) * (max - min) + min;
 }
 
 
 
-// Affiche les �toiles de la galaxie
+// Affiche les étoiles de la galaxie
 
-void draw_stars(Star::range& alive_galaxy, const Vector& mass_center, const double& area, const double& zoom, View view)
-{
-	double x;
-	double y;
-	double z;
-	Vector screen_position;
-	Vector camera = Vector(0., area / 2., area / 2.);
-	double  coef = 1. / (area / zoom);
+void draw_stars(Star::range &alive_galaxy, const Vector &mass_center, const double &area, const double &zoom, View view) {
+	double x, y, z;
+//	Vector screen_position;
+	const double coef = 1. / (area / zoom);
 
-	for (auto itStar = alive_galaxy.begin; itStar != alive_galaxy.end; ++itStar)
-	{
-		switch (view)
-		{
-		case default_view:
+	for (auto itStar = alive_galaxy.begin; itStar != alive_galaxy.end; ++itStar) {
+		const Vector tmp = itStar->position - mass_center;
+		switch (view) {
+			case default_view: { // Portée obligatoire : initialisation d'une variable à l'intérieur d'un case.
+				x = tmp.x;
+				y = tmp.y / 3. - tmp.z / 1.5;
 
-			x = (itStar->position - mass_center).x;
-			y = (itStar->position - mass_center).y / 3. - (itStar->position - mass_center).z / 1.5;
+				const Vector camera(0., area / 2., area / 2.);
+				const auto screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(itStar->position, camera)),
+															  Vector(x, y, 0.).get_phi(),
+															  Vector(x, y, 0.).get_theta());
 
-			screen_position = create_spherical(Vector(x, y, 0.).get_radius() / (get_distance(itStar->position, camera)), Vector(x, y, 0.).get_phi(), Vector(x, y, 0.).get_theta());
+				x = screen_position.x * zoom + WIDTH * 0.5;
+				y = screen_position.y * zoom + HEIGHT * 0.5;
+			}
+				break;
 
-			x = screen_position.x * zoom + WIDTH / 2.;
-			y = screen_position.y * zoom + HEIGHT / 2.;
-			break;
+			case xy:
 
-		case xy:
+				x = tmp.x * coef + WIDTH * 0.5;
+				y = tmp.y * coef + HEIGHT * 0.5;
+				break;
 
-			x = (itStar->position - mass_center).x * coef + WIDTH / 2.;
-			y = (itStar->position - mass_center).y * coef + HEIGHT / 2.;
-			break;
+			case xz:
 
-		case xz:
+				x = tmp.x * coef + WIDTH * 0.5;
+				y = tmp.z * coef + HEIGHT * 0.5;
+				break;
 
-			x = (itStar->position - mass_center).x * coef + WIDTH / 2.;
-			y = (itStar->position - mass_center).z * coef + HEIGHT / 2.;
-			break;
+			case yz:
 
-		case yz:
-
-			x = (itStar->position - mass_center).y * coef + WIDTH / 2.;
-			y = (itStar->position - mass_center).z * coef + HEIGHT / 2.;
-			break;
+				x = tmp.y * coef + WIDTH * 0.5;
+				y = tmp.z * coef + HEIGHT * 0.5;
+				break;
 		}
+		{
+			const int x_sdl = static_cast<int>(x), y_sdl = static_cast<int>(y);
+			SDL_SetRenderDrawColor(renderer, itStar->color.r, itStar->color.g, itStar->color.b, SDL_ALPHA_OPAQUE);
 
-		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE);
+			SDL_RenderDrawPoint(renderer, x_sdl, y_sdl);
 
-		SDL_RenderDrawPoint(renderer, x, y);
+			SDL_SetRenderDrawColor(renderer, itStar->color.r, itStar->color.g, itStar->color.b, SDL_ALPHA_OPAQUE * 0.5);
 
-		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE * 0.5);
+			SDL_RenderDrawPoint(renderer, x_sdl - 1, y_sdl);
+			SDL_RenderDrawPoint(renderer, x_sdl, y_sdl - 1);
+			SDL_RenderDrawPoint(renderer, x_sdl, y_sdl + 1);
+			SDL_RenderDrawPoint(renderer, x_sdl + 1, y_sdl);
 
-		SDL_RenderDrawPoint(renderer, x - 1, y);
-		SDL_RenderDrawPoint(renderer, x, y - 1);
-		SDL_RenderDrawPoint(renderer, x, y + 1);
-		SDL_RenderDrawPoint(renderer, x + 1, y);
+			SDL_SetRenderDrawColor(renderer, itStar->color.r, itStar->color.g, itStar->color.b, SDL_ALPHA_OPAQUE * 0.25);
 
-		SDL_SetRenderDrawColor(renderer, GetRValue(itStar->color), GetGValue(itStar->color), GetBValue(itStar->color), SDL_ALPHA_OPAQUE * 0.25);
-
-		SDL_RenderDrawPoint(renderer, x - 1, y - 1);
-		SDL_RenderDrawPoint(renderer, x - 1, y + 1);
-		SDL_RenderDrawPoint(renderer, x + 1, y - 1);
-		SDL_RenderDrawPoint(renderer, x + 1, y + 1);
+			SDL_RenderDrawPoint(renderer, x_sdl - 1, y_sdl - 1);
+			SDL_RenderDrawPoint(renderer, x_sdl - 1, y_sdl + 1);
+			SDL_RenderDrawPoint(renderer, x_sdl + 1, y_sdl - 1);
+			SDL_RenderDrawPoint(renderer, x_sdl + 1, y_sdl + 1);
+		}
 	}
 }

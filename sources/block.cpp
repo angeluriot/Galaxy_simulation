@@ -1,29 +1,24 @@
 #include "block.h"
 
 
-
-std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot)
-{
-	std::array<std::function<bool(const Star & star)>, 3> testStarAxis =
-	{
-		[pivot](const Star& star) {return star.position.x < pivot.x; },
-		[pivot](const Star& star) {return star.position.y < pivot.y; },
-		[pivot](const Star& star) {return star.position.z < pivot.z; }
+std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot) {
+	const std::array<std::function<bool(const Star &star)>, 3> testStarAxis{
+			[&pivot](const Star &star) { return star.position.x < pivot.x; }, // 3 double c'est plus lourd qu'une rÃ©fÃ©rence.
+			[&pivot](const Star &star) { return star.position.y < pivot.y; },
+			[&pivot](const Star &star) { return star.position.z < pivot.z; }
 	};
 
 	std::array<Star::range, 8> result;
-	int iPart = 0;
-	Star::container::iterator itX = std::partition(stars.begin, stars.end, testStarAxis[0]);
-	auto xParts = std::array{ Star::range{stars.begin, itX}, Star::range{itX, stars.end} };
+	std::size_t iPart = 0;
+	auto itX = std::partition(stars.begin, stars.end, testStarAxis[0]);
+	auto xParts = std::array{ Star::range{ stars.begin, itX }, Star::range{ itX, stars.end }};
 
-	for (auto& part : xParts)
-	{
-		Star::container::iterator itY = std::partition(part.begin, part.end, testStarAxis[1]);
-		auto yParts = std::array{ Star::range{part.begin, itY}, Star::range{itY, part.end} };
+	for (auto &part : xParts) {
+		auto itY = std::partition(part.begin, part.end, testStarAxis[1]);
+		auto yParts = std::array{ Star::range{ part.begin, itY }, Star::range{ itY, part.end }};
 
-		for (auto& part : yParts)
-		{
-			Star::container::iterator itZ = std::partition(part.begin, part.end, testStarAxis[2]);
+		for (auto &part : yParts) {
+			auto itZ = std::partition(part.begin, part.end, testStarAxis[2]);
 			result[iPart++] = Star::range{ part.begin, itZ };
 			result[iPart++] = Star::range{ itZ, part.end };
 		}
@@ -36,8 +31,7 @@ std::array<Star::range, 8> set_octree(Star::range stars, Vector pivot)
 
 // Construit un bloc
 
-Block::Block()
-{
+Block::Block() {
 	as_stars = false;
 	mass_center = Vector(0., 0., 0.);
 	as_children = false;
@@ -50,10 +44,9 @@ Block::Block()
 
 
 
-// Construit un bloc à partir d'un autre bloc
-
-Block::Block(const Block& block)
-{
+// Construit un bloc ï¿½ partir d'un autre bloc
+// Mais ton truc il est pÃ©tÃ© ? o_O
+/*Block::Block(const Block &block) {
 	as_stars = false;
 	mass_center = Vector(0., 0., 0.);
 	as_children = false;
@@ -62,14 +55,13 @@ Block::Block(const Block& block)
 	mass = 0.;
 	size = halfsize = 0.;
 	nb_stars = 0;
-}
+}*/
 
 
 
 // Assignation
 
-void Block::operator=(const Block& block)
-{
+/*Block &Block::operator=(const Block &block) {
 	as_stars = block.as_stars;
 	mass_center = block.mass_center;
 	as_children = block.as_children;
@@ -81,19 +73,17 @@ void Block::operator=(const Block& block)
 	halfsize = block.halfsize;
 	contains = block.contains;
 	nb_stars = block.nb_stars;
-}
+}*/
 
 
 
-// Met à jour la masse et le centre de gravité de chaque blocks
+// Met Ã  jour la masse et le centre de gravitï¿½ de chaque blocks
 
-void Block::update_mass_center_and_mass(const Star::range& galaxy)
-{
+void Block::update_mass_center_and_mass(const Star::range &galaxy) {
 	mass_center = Vector(0., 0., 0.);
 	mass = 0.;
 
-	for (auto it = galaxy.begin; it != galaxy.end; ++it)
-	{
+	for (auto it = galaxy.begin; it != galaxy.end; ++it) {
 		mass_center += it->position * it->mass;
 		mass += it->mass;
 	}
@@ -104,28 +94,22 @@ void Block::update_mass_center_and_mass(const Star::range& galaxy)
 
 // Divise un bloc en 8 plus petits
 
-void Block::divide(Star::range stars)
-{
+void Block::divide(Star::range stars) {
 	if (stars.begin == stars.end) // pas d'etoile
 	{
-		contains = stars.begin; // pas très utile, permet de clear la memoire de array<Block, 8> si c'était sa valeur précédente
+		contains = stars.begin; // pas trï¿½s utile, permet de clear la memoire de array<Block, 8> si c'ï¿½tait sa valeur prï¿½cï¿½dente
 		nb_stars = 0;
 		mass = 0.;
 		mass_center = Vector(0., 0., 0.);
 		as_children = false;
-	}
-
-	else if (std::next(stars.begin) == stars.end) // une étoile
+	} else if (std::next(stars.begin) == stars.end) // une Ã©toile
 	{
 		contains = stars.begin;
 		nb_stars = 1;
 		mass = stars.begin->mass;
 		mass_center = stars.begin->position;
 		as_children = false;
-	}
-
-	else
-	{
+	} else {
 		if (contains.index() != 1)
 			contains = std::vector<Block>(8);
 
@@ -138,31 +122,29 @@ void Block::divide(Star::range stars)
 		block.set_size(halfsize);
 
 		Vector posis[] =
-		{
-			{position.x - size / 4., position.y - size / 4., position.z - size / 4.},
-			{position.x - size / 4., position.y - size / 4., position.z + size / 4.},
-			{position.x - size / 4., position.y + size / 4., position.z - size / 4.},
-			{position.x - size / 4., position.y + size / 4., position.z + size / 4.},
-			{position.x + size / 4., position.y - size / 4., position.z - size / 4.},
-			{position.x + size / 4., position.y - size / 4., position.z + size / 4.},
-			{position.x + size / 4., position.y + size / 4., position.z - size / 4.},
-			{position.x + size / 4., position.y + size / 4., position.z + size / 4.}
-		};
+				{
+						{ position.x - size / 4., position.y - size / 4., position.z - size / 4. },
+						{ position.x - size / 4., position.y - size / 4., position.z + size / 4. },
+						{ position.x - size / 4., position.y + size / 4., position.z - size / 4. },
+						{ position.x - size / 4., position.y + size / 4., position.z + size / 4. },
+						{ position.x + size / 4., position.y - size / 4., position.z - size / 4. },
+						{ position.x + size / 4., position.y - size / 4., position.z + size / 4. },
+						{ position.x + size / 4., position.y + size / 4., position.z - size / 4. },
+						{ position.x + size / 4., position.y + size / 4., position.z + size / 4. }
+				};
 
-		auto& myblocks = std::get<1>(contains);
+		auto &myblocks = std::get<1>(contains);
 		auto partitions_stars = set_octree(stars, position);
 		double new_mass = 0.;
 		Vector new_mass_center = Vector(0., 0., 0.);
 		int i_add = 0;
 
-		for (int ibloc = 0; ibloc < 8; ibloc++)
-		{
+		for (int ibloc = 0; ibloc < 8; ibloc++) {
 			myblocks[ibloc] = block;
 			myblocks[ibloc].position = posis[ibloc];
 			myblocks[ibloc].divide(partitions_stars[ibloc]);
 
-			if (myblocks[ibloc].nb_stars > 0)
-			{
+			if (myblocks[ibloc].nb_stars > 0) {
 				new_mass += myblocks[ibloc].mass;
 				new_mass_center += myblocks[ibloc].mass_center * myblocks[ibloc].mass;
 				i_add++;
@@ -176,31 +158,28 @@ void Block::divide(Star::range stars)
 
 
 
-// Met à jour la taille du block
+// Met ï¿½ jour la taille du block
 
-void Block::set_size(const double& size)
-{
+void Block::set_size(const double &size) {
 	this->size = size;
-	this->halfsize = size / static_cast<double>(2.);
+	this->halfsize = size * 0.5;
 }
 
 
 
-// Dit si l'étoile est dans le bloc
+// Dit si l'ï¿½toile est dans le bloc
 
-bool is_in(const Block& block, const Star& star)
-{
-	return (block.position.x + block.size / 2. > star.position.x and block.position.x - block.size / 2. < star.position.x
-		and block.position.y + block.size / 2. > star.position.y and block.position.y - block.size / 2. < star.position.y
-		and block.position.z + block.size / 2. > star.position.z and block.position.z - block.size / 2. < star.position.z);
+bool is_in(const Block &block, const Star &star) {
+	return (block.position.x + block.size * 0.5 > star.position.x and block.position.x - block.size * 0.5 < star.position.x
+			and block.position.y + block.size * 0.5 > star.position.y and block.position.y - block.size * 0.5 < star.position.y
+			and block.position.z + block.size * 0.5 > star.position.z and block.position.z - block.size * 0.5 < star.position.z);
 }
 
 
 
-// Génère les blocs
+// Gï¿½nï¿½re les blocs
 
-void create_blocks(const double& area, Block& block, Star::range& alive_galaxy)
-{
+void create_blocks(const double &area, Block &block, Star::range &alive_galaxy) {
 	block.set_size(area * 3.);
 	block.divide(alive_galaxy);
 }

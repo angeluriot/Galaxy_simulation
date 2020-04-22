@@ -5,8 +5,7 @@
 
 // Construit un vecteur
 
-Vector::Vector()
-{
+Vector::Vector() {
 	x = 0.;
 	y = 0.;
 	z = 0.;
@@ -14,10 +13,9 @@ Vector::Vector()
 
 
 
-// Construit un vecteur à partir d'un autre vecteur
+// Construit un vecteur Ã  partir d'un autre vecteur
 
-Vector::Vector(const Vector& vector)
-{
+Vector::Vector(const Vector &vector) {
 	x = vector.x;
 	y = vector.y;
 	z = vector.z;
@@ -25,10 +23,9 @@ Vector::Vector(const Vector& vector)
 
 
 
-// Construit un vecteur à partir de ses coordonnées cartésiennes
+// Construit un vecteur Ã  partir de ses coordonnÃ©es cartÃ©siennes
 
-Vector::Vector(const double& x, const double& y, const double& z)
-{
+Vector::Vector(const double &x, const double &y, const double &z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
@@ -36,10 +33,9 @@ Vector::Vector(const double& x, const double& y, const double& z)
 
 
 
-// Construit un vecteur à partir de ses coordonnées sphériques
+// Construit un vecteur Ã  partir de ses coordonnÃ©es sphÃ©riques
 
-Vector create_spherical(const double& radius, const double& phi, const double& theta)
-{
+Vector create_spherical(const double &radius, const double &phi, const double &theta) {
 	return Vector(get_x(radius, phi, theta), get_y(radius, phi, theta), get_z(radius, phi, theta));
 }
 
@@ -47,30 +43,25 @@ Vector create_spherical(const double& radius, const double& phi, const double& t
 
 // Assignations
 
-void Vector::operator=(const Vector& vector)
-{
+/*Vector &Vector::operator=(const Vector &vector) {
 	x = vector.x;
 	y = vector.y;
 	z = vector.z;
-}
+}*/
 
-void Vector::operator+=(const Vector& vector)
-{
+void Vector::operator+=(const Vector &vector) {
 	*this = *this + vector;
 }
 
-void Vector::operator-=(const Vector& vector)
-{
+void Vector::operator-=(const Vector &vector) {
 	*this = *this - vector;
 }
 
-void Vector::operator*=(const double& number)
-{
+void Vector::operator*=(const double &number) {
 	*this = *this * number;
 }
 
-void Vector::operator/=(const double& number)
-{
+void Vector::operator/=(const double &number) {
 	*this = *this / number;
 }
 
@@ -78,8 +69,7 @@ void Vector::operator/=(const double& number)
 
 // Addition
 
-Vector operator+(const Vector& vector_1, const Vector& vector_2)
-{
+Vector operator+(const Vector &vector_1, const Vector &vector_2) {
 	return Vector(vector_1.x + vector_2.x, vector_1.y + vector_2.y, vector_1.z + vector_2.z);
 }
 
@@ -87,8 +77,7 @@ Vector operator+(const Vector& vector_1, const Vector& vector_2)
 
 // Soustraction
 
-Vector operator-(const Vector& vector_1, const Vector& vector_2)
-{
+Vector operator-(const Vector &vector_1, const Vector &vector_2) {
 	return Vector(vector_1.x - vector_2.x, vector_1.y - vector_2.y, vector_1.z - vector_2.z);
 }
 
@@ -96,13 +85,11 @@ Vector operator-(const Vector& vector_1, const Vector& vector_2)
 
 // Produit
 
-Vector operator*(const Vector& vector, const double& number)
-{
+Vector operator*(const Vector &vector, const double &number) {
 	return Vector(vector.x * number, vector.y * number, vector.z * number);
 }
 
-Vector operator*(const double& number, const Vector& vector)
-{
+Vector operator*(const double &number, const Vector &vector) {
 	return Vector(number * vector.x, number * vector.y, number * vector.z);
 }
 
@@ -110,8 +97,7 @@ Vector operator*(const double& number, const Vector& vector)
 
 // Produit scalaire
 
-double operator*(const Vector& vector_1, const Vector& vector_2)
-{
+double operator*(const Vector &vector_1, const Vector &vector_2) {
 	return vector_1.x * vector_2.x + vector_1.y * vector_2.y + vector_1.z * vector_2.z;
 }
 
@@ -119,40 +105,37 @@ double operator*(const Vector& vector_1, const Vector& vector_2)
 
 // Produit vectoriel
 
-Vector operator^(const Vector& vector_1, const Vector& vector_2)
-{
-	return Vector(vector_1.y * vector_2.z - vector_1.z * vector_2.y, vector_1.z * vector_2.x - vector_1.x * vector_2.z, vector_1.x * vector_2.y - vector_1.y * vector_2.x);
+Vector operator^(const Vector &vector_1, const Vector &vector_2) {
+	return Vector(vector_1.y * vector_2.z - vector_1.z * vector_2.y,
+				  vector_1.z * vector_2.x - vector_1.x * vector_2.z,
+				  vector_1.x * vector_2.y - vector_1.y * vector_2.x);
 }
 
 
 
 // Division
 
-Vector operator/(const Vector& vector, const double& number)
-{
+Vector operator/(const Vector &vector, const double &number) {
 	return Vector(vector.x / number, vector.y / number, vector.z / number);
 }
 
 
 
-// Egalités
+// EgalitÃ©s
 
-bool operator==(const Vector& vector_1, const Vector& vector_2)
-{
+bool operator==(const Vector &vector_1, const Vector &vector_2) {
 	return (vector_1.x == vector_2.x and vector_1.y == vector_2.y and vector_1.z == vector_2.z);
 }
 
-bool operator!=(const Vector& vector_1, const Vector& vector_2)
-{
+bool operator!=(const Vector &vector_1, const Vector &vector_2) {
 	return (!(vector_1.x == vector_2.x and vector_1.y == vector_2.y and vector_1.z == vector_2.z));
 }
 
 
 
-// Donne la norme du vecteur (en mètres)
+// Donne la norme du vecteur (en mÃ¨tres)
 
-double Vector::get_radius() const
-{
+double Vector::get_radius() const {
 	return sqrt(x * x + y * y + z * z);
 }
 
@@ -160,8 +143,7 @@ double Vector::get_radius() const
 
 // Donne l'angle phi du vecteur (en radiants)
 
-double Vector::get_phi() const
-{
+double Vector::get_phi() const {
 	Vector vector = *this;
 
 	vector.z = 0.;
@@ -177,44 +159,39 @@ double Vector::get_phi() const
 
 // Donne l'angle theta du vecteur (en radiants)
 
-double Vector::get_theta() const
-{
+double Vector::get_theta() const {
 	return acos(z / get_radius());
 }
 
 
 
-// Donne la valeur cartésienne x à partir des coordonnées sphériques (en mètres)
+// Donne la valeur cartÃ©sienne x Ã  partir des coordonnÃ©es sphÃ©riques (en mÃ¨tres)
 
-double get_x(const double& radius, const double& phi, const double& theta)
-{
+double get_x(const double &radius, const double &phi, const double &theta) {
 	return cos(phi) * sin(theta) * radius;
 }
 
 
 
-// Donne la valeur cartésienne y à partir des coordonnées sphériques (en mètres)
+// Donne la valeur cartÃ©sienne y Ã  partir des coordonnÃ©es sphÃ©riques (en mÃ¨tres)
 
-double get_y(const double& radius, const double& phi, const double& theta)
-{
+double get_y(const double &radius, const double &phi, const double &theta) {
 	return sin(phi) * sin(theta) * radius;
 }
 
 
 
-// Donne la valeur cartésienne z à partir des coordonnées sphériques (en mètres)
+// Donne la valeur cartÃ©sienne z Ã  partir des coordonnÃ©es sphÃ©riques (en mÃ¨tres)
 
-double get_z(const double& radius, const double& phi, const double& theta)
-{
+double get_z(const double &radius, const double &phi, const double &theta) {
 	return cos(theta) * radius;
 }
 
 
 
-// Donne la distance entre deux points (en mètres)
+// Donne la distance entre deux points (en mÃ¨tres)
 
-double get_distance(const Vector& point_1, const Vector& point_2)
-{
+double get_distance(const Vector &point_1, const Vector &point_2) {
 	return (point_1 - point_2).get_radius();
 }
 
@@ -222,8 +199,7 @@ double get_distance(const Vector& point_1, const Vector& point_2)
 
 // Donne l'angle phi entre deux points (en radiants)
 
-double get_phi(const Vector& point_1, const Vector& point_2)
-{
+double get_phi(const Vector &point_1, const Vector &point_2) {
 	return (point_1 - point_2).get_phi();
 }
 
@@ -231,16 +207,14 @@ double get_phi(const Vector& point_1, const Vector& point_2)
 
 // Donne l'angle theta entre deux points (en radiants)
 
-double get_theta(const Vector& point_1, const Vector& point_2)
-{
+double get_theta(const Vector &point_1, const Vector &point_2) {
 	return (point_1 - point_2).get_theta();
 }
 
 
 
-// Donne le vecteur normalisé
+// Donne le vecteur normalisÃ©
 
-Vector normalize(const Vector& vector)
-{
+Vector normalize(const Vector &vector) {
 	return vector / vector.get_radius();
 }
