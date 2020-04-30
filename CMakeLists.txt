@@ -21,7 +21,7 @@ set(SOURCES
 	includes/utils.h
 	includes/vector.h)
 
-set(COMPILE_FLAGS
+set(COMPILE_OPTIONS
 	-pipe
 	-march=native
 	-Wall
