@@ -16,7 +16,7 @@ if ((NOT DEFINED VCPKG_TARGET_TRIPLET) AND ("${CMAKE_CXX_COMPILER}" MATCHES  g\\
 endif()
 
 add_executable(Galaxy_simulation ${PROJ_SRC})
-target_include_directories(Galaxy_simulation PUBLIC ${CMAKE_SOURCE_DIR}/includes)
+target_include_directories(Galaxy_simulation PRIVATE ${CMAKE_SOURCE_DIR}/includes)
 
 find_package(SFML COMPONENTS system window graphics REQUIRED)
 target_link_libraries(Galaxy_simulation PRIVATE

@@ -419,7 +419,7 @@ void Menu::init_values(uint16_t values_sizes, const double& values_positions, co
 		}
 }
 
-// Initialise les cases é cocher
+// Initialise les cases à cocher
 
 void Menu::init_boxes(const double& boxes_sizes, const double& boxes_widths, const double& boxes_positions, const sf::Color& squares_colors, const sf::Color& checks_colors)
 {
