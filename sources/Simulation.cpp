@@ -1,6 +1,6 @@
 #include "Simulation.h"
 
-// Crée une simulation
+// CrÃ©e une simulation
 
 Simulation::Simulation()
 {
@@ -15,14 +15,14 @@ Simulation::Simulation()
 	step = 0.f;
 }
 
-// Crée une simulation à partir des données du menu
+// CrÃ©e une simulation Ã  partir des donnÃ©es du menu
 
 Simulation::Simulation(const Menu& menu, sf::RenderWindow* window, My_event& my_event)
 {
 	restart(menu, window, my_event);
 }
 
-// Recrée une simulation à partir des données du menu
+// RecrÃ©e une simulation Ã  partir des donnÃ©es du menu
 
 void Simulation::restart(const Menu& menu, sf::RenderWindow* window, My_event& my_event)
 {
@@ -37,7 +37,7 @@ void Simulation::restart(const Menu& menu, sf::RenderWindow* window, My_event& m
 	finished = std::vector<std::atomic<bool>>(thread_nb);
 	std::fill(finished.begin(), finished.end(), false);
 
-	// Paramètres
+	// ParamÃ¨tres
 	area = menu["area"];
 	acc_max = menu["acc_max"];
 	precision = menu["precision"];
@@ -103,7 +103,7 @@ std::vector<Part> Simulation::split_galaxy()
 	return parts;
 }
 
-// Met à jour l'accélération des étoiles pour un thread
+// Met Ã  jour l'accÃ©lÃ©ration des Ã©toiles pour un thread
 
 void Simulation::acceleration_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
 {
@@ -118,7 +118,7 @@ void Simulation::acceleration_update(const Galaxy::iterator& begin, const Galaxy
 	finished[thread_id] = true;
 }
 
-// Met à jour la position et la couleur des étoiles pour un thread
+// Met Ã  jour la position et la couleur des Ã©toiles pour un thread
 
 void Simulation::position_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
 {
@@ -134,7 +134,7 @@ void Simulation::position_update(const Galaxy::iterator& begin, const Galaxy::it
 	finished[thread_id] = true;
 }
 
-// Check les évenements et stop les threads
+// Check les Ã©venements et stop les threads
 
 bool Simulation::check_events(My_event& my_event, std::vector<std::thread>& threads)
 {
@@ -153,7 +153,7 @@ bool Simulation::check_events(My_event& my_event, std::vector<std::thread>& thre
 
 }
 
-// Check les évenements et stop le thread
+// Check les Ã©venements et stop le thread
 
 bool Simulation::check_events(My_event& my_event, std::thread& thread)
 {
@@ -170,7 +170,7 @@ bool Simulation::check_events(My_event& my_event, std::thread& thread)
 	return false;
 }
 
-// Met à jour la simulation (Gère le multithreading)
+// Met Ã  jour la simulation (GÃ©re le multithreading)
 
 void Simulation::update(My_event& my_event)
 {
@@ -184,7 +184,7 @@ void Simulation::update(My_event& my_event)
 	std::fill(finished.begin(), finished.end(), false);
 	thread = std::thread([this]() { block.reload(*this); finished.front() = true; });
 
-	// Evénements
+	// EvÃ©nements
 	if (check_events(my_event, thread))
 		return;
 
@@ -195,7 +195,7 @@ void Simulation::update(My_event& my_event)
 	for (uint8_t i = 0; i < threads.size(); i++)
 		threads[i] = std::thread([this, i, parts]() { this->acceleration_update(parts[i][0], parts[i][1], i); });
 
-	// Evénements
+	// EvÃ©nements
 	if (check_events(my_event, threads))
 		return;
 
@@ -206,7 +206,7 @@ void Simulation::update(My_event& my_event)
 	for (uint8_t i = 0; i < threads.size(); i++)
 		threads[i] = std::thread([this, i, parts]() { this->position_update(parts[i][0], parts[i][1], i); });
 
-	// Evénements
+	// EvÃ©nements
 	if (check_events(my_event, threads))
 		return;
 
@@ -215,7 +215,7 @@ void Simulation::update(My_event& my_event)
 	std::fill(finished.begin(), finished.end(), false);
 	thread = std::thread([this]() { this->center_galaxy(); this->draw_simulation(); finished.front() = true; });
 
-	// Evénements
+	// EvÃ©nements
 	if (check_events(my_event, thread))
 		return;
 }
@@ -226,15 +226,15 @@ void Simulation::draw_simulation()
 {
 	image = void_image;
 
-	//block.draw(area, image, View::XY); // Décommenter pour afficher les blocs
+	//block.draw(area, image, View::XY); // DÃ©commenter pour afficher les blocs
 
 	for (Star& star : galaxy)
 		star.draw(area, image, View::XY);
 
-	//save_image(""); // Décommenter pour enregister une image par frame (attention il faut mettre un chemin)
+	//save_image(""); // DÃ©commenter pour enregister une image par frame (attention il faut mettre un chemin)
 }
 
-// Affiche la simulation sur l'écran
+// Affiche la simulation sur l'Ã©cran
 
 void Simulation::draw()
 {

@@ -17,25 +17,25 @@ class Simulation;
 class Star;
 class Restart;
 
-typedef					std::list<Star> Galaxy;						// Typedef désignant une galaxie
+typedef					std::list<Star> Galaxy;						// Typedef dÃ©signant une galaxie
 
-extern uint16_t			screen_width;								// Largeur de l'écran
+extern uint16_t			screen_width;								// Largeur de l'Ã©cran
 	
 enum class				View { Default, XY, XZ, YZ };				// Vues possibles de la simulation
 
-#define					WIDTH		1920							// Largeur de l'écran
-#define					HEIGHT		1080							// Hauteur de l'écran
-#define					RESIZE		((1.f / 1920.f) * screen_width)	// Coéfficient en fonction de la taille de l'écran
+#define					WIDTH		1920							// Largeur de l'Ã©cran
+#define					HEIGHT		1080							// Hauteur de l'Ã©cran
+#define					RESIZE		((1.f / 1920.f) * screen_width)	// CoÃ©fficient en fonction de la taille de l'Ã©cran
 #define					FREE_THREAD	2								// Nombre de threads libres
 #define					FPS_BUTTONS	10								// Nombre de millisecondes entre chaque updates des buttons
 
-// Classe de gestion d'événements
+// Classe de gestion d'Ã©vÃ©nements
 
 class My_event
 {
 public:
 
-	sf::RenderWindow*	window;			// Fenêtre SFML
+	sf::RenderWindow*	window;			// fenÃªtre SFML
 	Simulation*			simulation;		// Simulation
 	Restart*			restart_button;	// Pointeur vers le bouton restart
 	bool*				end;			// Fin de la simulation

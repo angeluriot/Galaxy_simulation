@@ -5,7 +5,7 @@
 
 uint16_t screen_width;
 
-// Construit un gestionnaire d'événement
+// Construit un gestionnaire d'Ã©vÃ©nement
 
 My_event::My_event()
 {
@@ -16,14 +16,14 @@ My_event::My_event()
 	simulation_end = NULL;
 }
 
-// Construit un gestionnaire d'événement à partir d'un autre
+// Construit un gestionnaire d'Ã©vÃ©nement Ã  partir d'un autre
 
 My_event::My_event(const My_event& sf)
 {
 	*this = sf;
 }
 
-// Construit un gestionnaire d'événement à partir des pointeurs qu'il utilise
+// Construit un gestionnaire d'Ã©vÃ©nement Ã  partir des pointeurs qu'il utilise
 
 My_event::My_event(sf::RenderWindow* window, Simulation* simulation, Restart* restart_button, bool* end, bool* simulation_end)
 {
@@ -45,7 +45,7 @@ void My_event::operator=(const My_event& sf)
 	simulation_end = sf.simulation_end;
 }
 
-// Gestion des différents types d'événements
+// Gestion des diffÃ©rents types d'Ã©vÃ©nements
 
 bool My_event::events(sf::Event& sf_event)
 {
@@ -76,7 +76,7 @@ bool My_event::events(sf::Event& sf_event)
 	return false;
 }
 
-// Vérifie si un événement se produit
+// VÃ©rifie si un Ã©vÃ©nement se produit
 
 bool My_event::check()
 {
@@ -90,7 +90,7 @@ bool My_event::check()
 	return false;
 }
 
-// Attend qu'un événement se produit
+// Attend qu'un Ã©vÃ©nement se produit
 
 bool My_event::wait()
 {
@@ -108,14 +108,14 @@ uint32_t random_int(int32_t min, int32_t max)
 	return rand() % (max - min) + min;
 }
 
-// Donne un réel entre min et max
+// Donne un rÃ©el entre min et max
 
 Float random_Float(const Float& min, const Float& max)
 {
 	return (static_cast<Float>(rand()) / static_cast<Float>(RAND_MAX)) * (max - min) + min;
 }
 
-// Donne "vrai" avec une probabilité choisie
+// Donne "vrai" avec une probabilitÃ© choisie
 
 bool rand_probability(const Float& probability)
 {
@@ -128,7 +128,7 @@ bool rand_probability(const Float& probability)
 	return true;
 }
 
-// Donne la position sur l'écran à partir de la position dans la simulation
+// Donne la position sur l'Ã©cran Ã  partir de la position dans la simulation
 
 sf::Vector2f simu_to_screen(const Vector& position, const Float& area, View view)
 {
@@ -146,7 +146,7 @@ sf::Vector2f simu_to_screen(const Vector& position, const Float& area, View view
 		return sf::Vector2f((position.y / (area * 1.2f)) * 1080.f * RESIZE + 960.f * RESIZE, (position.z / (area * 1.2f)) * 1080.f * RESIZE + 540.f * RESIZE);
 }
 
-// Donne la taille sur l'écran à partir de la taille dans la simulation
+// Donne la taille sur l'Ã©cran Ã  partir de la taille dans la simulation
 
 sf::Vector2f simu_to_screen(const Float& size, const Float& area)
 {

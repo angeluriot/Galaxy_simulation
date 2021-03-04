@@ -5,7 +5,7 @@
 
 class Block;
 
-// Classe définissant une étoile
+// Classe dÃ©finissant une Ã©toile
 
 class Star
 {
@@ -14,8 +14,8 @@ public:
 	Vector		previous_position;	// Position d'avant
 	Vector		position;			// Position
 	Vector		speed;				// Vitesse
-	Vector		acceleration;		// Accélération
-	Float		density;			// Densité autour de l'étoile
+	Vector		acceleration;		// AccÃ©lÃ©ration
+	Float		density;			// DensitÃ© autour de l'Ã©toile
 	sf::Color	color;				// Couleur
 	Block*		block_index;		// Pointeur vers le bloc
 

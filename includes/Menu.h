@@ -6,11 +6,13 @@
 #include <iostream>
 #include <array>
 
-extern uint16_t	screen_width;								// Largeur de l'écran
-#define			MENU_RESIZE ((1. / 1920.) * screen_width)	// Coéfficient en fonction de la taille de l'écran
+#include <math.h> // sqrt atan2 pow : NÃ©cessaire pour la compilation sous linux
+
+extern uint16_t	screen_width;								// Largeur de l'Ã©cran
+#define			MENU_RESIZE ((1. / 1920.) * screen_width)	// CoÃ©fficient en fonction de la taille de l'Ã©cran
 #define			MENU_PI 3.14159265359						// Pi
 
-// Classe définissant une ligne
+// Classe dÃ©finissant une ligne
 
 class Line
 {
@@ -33,14 +35,14 @@ public:
 	void							draw(sf::RenderWindow& window) const;
 };
 
-// Clase définissant une case à cocher
+// Clase dÃ©finissant une case Ã  cocher
 
 class Box
 {
 private:
 
 	std::array<Line, 4>			square;	// La boite
-	std::array<Line, 2>			check;	// Boite cochée
+	std::array<Line, 2>			check;	// Boite cochÃ©e
 	sf::RectangleShape			hitbox; // Hitbox
 
 public:
@@ -63,27 +65,27 @@ enum Cursor_type { arrow, hand, resize };
 
 enum VarType { Bool, Int, Double };
 
-// Clase définissant une variable
+// Clase dÃ©finissant une variable
 
 class Variable
 {
 public:
 
 	VarType							type;				// Type de la variable
-	double							value;				// Valeur stockée
+	double							value;				// Valeur stockÃ©e
 	double							min;				// Valeur maximum
 	double							max;				// Valeur minimum
-	uint8_t							precision;			// Nombre de chiffres après la virgule
+	uint8_t							precision;			// Nombre de chiffres aprÃ¨s la virgule
 	bool							percent;			// Si c'est un pourcentage ou non
-	std::string						name_id;			// Nom utilisé pour la recherche
-	sf::Text						name;				// Nom affiché
+	std::string						name_id;			// Nom utilisÃ© pour la recherche
+	sf::Text						name;				// Nom affichÃ©
 	sf::Text						value_text;			// Texte de l'affichage de la valeur
-	Box								box;				// Boite à cocher
+	Box								box;				// Boite Ã  cocher
 	Line							line;				// Ligne du curseur
 	sf::CircleShape					circle;				// Rond du curseur
-	bool							grabbed;			// Est cliqué
+	bool							grabbed;			// Est cliquÃ©
 	bool							grab_forbiden;		// Clic interdit
-	sf::Vector2i					previous_mouse_pos;	// Position précédente de la souris
+	sf::Vector2i					previous_mouse_pos;	// Position prÃ©cÃ©dente de la souris
 
 									Variable();
 									Variable(const Variable& variable);
@@ -98,7 +100,7 @@ public:
 	void							draw(sf::RenderWindow& window) const;
 };
 
-// Clase définissant le menu
+// Clase dÃ©finissant le menu
 
 class Menu
 {
@@ -108,7 +110,7 @@ public:
 	sf::Color					background;				// Le fond
 	sf::Font					texts_font;				// La police du texte
 	sf::Texture					start_texture;			// Texture du bouton start
-	sf::Texture					start_texture_grabbed;	// Texture du bouton start appuyé
+	sf::Texture					start_texture_grabbed;	// Texture du bouton start appuyÃ©
 	sf::RectangleShape			start_button;			// Bouton start
 	bool						end;					// Fin du menu
 
@@ -133,7 +135,7 @@ public:
 	void						draw(sf::RenderWindow& window) const;
 };
 
-// Classe définissant un bouton pour recommencer
+// Classe dÃ©finissant un bouton pour recommencer
 
 class Restart
 {
@@ -142,7 +144,7 @@ public :
 	bool				is_active;			// Est actif
 	sf::RectangleShape	button;				// Bouton recommencer
 	sf::Texture			texture;			// Texture du bouton recommencer
-	sf::Texture			texture_grabbed;	// Texture du bouton recommencer appuyé
+	sf::Texture			texture_grabbed;	// Texture du bouton recommencer appuyÃ©
 
 						Restart();
 						Restart(const Restart& restart);

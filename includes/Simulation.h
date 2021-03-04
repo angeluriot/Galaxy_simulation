@@ -6,26 +6,26 @@
 #include "Vector.h"
 #include "Block.h"
 
-typedef std::array<Galaxy::iterator, 2> Part;	// Typedef désignant une partie de la galaxie
+typedef std::array<Galaxy::iterator, 2> Part;	// Typedef dÃ©signant une partie de la galaxie
 
-// Classe définissant la simulation
+// Classe dÃ©finissant la simulation
 
 class Simulation
 {
 public:
 
 	sf::Image						void_image;	// Image vide
-	sf::Image						image;		// Image à afficher
+	sf::Image						image;		// Image Ã  afficher
 	sf::Texture						texture;	// Texture supportant l'image
-	sf::RenderWindow*				window;		// Pointeur sur la fenêtre
-	uint8_t							thread_nb;	// Nombre de coeurs utilisés par le CPU
-	std::vector<std::atomic<bool>>	finished;	// Indique pour chaque thread si il a terminé
+	sf::RenderWindow*				window;		// Pointeur sur la fenÃªtre
+	uint8_t							thread_nb;	// Nombre de coeurs utilisÃ©s par le CPU
+	std::vector<std::atomic<bool>>	finished;	// Indique pour chaque thread si il a terminÃ©
 	Galaxy							galaxy;		// Galaxie
-	uint32_t						nb_stars;	// Nombre d'étoiles
-	Block							block;		// Blocs de l'algorithme de Barnes–Hut
-	Float							area;		// Zone d'apparition des étoiles
-	Float							acc_max;	// Accélération maximum
-	Float							precision;	// Précision de l'algorithme de Barnes–Hut
+	uint32_t						nb_stars;	// Nombre d'Ã©toiles
+	Block							block;		// Blocs de l'algorithme de Barnes-Hut
+	Float							area;		// Zone d'apparition des Ã©toiles
+	Float							acc_max;	// AccÃ©lÃ©ration maximum
+	Float							precision;	// PrÃ©cision de l'algorithme de Barnes-Hut
 	Float							step;		// Pas de temps
 
 									Simulation();
