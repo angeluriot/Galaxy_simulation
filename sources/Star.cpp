@@ -74,7 +74,7 @@ void Star::update_acceleration(Galaxy& galaxy, const Float& acc_max, const Block
 	// Force des autres étoiles
 	force_calculation(block, precision);
 
-	// Force supplémentaire vers le centre (matiére noire)
+	// Force supplémentaire vers le centre (matière noire)
 	acceleration += Vector_spherical((galaxy.size()) / get_distance_2(position, Vector()), get_theta(position, Vector()), get_phi(position, Vector()));
 
 	// Gestion de l'accélération maximum

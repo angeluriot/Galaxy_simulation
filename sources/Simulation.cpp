@@ -37,7 +37,7 @@ void Simulation::restart(const Menu& menu, sf::RenderWindow* window, My_event& m
 	finished = std::vector<std::atomic<bool>>(thread_nb);
 	std::fill(finished.begin(), finished.end(), false);
 
-	// Paramétres
+	// Paramètres
 	area = menu["area"];
 	acc_max = menu["acc_max"];
 	precision = menu["precision"];
@@ -103,7 +103,7 @@ std::vector<Part> Simulation::split_galaxy()
 	return parts;
 }
 
-// Met é jour l'accélération des étoiles pour un thread
+// Met à jour l'accélération des étoiles pour un thread
 
 void Simulation::acceleration_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
 {
@@ -118,7 +118,7 @@ void Simulation::acceleration_update(const Galaxy::iterator& begin, const Galaxy
 	finished[thread_id] = true;
 }
 
-// Met é jour la position et la couleur des étoiles pour un thread
+// Met à jour la position et la couleur des étoiles pour un thread
 
 void Simulation::position_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
 {
@@ -170,7 +170,7 @@ bool Simulation::check_events(My_event& my_event, std::thread& thread)
 	return false;
 }
 
-// Met é jour la simulation (Gére le multithreading)
+// Met à jour la simulation (Gére le multithreading)
 
 void Simulation::update(My_event& my_event)
 {

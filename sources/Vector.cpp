@@ -124,7 +124,7 @@ void Vector::normalize()
 		*this /= get_norm();
 }
 
-// Met toutes les composantes é zéro
+// Met toutes les composantes à zéro
 
 void Vector::clear()
 {

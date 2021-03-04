@@ -167,7 +167,7 @@ Variable::Variable(const Variable& variable)
 	*this = variable;
 }
 
-// Construit une variable à partir de ces paramétres
+// Construit une variable à partir de ces Paramètres
 
 Variable::Variable(const std::string& name_id, const std::string& name, VarType type, double initial_value, double min, double max, uint8_t precision, bool percent)
 {
@@ -342,14 +342,14 @@ Menu::Menu(const Menu& menu)
 	*this = menu;
 }
 
-// Construit un menu à partir de ces paramétres
+// Construit un menu à partir de ces Paramètres
 
 Menu::Menu(const sf::Color& background)
 {
 	reload(background);
 }
 
-// Initialise un menu à partir de ces paramétres 
+// Initialise un menu à partir de ces Paramètres 
 
 void Menu::reload(const sf::Color& background)
 {
@@ -582,7 +582,7 @@ Restart::Restart(const Restart& restart)
 	*this = restart;
 }
 
-// Construit un bouton recommencer à partir de ces paramétres
+// Construit un bouton recommencer à partir de ces Paramètres
 
 Restart::Restart(const double& start_size, const double& start_x_position, const double& start_y_position, const sf::Color& start_color)
 {

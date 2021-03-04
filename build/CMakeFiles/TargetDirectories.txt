@@ -1,3 +1,0 @@
-/run/media/bensuperpc/97bd8ddd-4d52-45c9-b3bb-e369b544db32/Logiciels_Scripts_OS/repos_perso/Galaxy_simulation/build/CMakeFiles/rebuild_cache.dir
-/run/media/bensuperpc/97bd8ddd-4d52-45c9-b3bb-e369b544db32/Logiciels_Scripts_OS/repos_perso/Galaxy_simulation/build/CMakeFiles/edit_cache.dir
-/run/media/bensuperpc/97bd8ddd-4d52-45c9-b3bb-e369b544db32/Logiciels_Scripts_OS/repos_perso/Galaxy_simulation/build/CMakeFiles/Galaxy_simulation.dir

@@ -75,7 +75,7 @@ public:
 	double							value;				// Valeur stockée
 	double							min;				// Valeur maximum
 	double							max;				// Valeur minimum
-	uint8_t							precision;			// Nombre de chiffres aprés la virgule
+	uint8_t							precision;			// Nombre de chiffres après la virgule
 	bool							percent;			// Si c'est un pourcentage ou non
 	std::string						name_id;			// Nom utilisé pour la recherche
 	sf::Text						name;				// Nom affiché
