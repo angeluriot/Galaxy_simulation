@@ -35,7 +35,7 @@ class My_event
 {
 public:
 
-	sf::RenderWindow*	window;			// Fenétre SFML
+	sf::RenderWindow*	window;			// fenêtre SFML
 	Simulation*			simulation;		// Simulation
 	Restart*			restart_button;	// Pointeur vers le bouton restart
 	bool*				end;			// Fin de la simulation

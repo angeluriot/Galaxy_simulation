@@ -15,17 +15,17 @@ class Simulation
 public:
 
 	sf::Image						void_image;	// Image vide
-	sf::Image						image;		// Image é afficher
+	sf::Image						image;		// Image à afficher
 	sf::Texture						texture;	// Texture supportant l'image
-	sf::RenderWindow*				window;		// Pointeur sur la fenétre
+	sf::RenderWindow*				window;		// Pointeur sur la fenêtre
 	uint8_t							thread_nb;	// Nombre de coeurs utilisés par le CPU
 	std::vector<std::atomic<bool>>	finished;	// Indique pour chaque thread si il a terminé
 	Galaxy							galaxy;		// Galaxie
 	uint32_t						nb_stars;	// Nombre d'étoiles
-	Block							block;		// Blocs de l'algorithme de BarneséHut
+	Block							block;		// Blocs de l'algorithme de Barnes-Hut
 	Float							area;		// Zone d'apparition des étoiles
 	Float							acc_max;	// Accélération maximum
-	Float							precision;	// Précision de l'algorithme de BarneséHut
+	Float							precision;	// Précision de l'algorithme de Barnes-Hut
 	Float							step;		// Pas de temps
 
 									Simulation();

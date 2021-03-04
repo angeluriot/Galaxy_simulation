@@ -48,7 +48,7 @@ Block::Block(Block& parent, uint8_t location)
 	mass_center /= static_cast<Float>(stars.size());
 }
 
-// Construit un bloc é partir d'un autre bloc
+// Construit un bloc à partir d'un autre bloc
 
 Block::Block(const Block& block)
 {
@@ -152,7 +152,7 @@ void Block::draw(const Float& area, sf::Image& image, View view) const
 		block.draw(area, image, view);
 }
 
-// Donne la position d'un bloc enfant é partir de son indice
+// Donne la position d'un bloc enfant à partir de son indice
 
 Vector locate(uint8_t location)
 {

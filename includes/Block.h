@@ -6,7 +6,7 @@
 
 class Simulation;
 
-// Classe définissant une zone de l'algorithme de BarneséHut
+// Classe définissant une zone de l'algorithme de Barnes-Hut
 
 class Block
 {

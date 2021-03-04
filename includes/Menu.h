@@ -35,7 +35,7 @@ public:
 	void							draw(sf::RenderWindow& window) const;
 };
 
-// Clase définissant une case é cocher
+// Clase définissant une case à cocher
 
 class Box
 {
@@ -80,7 +80,7 @@ public:
 	std::string						name_id;			// Nom utilisé pour la recherche
 	sf::Text						name;				// Nom affiché
 	sf::Text						value_text;			// Texte de l'affichage de la valeur
-	Box								box;				// Boite é cocher
+	Box								box;				// Boite à cocher
 	Line							line;				// Ligne du curseur
 	sf::CircleShape					circle;				// Rond du curseur
 	bool							grabbed;			// Est cliqué
