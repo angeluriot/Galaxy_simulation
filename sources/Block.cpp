@@ -48,7 +48,7 @@ Block::Block(Block& parent, uint8_t location)
 	mass_center /= static_cast<Float>(stars.size());
 }
 
-// Construit un bloc à partir d'un autre bloc
+// Construit un bloc Ã© partir d'un autre bloc
 
 Block::Block(const Block& block)
 {
@@ -67,7 +67,7 @@ void Block::operator=(const Block& block)
 	size = block.size;
 }
 
-// Recrée le bloc
+// RecrÃ©e le bloc
 
 void Block::reload(Simulation& simulation)
 {
@@ -100,7 +100,7 @@ void Block::reload(Simulation& simulation)
 	}
 }
 
-// Dit si l'étoile est dans le bloc
+// Dit si l'Ã©toile est dans le bloc
 
 bool Block::is_in(const Vector& star_position) const
 {
@@ -121,7 +121,7 @@ void Block::clear()
 	size = 0.f;
 }
 
-// Affiche les blocs (Ne marche pas en vue par défaut)
+// Affiche les blocs (Ne marche pas en vue par dÃ©faut)
 
 void Block::draw(const Float& area, sf::Image& image, View view) const
 {
@@ -152,7 +152,7 @@ void Block::draw(const Float& area, sf::Image& image, View view) const
 		block.draw(area, image, view);
 }
 
-// Donne la position d'un bloc enfant à partir de son indice
+// Donne la position d'un bloc enfant Ã© partir de son indice
 
 Vector locate(uint8_t location)
 {

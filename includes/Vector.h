@@ -8,15 +8,15 @@
 
 typedef float Float;
 
-// Classe définissant un vecteur
+// Classe dÃ©finissant un vecteur
 
 class Vector
 {
 public:
 
-	Float		x;	// coordonnée x
-	Float		y;	// coordonnée y
-	Float		z;	// coordonnée z
+	Float		x;	// coordonnÃ©e x
+	Float		y;	// coordonnÃ©e y
+	Float		z;	// coordonnÃ©e z
 
 	// Constructeurs
 
@@ -32,7 +32,7 @@ public:
 	void		operator*=(const Float& number);
 	void		operator/=(const Float& number);
 
-	// Récupérer
+	// RÃ©cupÃ©rer
 
 	Float		get_norm() const;
 	Float		get_norm_2() const;
@@ -53,7 +53,7 @@ public:
 Vector			Vector_cartesian(const Float& x, const Float& y, const Float& z);
 Vector			Vector_spherical(const Float& norm, const Float& theta, const Float& phi);
 
-// Opérateurs
+// OpÃ©rateurs
 
 Vector			operator+(const Vector& vector_1, const Vector& vector_2);
 Vector			operator-(const Vector& vector_1, const Vector& vector_2);
@@ -67,7 +67,7 @@ bool			operator==(const Vector& vector_1, const Vector& vector_2);
 bool			operator!=(const Vector& vector_1, const Vector& vector_2);
 std::ostream&	operator<<(std::ostream& os, const Vector& vector);
 
-// Récupérer
+// RÃ©cupÃ©rer
 
 Float			get_x(const Float& norm, const Float& theta, const Float& phi);
 Float			get_y(const Float& norm, const Float& theta, const Float& phi);

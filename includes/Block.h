@@ -6,7 +6,7 @@
 
 class Simulation;
 
-// Classe définissant une zone de l'algorithme de Barnes–Hut
+// Classe dÃ©finissant une zone de l'algorithme de BarnesÃ©Hut
 
 class Block
 {
@@ -15,8 +15,8 @@ public:
 	Block*				parent;			// Pointeur vers le bloc parent
 	std::list<Block>	children;		// Les blocs enfants
 	Vector				position;		// Position du bloc
-	Vector				mass_center;	// Centre de gravité du bloc
-	std::vector<Star*>	stars;			// Liste de pointeurs vers les étoiles contenues dans le block
+	Vector				mass_center;	// Centre de gravitÃ© du bloc
+	std::vector<Star*>	stars;			// Liste de pointeurs vers les Ã©toiles contenues dans le block
 	Float				size;			// Taille du bloc
 	
 						Block();

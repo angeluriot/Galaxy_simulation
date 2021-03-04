@@ -2,7 +2,7 @@
 #include "utils.h"
 #include "Block.h" // "Block.h" au lieu de "block.h"
 
-// Construit une �toile
+// Construit une étoile
 
 Star::Star()
 {
@@ -14,7 +14,7 @@ Star::Star()
 	block_index = NULL;
 }
 
-// Construit une �toile � partir des propri�t�s de la simulation
+// Construit une étoile à partir des propriétés de la simulation
 
 Star::Star(const Float& initial_speed, const Float& area, const Float& galaxy_thickness, const Float& step)
 {
@@ -28,7 +28,7 @@ Star::Star(const Float& initial_speed, const Float& area, const Float& galaxy_th
 	block_index = NULL;
 }
 
-// Construit une �toile � partir d'une autre �toile
+// Construit une étoile à partir d'une autre étoile
 
 Star::Star(const Star& star)
 {
@@ -48,41 +48,41 @@ void Star::operator=(const Star& star)
 	block_index = star.block_index;
 }
 
-// Met � jour la position
+// Met é jour la position
 
 void Star::update_position(const Float& step)
 {
 	Vector temp = position;
-	position = 2.f * position - previous_position + acceleration * step * step; // Int�gration de Verlet
+	position = 2.f * position - previous_position + acceleration * step * step; // Intégration de Verlet
 	previous_position = temp;
 }
 
-// Met � jour la vitesse
+// Met é jour la vitesse
 
 void Star::update_speed(const Float& step)
 {
 	speed += acceleration * step;
 }
 
-// Met � jour l'acc�l�ration et la densit�
+// Met é jour l'accélération et la densité
 
 void Star::update_acceleration(Galaxy& galaxy, const Float& acc_max, const Block& block, const Float& precision)
 {
 	acceleration.clear();
 	density = 0.;
 
-	// Force des autres �toiles
+	// Force des autres étoiles
 	force_calculation(block, precision);
 
-	// Force suppl�mentaire vers le centre (mati�re noire)
+	// Force supplémentaire vers le centre (matiére noire)
 	acceleration += Vector_spherical((galaxy.size()) / get_distance_2(position, Vector()), get_theta(position, Vector()), get_phi(position, Vector()));
 
-	// Gestion de l'acc�l�ration maximum
+	// Gestion de l'accélération maximum
 	if (acceleration.get_norm() > acc_max)
 		acceleration.set_norm(acc_max);
 }
 
-// Calcule la densit� et la force exerc�e sur une �toile
+// Calcule la densité et la force exercée sur une étoile
 
 void Star::force_calculation(const Block& block, const Float& precision)
 {
@@ -113,7 +113,7 @@ void Star::force_calculation(const Block& block, const Float& precision)
 	}
 }
 
-// Met � jour la couleur
+// Met é jour la couleur
 
 void Star::update_color(uint32_t nb_stars)
 {
@@ -132,7 +132,7 @@ void Star::update_color(uint32_t nb_stars)
 		color = sf::Color(color_nb - 255 * 2, 255, 255);
 }
 
-// Dessine l'�toile
+// Dessine l'étoile
 
 void Star::draw(const Float& area, sf::Image& image, View view) const
 {

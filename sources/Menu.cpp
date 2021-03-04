@@ -8,14 +8,14 @@ Line::Line()
 {
 }
 
-// Construit une ligne à partir d'une autre ligne
+// Construit une ligne Ã  partir d'une autre ligne
 
 Line::Line(const Line& line)
 {
 	*this = line;
 }
 
-// Construit une ligne à partir de ces propriétés
+// Construit une ligne Ã  partir de ces propriÃ©tÃ©s
 
 Line::Line(const double& width, const sf::Vector2f& position_1, const sf::Vector2f& position_2, const sf::Color& color)
 {
@@ -58,7 +58,7 @@ double Line::get_size() const
 	return rectangle.getSize().x;
 }
 
-// Renvoie l'épaisseur
+// Renvoie l'Ã©paisseur
 
 double Line::get_width() const
 {
@@ -90,14 +90,14 @@ Box::Box()
 {
 }
 
-// Construit une case à partir d'une autre case
+// Construit une case Ã  partir d'une autre case
 
 Box::Box(const Box& box)
 {
 	*this = box;
 }
 
-// Construit une case à partir de ces propriétés
+// Construit une case Ã  partir de ces propriÃ©tÃ©s
 
 Box::Box(const double& size, const double& width, const sf::Vector2f& position, const sf::Color& square_color, const sf::Color& check_color)
 {
@@ -160,14 +160,14 @@ Variable::Variable()
 	grab_forbiden = false;
 }
 
-// Construit une variable à partir d'une autre variable
+// Construit une variable Ã  partir d'une autre variable
 
 Variable::Variable(const Variable& variable)
 {
 	*this = variable;
 }
 
-// Construit une variable à partir de ces paramètres
+// Construit une variable Ã  partir de ces paramÃ©tres
 
 Variable::Variable(const std::string& name_id, const std::string& name, VarType type, double initial_value, double min, double max, uint8_t precision, bool percent)
 {
@@ -239,7 +239,7 @@ double Variable::get_value_from_circle() const
 	return (static_cast<double>(circle.getPosition().x - line.get_position(0).x) / line.get_size()) * (max - min) + min;
 }
 
-// Met à jour la variable
+// Met Ã© jour la variable
 
 void Variable::update(sf::RenderWindow& window)
 {
@@ -335,21 +335,21 @@ Menu::Menu()
 	end = false;
 }
 
-// Construit un menu à partir d'un autre menu
+// Construit un menu Ã  partir d'un autre menu
 
 Menu::Menu(const Menu& menu)
 {
 	*this = menu;
 }
 
-// Construit un menu à partir de ces paramètres
+// Construit un menu Ã  partir de ces paramÃ©tres
 
 Menu::Menu(const sf::Color& background)
 {
 	reload(background);
 }
 
-// Initialise un menu à partir de ces paramètres 
+// Initialise un menu Ã  partir de ces paramÃ©tres 
 
 void Menu::reload(const sf::Color& background)
 {
@@ -404,7 +404,7 @@ void Menu::init_circles(const double& circles_radius, const sf::Color& circles_c
 		}
 }
 
-// Initialise les valeurs affichées
+// Initialise les valeurs affichÃ©es
 
 void Menu::init_values(uint16_t values_sizes, const double& values_positions, const sf::Color& values_colors)
 {
@@ -419,7 +419,7 @@ void Menu::init_values(uint16_t values_sizes, const double& values_positions, co
 		}
 }
 
-// Initialise les cases à cocher
+// Initialise les cases Ã© cocher
 
 void Menu::init_boxes(const double& boxes_sizes, const double& boxes_widths, const double& boxes_positions, const sf::Color& squares_colors, const sf::Color& checks_colors)
 {
@@ -458,7 +458,7 @@ void Menu::operator=(const Menu& menu)
 	end = menu.end;
 }
 
-// Donne la valeur d'une variable à partir de son nom
+// Donne la valeur d'une variable Ã  partir de son nom
 
 double Menu::operator[](const std::string& name_id) const
 {
@@ -477,7 +477,7 @@ bool Menu::is_in(sf::Vector2f position) const
 			position.y > start_button.getPosition().y - start_button.getSize().y / 2. && position.y < start_button.getPosition().y + start_button.getSize().x / 2.);
 }
 
-// Met à jour le menu
+// Met Ã© jour le menu
 
 void Menu::update(sf::RenderWindow& window)
 {
@@ -575,14 +575,14 @@ Restart::Restart()
 	is_active = false;
 }
 
-// Construit un bouton recommencer à partir d'un autre
+// Construit un bouton recommencer Ã  partir d'un autre
 
 Restart::Restart(const Restart& restart)
 {
 	*this = restart;
 }
 
-// Construit un bouton recommencer à partir de ces paramètres
+// Construit un bouton recommencer Ã  partir de ces paramÃ©tres
 
 Restart::Restart(const double& start_size, const double& start_x_position, const double& start_y_position, const sf::Color& start_color)
 {
@@ -619,7 +619,7 @@ bool Restart::is_in(sf::Vector2f position)
 			position.y > button.getPosition().y - button.getSize().y / 2. && position.y < button.getPosition().y + button.getSize().x / 2.);
 }
 
-// Met à jour le bouton recommencer
+// Met Ã© jour le bouton recommencer
 
 bool Restart::update(sf::RenderWindow& window)
 {
@@ -694,7 +694,7 @@ void Restart::draw(sf::RenderWindow& window)
 
 // -------------------- Fonctions --------------------
 
-// Transforme un nombre réel en text
+// Transforme un nombre rÃ©el en text
 
 std::string double_to_string(const double& value, uint8_t precision, bool percent)
 {

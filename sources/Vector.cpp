@@ -9,14 +9,14 @@ Vector::Vector()
 	z = 0.;
 }
 
-// Construit un vecteur à partir d'un autre vecteur
+// Construit un vecteur Ã  partir d'un autre vecteur
 
 Vector::Vector(const Vector& vector)
 {
 	*this = vector;
 }
 
-// Construit un vecteur à partir de ses coordonnées cartésiennes
+// Construit un vecteur Ã  partir de ses coordonnÃ©es cartÃ©siennes
 
 Vector::Vector(const Float& x, const Float& y, const Float& z)
 {
@@ -61,7 +61,7 @@ Float Vector::get_norm() const
 	return sqrt(x * x + y * y + z * z);
 }
 
-// Donne la norme du vecteur au carré
+// Donne la norme du vecteur au carrÃ©
 
 Float Vector::get_norm_2() const
 {
@@ -124,21 +124,21 @@ void Vector::normalize()
 		*this /= get_norm();
 }
 
-// Met toutes les composantes à zéro
+// Met toutes les composantes Ã© zÃ©ro
 
 void Vector::clear()
 {
 	*this = Vector();
 }
 
-// Construit un vecteur à partir de ses coordonnées cartésiennes
+// Construit un vecteur Ã  partir de ses coordonnÃ©es cartÃ©siennes
 
 Vector Vector_cartesian(const Float& x, const Float& y, const Float& z)
 {
 	return Vector(x, y, z);
 }
 
-// Construit un vecteur à partir de ses coordonnées sphériques
+// Construit un vecteur Ã  partir de ses coordonnÃ©es sphÃ©riques
 
 Vector Vector_spherical(const Float& norm, const Float& theta, const Float& phi)
 {
@@ -202,7 +202,7 @@ Vector operator/(const Vector& vector, const Float& number)
 	return Vector(vector.x / number, vector.y / number, vector.z / number);
 }
 
-// Egalités
+// EgalitÃ©s
 
 bool operator==(const Vector& vector_1, const Vector& vector_2)
 {
@@ -222,21 +222,21 @@ std::ostream& operator<<(std::ostream& os, const Vector& vector)
 	return os;
 }
 
-// Donne la valeur cartésienne x à partir des coordonnées sphériques
+// Donne la valeur cartÃ©sienne x Ã  partir des coordonnÃ©es sphÃ©riques
 
 Float get_x(const Float& norm, const Float& theta, const Float& phi)
 {
 	return sin(theta) * cos(phi) * norm;
 }
 
-// Donne la valeur cartésienne y à partir des coordonnées sphériques
+// Donne la valeur cartÃ©sienne y Ã  partir des coordonnÃ©es sphÃ©riques
 
 Float get_y(const Float& norm, const Float& theta, const Float& phi)
 {
 	return sin(theta) * sin(phi) * norm;
 }
 
-// Donne la valeur cartésienne z à partir des coordonnées sphériques
+// Donne la valeur cartÃ©sienne z Ã  partir des coordonnÃ©es sphÃ©riques
 
 Float get_z(const Float& norm, const Float& theta, const Float& phi)
 {
@@ -250,7 +250,7 @@ Float get_distance(const Vector& point_1, const Vector& point_2)
 	return (point_2 - point_1).get_norm();
 }
 
-// Donne la distance entre deux points au carré
+// Donne la distance entre deux points au carrÃ©
 
 Float get_distance_2(const Vector& point_1, const Vector& point_2)
 {
@@ -271,7 +271,7 @@ Float get_phi(const Vector& point_1, const Vector& point_2)
 	return (point_2 - point_1).get_phi();
 }
 
-// Donne le vecteur normalisé
+// Donne le vecteur normalisÃ©
 
 Vector normalized(const Vector& vector)
 {
