@@ -1,137 +1,56 @@
-#include "Simulation.h"
-
-// Initialisation de la fenêtre en fonction de l'écran
-
-void init_window(sf::RenderWindow& window, std::string project_name)
-{
-	uint16_t width;
-	uint16_t height;
-
-	if (sf::VideoMode::getDesktopMode().width > (16. / 9.) * sf::VideoMode::getDesktopMode().height)
-		height = (sf::VideoMode::getDesktopMode().height * 3) / 4, width = (height * 16) / 9;
-
-	else if (sf::VideoMode::getDesktopMode().width < (16. / 9.) * sf::VideoMode::getDesktopMode().height)
-		width = (sf::VideoMode::getDesktopMode().width * 3) / 4, height = (width * 9) / 16;
-
-	else
-		width = (sf::VideoMode::getDesktopMode().width * 3) / 4, height = (sf::VideoMode::getDesktopMode().height * 3) / 4;
-
-	screen_width = width;
-
-	sf::ContextSettings settings;
-	settings.antialiasingLevel = 8;
-	window.create(sf::VideoMode(width, height), project_name, sf::Style::Close | sf::Style::Titlebar, settings);
-
-	sf::Image icon;
-	icon.loadFromFile("dependencies/resources/icon.png");
-	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-}
-
-// Initialisation du menu
-
-void init_menu(Menu& menu)
-{
-	menu.reload(sf::Color(20, 20, 200));
-
-	menu.add_variable("star_nb", "Nombre d'etoiles", Int, 50000, 100, 500000);
-	menu.add_variable("initial_speed", "Vitesse initiale", Double, 23., 0., 100., 1);
-	menu.add_variable("area", "Taille de la galaxie", Double, 50., 10., 1000., 0);
-	menu.add_variable("galaxy_thickness", "Epaisseur de la galaxie", Double, 1., 0., 10., 0);
-	menu.add_variable("acc_max", "Limite de l'acceleration", Double, 700., 1., 2000., 1);
-	menu.add_variable("precision", "Precision", Double, 0.5, 0., 2., 1);
-	menu.add_variable("step", "Pas de temps", Double, 0.01, 0.001, 0.1, 3);
-	menu.add_variable("simulation_speed", "Update / sec (0 = max)", Int, 0, 0, 1000);
-
-	menu.init_names(50, 750, sf::Color::White, 150);
-	menu.init_lines(700, 15, 1200, sf::Color(75, 75, 255));
-	menu.init_circles(20, sf::Color::White);
-	menu.init_values(40, 50, sf::Color::White);
-	menu.init_boxes(45, 11, 900, sf::Color::White, sf::Color::Green);
-	menu.init_start(150, 1920 * RESIZE - 150, 1080 * RESIZE - 150, sf::Color::White);
-}
-
-// Main
+#include <dim/dimension3D.hpp>
+#include "Simulation.hpp"
 
 int main()
 {
-	// Initialisation
+	dim::Window::open("Galaxy simulation", 0.75f, "resources/icons/icon.png");
 
-	sf::RenderWindow window;
-	init_window(window, "Galaxy simulation");
+	dim::PerspectiveCamera cam(45.f, 1.f, 10000.f);
+	cam.set_position(dim::Vector3(0.f, 0.f, 100.f));
+	dim::Window::set_camera(cam);
+	dim::Window::set_controller(dim::OrbitController(dim::Vector3::null, dim::OrbitController::default_sensitivity, 2.f));
 
-	Menu menu;
-	init_menu(menu);
+	dim::Shader::add("star", "shaders/star.vert", "shaders/star.frag");
+	dim::Shader::add("galaxy", "shaders/galaxy.vert", "shaders/galaxy.frag");
+	dim::Shader::add("blur", "shaders/blur.vert", "shaders/blur.frag");
+	dim::Shader::add("post", "shaders/post.vert", "shaders/post.frag");
+	dim::Shader::add("test", "shaders/test.vert", "shaders/test.frag");
 
-	Restart restart_button(150, 1920 * RESIZE - 150, 1080 * RESIZE - 150, sf::Color::White);
+	Simulation::restart();
 
-	bool simulation_end = false;
-	bool end = false;
-
-	sf::Cursor cursor;
-	cursor.loadFromSystem(sf::Cursor::Arrow);
-	window.setMouseCursor(cursor);
-
-	// lancement de la simulation
-
-	Simulation simulation;
-	My_event my_event(&window, &simulation, &restart_button, &end, &simulation_end);
-
-	while (!end)
+	std::thread simulation_thread([]()
 	{
-		// Lancement du menu
+		while (dim::Window::running)
+			Simulation::update();
+	});
 
-		while (!menu.end && !end)
+	while (dim::Window::running)
+	{
+		sf::Event sf_event;
+		while (dim::Window::poll_event(sf_event))
 		{
-			if (sleep_every(FPS_BUTTONS))
-			{
-				my_event.check();
+			if (sf_event.type == sf::Event::MouseWheelScrolled)
+				dim::Window::get_controller().enable(true);
 
-				menu.update(window);
-				menu.draw(window);
-			}
+			dim::Window::check_events(sf_event);
+			Menu::check_events(sf_event);
+			Simulation::check_events(sf_event);
 		}
 
-		cursor.loadFromSystem(sf::Cursor::Wait);
-		window.setMouseCursor(cursor);
+		dim::Window::get_controller().enable(!Menu::active || !Menu::visible, dim::Controller::Action::Look);
 
-		menu.end = false;
-		simulation.restart(menu, &window, my_event);
-		restart_button.is_active = true;
+		dim::Window::clear();
+		Simulation::clear();
+		dim::Window::update();
 
-		if (restart_button.is_in(sf::Vector2f(sf::Mouse::getPosition(window))))
-			cursor.loadFromSystem(sf::Cursor::Hand);
+		//Simulation::send_mesh();
+		Simulation::draw();
 
-		else
-			cursor.loadFromSystem(sf::Cursor::Arrow);
-
-		window.setMouseCursor(cursor);
-
-		// Lancement de la simulation
-
-		while (!simulation_end && !end)
-		{
-			if (menu["simulation_speed"] != 0)
-			{
-				if (sleep_every(menu["simulation_speed"]))
-					simulation.update(my_event);
-			}
-
-			else
-				simulation.update(my_event);
-
-			if (sleep_every(FPS_BUTTONS))
-			{
-				window.clear(sf::Color::Black);
-
-				simulation.draw();
-				my_event.check();
-			}
-		}
-
-		simulation_end = false;
-		restart_button.is_active = false;
+		Menu::display();
+		dim::Window::display();
 	}
 
-	window.close();
-	return 0;
+	simulation_thread.join();
+	dim::Window::close();
+	return EXIT_SUCCESS;
 }

@@ -1,75 +1,55 @@
-# Galaxy simulation
+# Project
 
-![Release](https://img.shields.io/badge/Release-v3.0-blueviolet)
+![Release](https://img.shields.io/badge/Release-v1.0-blueviolet)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
-![Library](https://img.shields.io/badge/Library-SFML-00cf2c)
-![Size](https://img.shields.io/badge/Size-32%20Mo-f12222)
+![Size](https://img.shields.io/badge/Size-218Mo-f12222)
 ![Open Source](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)
 
-<br/>
+<br>
 
-This repository contains the source code of an n-body type simulation using the Barnes-Hut algorithm for optimization, it's specifically designed to simulate galaxies.
+This repository contains...
 
-<br/>
+<br>
 
 <p align="center">
-	<img src="https://i.imgur.com/4sF1bDK.png" width="700">
+	<img src="" width="700">
 </p>
 
-<br/>
-
-# Video
-
-Here is a video explaining how the algorithm works :
-
-[**► SIMULER UNE GALAXIE 🌌💻**](https://www.youtube.com/watch?v=CQV89wXPnmQ)
-
-<br/>
+<br>
 
 # Features
 
-* The program has an integrated menu to change the options of the simulation :
+<br>
 
-<p align="center">
-	<img src="https://i.imgur.com/6b02rta.png" width="700">
-</p>
+# Video
 
-* Once the parameters are selected, the galaxy simulation begins.
+<br>
 
-<br/>
+# Libraries
 
-# Tests
+* **[GLM](http://glm.g-truc.net/0.9.6/api/index.html)** *(for math stuff)*
+* **[GLEW](http://glew.sourceforge.net/)** *(for 3D graphics)*
+* **[SFML](https://www.sfml-dev.org/)** *(for 2D graphics)*
+* **[ImGui](https://github.com/ocornut/imgui)** *(for windows and menus)*
+* **[ImGui-SFML](https://github.com/eliasdaler/imgui-sfml)** *(Links **ImGui** and **SFML**)*
+* **[Dimension3D](https://github.com/angeluriot/Dimension3D)** *(Links all the libraries above)*
 
-Here are several moments of the evolution of a galaxy with 200,000 stars :
+*(They are all included in the repository)*
 
-<p align="center">
-	<img src="https://i.imgur.com/ZnNaGkk.png" width="700">
-</p>
+<br>
 
-<p align="center">
-	<img src="https://i.imgur.com/4sF1bDK.png" width="700">
-</p>
+# Install
 
-<p align="center">
-	<img src="https://i.imgur.com/DCyWTAb.png" width="700">
-</p>
+This repository is based on my **[Graphics Skeleton](https://github.com/angeluriot/Graphics_skeleton)** project, see its **[install part](https://github.com/angeluriot/Graphics_skeleton#install)** for more information.
 
-<p align="center">
-	<img src="https://i.imgur.com/LJfT9yK.png" width="700">
-</p>
+<br>
 
-<br/>
+# Releases
 
-# Notes
+If you want to test the program without compiling it, you can see the **[releases](?)**.
 
-The Barnes-Hut algorithm was used to optimize the simulation, here is what the different areas used for the calculation look like:
-
-<p align="center">
-	<img src="https://i.imgur.com/XUF0ODw.png" width="700">
-</p>
-
-<br/>
+<br>
 
 # Credits
 
-* [**Angel Uriot**](https://github.com/angeluriot) : Creator of the project.
+* **[Angel Uriot](https://github.com/angeluriot) :** Creator of the project.

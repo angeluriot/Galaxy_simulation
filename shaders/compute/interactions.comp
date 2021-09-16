@@ -1,0 +1,36 @@
+#version 430
+precision mediump float;
+
+layout (local_size_x = 10, local_size_y = 10) in;
+
+layout (rgba32f, binding = 0) uniform image2D a_positions;
+layout (rgba32f, binding = 1) uniform image2D a_accelerations;
+
+layout (location = 2) uniform float u_smoothing_length;
+layout (location = 3) uniform vec2 u_texture_size;
+
+float distance_2(vec3 pos_1, vec3 pos_2)
+{
+	return pow(pos_2.x - pos_1.x, 2) + pow(pos_2.y - pos_1.y, 2) + pow(pos_2.z - pos_1.z, 2);
+}
+
+void main()
+{
+	ivec2 coords = ivec2(gl_GlobalInvocationID);
+	vec3 position = imageLoad(a_positions, coords).rgb;
+	vec3 acc = vec3(0.);
+	vec3 star_pos;
+	float dist;
+
+	for (int i = 0; i < u_texture_size.x; i++)
+		for (int j = 0; j < u_texture_size.y; j++)
+		{
+			star_pos = imageLoad(a_positions, ivec2(i, j)).rgb;
+			dist = distance_2(position, star_pos);
+
+			if (dist > 0.)
+				acc += ((normalize(star_pos - position)) / (dist + u_smoothing_length));
+		}
+
+	imageStore(a_accelerations, coords, vec4(acc, 1.));
+}

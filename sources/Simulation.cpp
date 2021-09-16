@@ -1,252 +1,235 @@
-#include "Simulation.h"
+#include "Simulation.hpp"
 
-// Crée une simulation
+std::atomic<bool>	Simulation::mesh_done = false;
+std::mutex			Simulation::reload;
+float				Simulation::step;
+IntergrationMethod	Simulation::intergration_method;
+float				Simulation::smoothing_length;
+float				Simulation::precision;
+int					Simulation::nb_stars;
+float				Simulation::galaxy_diameter;
+float				Simulation::galaxy_thickness;
+float				Simulation::stars_speed;
+std::list<Star>		Simulation::galaxy = {};
+dim::FrameBuffer	Simulation::input_texture;
+dim::FrameBuffer	Simulation::output_texture;
+dim::ComputeShader	Simulation::compute_shader;
+dim::VertexBuffer	Simulation::star_vbo;
+dim::VertexBuffer	Simulation::galaxy_vbo;
+dim::VertexBuffer	Simulation::blur_vbo;
+dim::VertexBuffer	Simulation::post_vbo;
+dim::Mesh			Simulation::mesh;
+dim::FrameBuffer	Simulation::galaxy_fbo_1;
+dim::FrameBuffer	Simulation::galaxy_fbo_2;
+dim::FrameBuffer	Simulation::blur_fbo_1;
+dim::FrameBuffer	Simulation::blur_fbo_2;
+Block				Simulation::main_block;
 
-Simulation::Simulation()
+void Simulation::restart()
 {
-	window = NULL;
-	thread_nb = 0;
-	finished.clear();
 	galaxy.clear();
-	nb_stars = 0;
-	area = 0.f;
-	acc_max = 0.f;
-	precision = 0.f;
-	step = 0.f;
+	mesh.clear();
+
+	step = Menu::step;
+	intergration_method = static_cast<IntergrationMethod>(Menu::intergration_method);
+	smoothing_length = Menu::smoothing_length;
+	precision = Menu::precision;
+	nb_stars = Menu::nb_stars;
+	galaxy_diameter = Menu::galaxy_diameter;
+	galaxy_thickness = Menu::galaxy_thickness;
+	stars_speed = Menu::stars_speed;
+
+	input_texture.create(640, 480, dim::Texture::Type::RGBA_32f);
+	output_texture.create(640, 480, dim::Texture::Type::RGBA_32f);
+	compute_shader.load("shaders/compute.comp");
+
+	galaxy_vbo.set_shader("galaxy");
+	star_vbo.send_data("star", dim::Mesh::square, dim::DataType::Positions);
+	blur_vbo.send_data("blur", dim::Mesh::screen, dim::DataType::Positions | dim::DataType::TexCoords);
+	post_vbo.send_data("post", dim::Mesh::screen, dim::DataType::Positions | dim::DataType::TexCoords);
+	galaxy_fbo_1.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
+	galaxy_fbo_2.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
+	blur_fbo_1.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
+	blur_fbo_2.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
+
+	Computer::init();
+	Renderer::init();
+
+	galaxy.resize(nb_stars);
+	mesh.positions.resize(nb_stars);
+	mesh.texcoords.resize(nb_stars);
+
+	center_camera();
+	update_mesh();
 }
 
-// Crée une simulation à partir des données du menu
-
-Simulation::Simulation(const Menu& menu, sf::RenderWindow* window, My_event& my_event)
+void Simulation::center_camera()
 {
-	restart(menu, window, my_event);
+	
 }
 
-// Recrée une simulation à partir des données du menu
-
-void Simulation::restart(const Menu& menu, sf::RenderWindow* window, My_event& my_event)
+void Simulation::menu_update()
 {
-	// Affichage
-	void_image.create(WIDTH, HEIGHT, sf::Color(0, 0, 0));
-	image = void_image;
-	texture.create(WIDTH, HEIGHT);
-	this->window = window;
-
-	// Multithreading
-	thread_nb = std::max(static_cast<int>(std::thread::hardware_concurrency()) - FREE_THREAD, 1);
-	finished = std::vector<std::atomic<bool>>(thread_nb);
-	std::fill(finished.begin(), finished.end(), false);
-
-	// Paramètres
-	area = menu["area"];
-	acc_max = menu["acc_max"];
-	precision = menu["precision"];
-	step = menu["step"];
-
-	// Galaxie
-
-	galaxy.clear();
-
-	for (uint32_t i = 0; i < menu["star_nb"]; i++)
-		galaxy.push_back(Star(menu["initial_speed"], area, menu["galaxy_thickness"], step));
-
-	nb_stars = galaxy.size();
-	update(my_event);
+	step = Menu::step;
+	intergration_method = static_cast<IntergrationMethod>(Menu::intergration_method);
+	smoothing_length = Menu::smoothing_length;
+	precision = Menu::precision;
 }
 
-// Recentre la galaxie
-
-void Simulation::center_galaxy()
+void Simulation::update()
 {
-	Vector mass_center = Vector();
+	Simulation::reload.lock();
 
-	for (Star& star : galaxy)
-		mass_center += star.position;
+	//if (!Menu::pause && !mesh_done)
+	//{
+		menu_update();
+		//main_block.reload();
 
-	mass_center /= static_cast<Float>(galaxy.size());
+		//for (Star& star : galaxy)
+			//star.update_acceleration();
+
+		//for (Star& star : galaxy)
+			//star.update_position();
+
+		//center_camera();
+		//update_mesh();
+	//}
+
+	Simulation::reload.unlock();
+}
+
+void Simulation::update_mesh()
+{
+	int i = 0;
 
 	for (Star& star : galaxy)
 	{
-		star.position -= mass_center;
-		star.previous_position -= mass_center;
-	}
-}
-
-// Donne les limites des coupes de la galaxie pour le multithreading
-
-std::vector<Part> Simulation::split_galaxy()
-{
-	std::vector<Part> parts;
-	Galaxy::iterator begin = galaxy.begin();
-	Galaxy::iterator end;
-	uint32_t part_size = galaxy.size() / thread_nb - 1;
-	uint8_t t = 0;
-	uint32_t i = 1;
-
-	for (auto it = ++galaxy.begin(); it != galaxy.end(); ++it)
-	{
-		if (i % part_size == 0)
-		{
-			end = it;
-			parts.push_back(Part({ begin, end }));
-			t++;
-			begin = it;
-		}
-
-		if (t == thread_nb)
-			break;
-
+		mesh.positions[i] = star.position;
+		mesh.texcoords[i].x = star.get_brightness();
 		i++;
 	}
 
-	parts.back()[1] = galaxy.end();
-	return parts;
+	mesh_done = true;
 }
 
-// Met à jour l'accélération des étoiles pour un thread
-
-void Simulation::acceleration_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
+void Simulation::send_mesh()
 {
-	for (auto it = begin; it != end; ++it)
+	//if (mesh_done)
+	//{
+		//galaxy_vbo.send_data(mesh, dim::DataType::Positions | dim::DataType::TexCoords);
+		//mesh_done = false;
+	//}
+}
+
+void Simulation::check_events(const sf::Event& sf_event)
+{
+	if (sf_event.type == sf::Event::Resized)
 	{
-		it->update_acceleration(galaxy, acc_max, block, precision);
-
-		if (finished[thread_id])
-			return;
+		galaxy_fbo_1.set_size(dim::Window::get_size());
+		galaxy_fbo_2.set_size(dim::Window::get_size());
+		blur_fbo_1.set_size(dim::Window::get_size());
+		blur_fbo_2.set_size(dim::Window::get_size());
 	}
-
-	finished[thread_id] = true;
 }
 
-// Met à jour la position et la couleur des étoiles pour un thread
-
-void Simulation::position_update(const Galaxy::iterator& begin, const Galaxy::iterator& end, uint8_t thread_id)
+void Simulation::clear()
 {
-	for (auto it = begin; it != end; ++it)
-	{
-		it->update_position(step);
-		it->update_color(nb_stars);
+	galaxy_fbo_1.bind();
+	galaxy_fbo_1.clear();
+	galaxy_fbo_1.unbind();
 
-		if (finished[thread_id])
-			return;
-	}
+	galaxy_fbo_2.bind();
+	galaxy_fbo_2.clear();
+	galaxy_fbo_2.unbind();
 
-	finished[thread_id] = true;
+	blur_fbo_1.bind();
+	blur_fbo_1.clear();
+	blur_fbo_1.unbind();
+
+	blur_fbo_2.bind();
+	blur_fbo_2.clear();
+	blur_fbo_2.unbind();
 }
-
-// Check les évenements et stop les threads
-
-bool Simulation::check_events(My_event& my_event, std::vector<std::thread>& threads)
-{
-	while (!std::all_of(finished.begin(), finished.end(), [](bool i) -> bool { return i; }))
-		if (sleep_every(FPS_BUTTONS))
-			if (my_event.check())
-				std::fill(finished.begin(), finished.end(), true);
-
-	for (auto& thread : threads)
-		thread.join();
-
-	if (*(my_event.end) || *(my_event.simulation_end))
-		return true;
-
-	return false;
-
-}
-
-// Check les évenements et stop le thread
-
-bool Simulation::check_events(My_event& my_event, std::thread& thread)
-{
-	while (!finished.front())
-		if (sleep_every(FPS_BUTTONS))
-			if (my_event.check())
-				finished.front() = true;
-
-	thread.join();
-
-	if (*(my_event.end) || *(my_event.simulation_end))
-		return true;
-
-	return false;
-}
-
-// Met à jour la simulation (Gère le multithreading)
-
-void Simulation::update(My_event& my_event)
-{
-	// Multithreading
-	std::fill(finished.begin(), finished.end(), false);
-	auto parts = split_galaxy();
-	std::vector<std::thread> threads(thread_nb);
-	std::thread thread;
-
-	// Maj les blocs de l'algorithme de Barnes-Hut
-	std::fill(finished.begin(), finished.end(), false);
-	thread = std::thread([this]() { block.reload(*this); finished.front() = true; });
-
-	// Evénements
-	if (check_events(my_event, thread))
-		return;
-
-	// Acceleration
-
-	std::fill(finished.begin(), finished.end(), false);
-
-	for (uint8_t i = 0; i < threads.size(); i++)
-		threads[i] = std::thread([this, i, parts]() { this->acceleration_update(parts[i][0], parts[i][1], i); });
-
-	// Evénements
-	if (check_events(my_event, threads))
-		return;
-
-	// Position et couleur
-
-	std::fill(finished.begin(), finished.end(), false);
-
-	for (uint8_t i = 0; i < threads.size(); i++)
-		threads[i] = std::thread([this, i, parts]() { this->position_update(parts[i][0], parts[i][1], i); });
-
-	// Evénements
-	if (check_events(my_event, threads))
-		return;
-
-	// Recenter la galaxie et dessiner la simulation
-
-	std::fill(finished.begin(), finished.end(), false);
-	thread = std::thread([this]() { this->center_galaxy(); this->draw_simulation(); finished.front() = true; });
-
-	// Evénements
-	if (check_events(my_event, thread))
-		return;
-}
-
-// Affiche la simulation sur l'image
-
-void Simulation::draw_simulation()
-{
-	image = void_image;
-
-	//block.draw(area, image, View::XY); // Décommenter pour afficher les blocs
-
-	for (Star& star : galaxy)
-		star.draw(area, image, View::XY);
-
-	//save_image(""); // Décommenter pour enregister une image par frame (attention il faut mettre un chemin)
-}
-
-// Affiche la simulation sur l'écran
 
 void Simulation::draw()
 {
-	texture.update(image);
-	window->draw(sf::Sprite(texture));
-}
+	Computer::compute();
+	Renderer::draw();
 
-// Enregistre chaque images dans un dossier
+	/*
+	glDisable(GL_POINT_SMOOTH);
+	glDisable(GL_LINE_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	dim::Window::set_thickness(1.f);
 
-void Simulation::save_image(const std::string& folder)
-{
-	static uint32_t nb = 0;
-	image.saveToFile(folder + (!folder.empty() && folder.back() == '/' ? "" : "/") + "image_" + std::to_string(nb) + ".png");
-	nb++;
+	galaxy_fbo_1.bind();
+		dim::Shader::get("galaxy").bind();
+			galaxy_vbo.bind();
+
+				dim::Shader::get("galaxy").send_uniform("u_mvp", dim::Window::get_camera().get_matrix());
+				galaxy_vbo.draw(dim::DrawType::Points);
+
+			galaxy_vbo.unbind();
+		dim::Shader::get("galaxy").unbind();
+	galaxy_fbo_1.unbind();
+
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
+	dim::Window::set_thickness(2.f);
+
+	galaxy_fbo_2.bind();
+		dim::Shader::get("galaxy").bind();
+			galaxy_vbo.bind();
+
+				dim::Shader::get("galaxy").send_uniform("u_mvp", dim::Window::get_camera().get_matrix());
+				galaxy_vbo.draw(dim::DrawType::Points);
+
+			galaxy_vbo.unbind();
+		dim::Shader::get("galaxy").unbind();
+	galaxy_fbo_2.unbind();
+
+	blur_fbo_1.bind();
+		dim::Shader::get("blur").bind();
+			galaxy_fbo_2.get_texture().bind();
+				blur_vbo.bind();
+
+					dim::Shader::get("blur").send_uniform("u_texture", galaxy_fbo_2.get_texture());
+					dim::Shader::get("blur").send_uniform("u_horizontal", 1);
+					blur_vbo.draw();
+
+				blur_vbo.unbind();
+			galaxy_fbo_2.get_texture().unbind();
+		dim::Shader::get("blur").unbind();
+	blur_fbo_1.unbind();
+
+	blur_fbo_2.bind();
+		dim::Shader::get("blur").bind();
+			blur_fbo_1.get_texture().bind();
+				blur_vbo.bind();
+
+					dim::Shader::get("blur").send_uniform("u_texture", blur_fbo_1.get_texture());
+					dim::Shader::get("blur").send_uniform("u_horizontal", 0);
+					blur_vbo.draw();
+
+				blur_vbo.unbind();
+			blur_fbo_1.get_texture().unbind();
+		dim::Shader::get("blur").unbind();
+	blur_fbo_2.unbind();
+
+	dim::Shader::get("post").bind();
+		galaxy_fbo_1.get_texture().bind();
+		blur_fbo_2.get_texture().bind();
+			post_vbo.bind();
+
+				dim::Shader::get("post").send_uniform("u_galaxy", galaxy_fbo_1.get_texture());
+				dim::Shader::get("post").send_uniform("u_blur", blur_fbo_2.get_texture());
+				post_vbo.draw();
+
+			post_vbo.unbind();
+		blur_fbo_2.get_texture().unbind();
+		galaxy_fbo_1.get_texture().unbind();
+	dim::Shader::get("post").unbind();
+
+	glDisable(GL_BLEND);*/
 }

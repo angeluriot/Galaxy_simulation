@@ -1,144 +1,134 @@
-#include "star.h"
-#include "utils.h"
-#include "block.h"
-
-// Construit une étoile
+#include "Star.hpp"
+#include "Simulation.hpp"
 
 Star::Star()
 {
-	previous_position.clear();
-	position.clear();
-	speed.clear();
+	//position = dim::Vector3::Spherical(dim::random_float(0.f, 1.f) * (Simulation::galaxy_diameter / 2.f),
+		//dim::random_float(0.f, 2.f * dim::pi), dim::random_float(0.f, dim::pi));
+
+	//position.y *= Simulation::galaxy_thickness / Simulation::galaxy_diameter;
+
+	position = dim::Vector3::Spherical(dim::random_float(0.f, 1.f) * (Simulation::galaxy_diameter / 2.f),
+		dim::random_float(0.f, 2.f * dim::pi), dim::pi / 2.f);
+
+	position.y = dim::random_float(-0.5f, 0.5f) * Simulation::galaxy_thickness;
+
+	speed = (dim::normalize(dim::Vector3(position.x, 0.f, position.z)) ^ dim::Vector3(0.f, 1.f, 0.f)) * Simulation::stars_speed;
 	acceleration.clear();
-	density = 0.f;
-	block_index = NULL;
+	std::fill(closest_stars.begin(), closest_stars.end(), 1000000000.f);
+
+	previous_acc.clear();
+	previous_pos = position - (speed * Simulation::step);
+
+	alive = true;
 }
 
-// Construit une étoile à partir des propriétés de la simulation
-
-Star::Star(const Float& initial_speed, const Float& area, const Float& galaxy_thickness, const Float& step)
+void Star::force_calculation(const Block& block)
 {
-	position = Vector_spherical(random_Float(0.01f, 1.f) * (area / 2.f), PI / 2.f, random_Float(0.f, 2.f * PI));
-	position.z = ((random_Float(0.f, 1.f) - 0.5f) * galaxy_thickness);
-	speed = Vector_spherical(initial_speed * cbrt(position.get_norm()), PI / 2.f, position.get_phi() + PI / 2.f);
-	previous_position = position - speed * step;
-	acceleration.clear();
-	density = 0.f;
-	color = sf::Color(0, 255, 255);
-	block_index = NULL;
-}
-
-// Construit une étoile à partir d'une autre étoile
-
-Star::Star(const Star& star)
-{
-	*this = star;
-}
-
-// Assignation
-
-void Star::operator=(const Star& star)
-{
-	previous_position = star.previous_position;
-	position = star.position;
-	speed = star.speed;
-	acceleration = star.acceleration;
-	density = star.density;
-	color = star.color;
-	block_index = star.block_index;
-}
-
-// Met à jour la position
-
-void Star::update_position(const Float& step)
-{
-	Vector temp = position;
-	position = 2.f * position - previous_position + acceleration * step * step; // Intégration de Verlet
-	previous_position = temp;
-}
-
-// Met à jour la vitesse
-
-void Star::update_speed(const Float& step)
-{
-	speed += acceleration * step;
-}
-
-// Met à jour l'accélération et la densité
-
-void Star::update_acceleration(Galaxy& galaxy, const Float& acc_max, const Block& block, const Float& precision)
-{
-	acceleration.clear();
-	density = 0.;
-
-	// Force des autres étoiles
-	force_calculation(block, precision);
-
-	// Force supplémentaire vers le centre (matière noire)
-	acceleration += Vector_spherical((galaxy.size()) / get_distance_2(position, Vector()), get_theta(position, Vector()), get_phi(position, Vector()));
-
-	// Gestion de l'accélération maximum
-	if (acceleration.get_norm() > acc_max)
-		acceleration.set_norm(acc_max);
-}
-
-// Calcule la densité et la force exercée sur une étoile
-
-void Star::force_calculation(const Block& block, const Float& precision)
-{
-	Float distance = get_distance(position, block.mass_center);
+	float distance = dim::distance(position, block.mass_center);
+	float distance_2 = distance * distance;
 
 	if (block.stars.size() == 1)
 	{
-		if (distance != 0.f)
+		if (distance_2 > 0.f)
 		{
-			acceleration += Vector_spherical(1.f / get_distance_2(position, block.mass_center), get_theta(position, block.mass_center), get_phi(position, block.mass_center));
-			density += acceleration.get_norm();
+			acceleration += dim::normalize(block.mass_center - position) / (distance_2 + Simulation::smoothing_length);
+
+			float farest = 0.f;
+			float* farest_ptr;
+
+			for (float& dist : closest_stars)
+				if (dist > farest)
+				{
+					farest = dist;
+					farest_ptr = &dist;
+				}
+
+			if (distance < farest)
+				*farest_ptr = distance;
 		}
 	}
 
 	else
 	{
-		if (block.size / distance < precision && distance != 0.f)
+		if (block.size / distance < Simulation::precision && distance_2 > 0.f)
 		{
-			acceleration += Vector_spherical(static_cast<Float>(block.stars.size()) / get_distance_2(position, block.mass_center),
-				get_theta(position, block.mass_center), get_phi(position, block.mass_center));
-			
-			density += acceleration.get_norm();
+			acceleration += (static_cast<float>(block.stars.size()) * dim::normalize(block.mass_center - position)) / (distance_2 + Simulation::smoothing_length);
+
+			float farest = 0.f;
+			float* farest_ptr;
+
+			for (float& dist : closest_stars)
+				if (dist > farest)
+				{
+					farest = dist;
+					farest_ptr = &dist;
+				}
+
+			if (distance < farest)
+				*farest_ptr = distance;
 		}
 
 		else
-			for (const Block& b : block.children)
-				force_calculation(b, precision);
+			for (const Block& child : block.children)
+				force_calculation(child);
 	}
 }
 
-// Met à jour la couleur
-
-void Star::update_color(uint32_t nb_stars)
+void Star::update_acceleration()
 {
-	int color_nb = cbrt((density / (static_cast<Float>(nb_stars) / 100000.f)) * 100.f) + 200;
+	if (alive)
+	{
+		previous_acc = acceleration;
+		acceleration.clear();
+		std::fill(closest_stars.begin(), closest_stars.end(), 1000000000.f);
 
-	if (color_nb > 255 * 3)
-		color_nb = 255 * 3;
+		force_calculation(Simulation::main_block);
 
-	if (color_nb < 255)
-		color = sf::Color(0, 0, color_nb);
-
-	else if (color_nb < 255 * 2)
-		color = sf::Color(0, color_nb - 255, 255);
-
-	else
-		color = sf::Color(color_nb - 255 * 2, 255, 255);
+		acceleration -= (2000 * dim::normalize(position)) / (position.get_norm_2() + Simulation::smoothing_length);
+	}
 }
 
-// Dessine l'étoile
-
-void Star::draw(const Float& area, sf::Image& image, View view) const
+void Star::update_position()
 {
-	sf::Vector2f screen_pos = simu_to_screen(position, area, view);
+	if (alive)
+	{
+		dim::Vector3 temp = position;
 
-	if (screen_pos.x >= 0 && screen_pos.x < image.getSize().x && screen_pos.y >= 0 && screen_pos.y < image.getSize().y)
-		image.setPixel(screen_pos.x, screen_pos.y,
-			sf::Color(std::max(color.r, image.getPixel(screen_pos.x, screen_pos.y).r), std::max(color.g, image.getPixel(screen_pos.x, screen_pos.y).g), color.b));
+		if (Simulation::intergration_method == IntergrationMethod::Euler)
+		{
+			speed += acceleration * Simulation::step;
+			position += speed * Simulation::step;
+		}
+
+		else if (Simulation::intergration_method == IntergrationMethod::Verlet)
+		{
+			speed = (position - previous_pos) / Simulation::step;
+			position = (2.f * position) - previous_pos + (acceleration * (Simulation::step * Simulation::step));
+		}
+
+		else
+		{
+			speed += previous_acc * (Simulation::step / 2.f);
+			position += speed * Simulation::step;
+			speed += acceleration * (Simulation::step / 2.f);
+		}
+
+		previous_pos = temp;
+	}
+}
+
+float Star::get_brightness() const
+{
+	if (!alive)
+		return 0.f;
+
+	float density = 0.f;
+
+	for (float dist : closest_stars)
+		density += dist;
+
+	density = 1.f / density;
+
+	return 5.f * sqrt((Simulation::galaxy_diameter * Simulation::galaxy_diameter * Simulation::galaxy_thickness * density) / Simulation::nb_stars);
 }
