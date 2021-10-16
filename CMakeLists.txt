@@ -7,9 +7,9 @@ project(Galaxy_simulation)
 file(GLOB_RECURSE SOURCES sources/*.cpp)
 file(GLOB_RECURSE HEADERS includes/*.hpp includes/*.h)
 
-#if(MSVC)
-	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#endif()
+if(MSVC)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+endif()
 
 # Executable
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
@@ -31,9 +31,13 @@ if(MSVC)
 	set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 endif()
 
-#libraries
+# libraries
 add_subdirectory(libraries)
 target_link_libraries(${PROJECT_NAME} PUBLIC Libraries)
+
+# OpenCL
+find_package(OpenCL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC OpenCL::OpenCL)
 
 # Dimension3D
 target_include_directories(${PROJECT_NAME} PUBLIC libraries/Dimension3D/includes)

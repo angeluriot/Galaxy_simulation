@@ -112,18 +112,6 @@ namespace dim
 		max_unit = std::max(-1, max_unit - 1);
 	}
 
-	void Texture::bind_image(unsigned int location, Permissions permissions) const
-	{
-		glBindTexture(GL_TEXTURE_2D, *id);
-		glBindImageTexture(location, *id, 0, GL_FALSE, 0, static_cast<GLenum>(permissions), static_cast<GLenum>(*pixel_type));
-	}
-
-	void Texture::unbind_image(Permissions permissions) const
-	{
-		glBindImageTexture(0, 0, 0, GL_FALSE, 0, static_cast<GLenum>(permissions), static_cast<GLenum>(*pixel_type));
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
 	void Texture::add(const std::string& name, const Texture& texture)
 	{
 		if (!textures.insert(std::make_pair(name, texture)).second)

@@ -116,6 +116,7 @@ namespace dim
 	void Window::set_camera(const Camera& camera)
 	{
 		Window::camera = camera.clone();
+		Window::camera->set_resolution(get_size());
 	}
 
 	Camera& Window::get_camera()

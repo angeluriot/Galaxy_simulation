@@ -157,19 +157,6 @@ namespace dim
 		void unbind() const;
 
 		/**
-		 * @brief Bind the texture for compute shaders.
-		 * @param location the object location id in the compute shader
-		 * @param permissions the permissions of the compute shader using the texture image
-		 */
-		void bind_image(unsigned int location, Permissions permissions = Permissions::All) const;
-
-		/**
-		 * @brief Unbind the texture for compute shaders.
-		 * @param permissions the permissions of the compute shader using the texture image
-		 */
-		void unbind_image(Permissions permissions = Permissions::All) const;
-
-		/**
 		 * @brief Add a texture to the static textures container (throw if the name already exists).
 		 *
 		 * @param name the name of the texture

@@ -181,6 +181,7 @@ namespace dim
 	void Scene::set_camera(const Camera& camera)
 	{
 		this->camera = camera.clone();
+		(this->camera)->set_resolution(get_size());
 	}
 
 	Camera& Scene::get_camera()

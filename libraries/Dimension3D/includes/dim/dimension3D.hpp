@@ -10,7 +10,6 @@
 #include "dim/objects/Material.hpp"
 #include "dim/objects/Object.hpp"
 #include "dim/opengl/Shader.hpp"
-#include "dim/opengl/ComputeShader.hpp"
 #include "dim/opengl/Texture.hpp"
 #include "dim/vectors/Vector2.hpp"
 #include "dim/vectors/Vector3.hpp"

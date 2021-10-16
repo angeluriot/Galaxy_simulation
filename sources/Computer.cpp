@@ -1,96 +1,107 @@
 #include "Computer.hpp"
-#include "Simulation.hpp"
+#include "Simulator.hpp"
 
-dim::Vector2int		Computer::textures_size;
-dim::ComputeShader	Computer::init_positions;
-dim::ComputeShader	Computer::init_speeds;
-dim::ComputeShader	Computer::interactions;
-dim::ComputeShader	Computer::integration;
-dim::FrameBuffer	Computer::positions;
-dim::FrameBuffer	Computer::speeds;
-dim::FrameBuffer	Computer::accelerations;
+std::vector<dim::Vector4>	Computer::positions;
+std::vector<dim::Vector4>	Computer::speeds;
+std::vector<dim::Vector4>	Computer::accelerations;
+cl::Buffer					Computer::positions_buffer;
+cl::Buffer					Computer::speeds_buffer;
+cl::Buffer					Computer::accelerations_buffer;
+cl::Buffer					Computer::step_buffer;
+cl::Buffer					Computer::smoothing_length_buffer;
+cl::Buffer					Computer::interaction_rate_buffer;
+cl::Buffer					Computer::black_hole_mass_buffer;
+
+dim::Vector3 Computer::random_sphere()
+{
+	dim::Vector3 result = dim::Vector3::null;
+
+	do
+	{
+		result.x = dim::random_float(-Simulator::galaxy_diameter / 2.f, Simulator::galaxy_diameter / 2.f);
+		result.y = dim::random_float(-Simulator::galaxy_diameter / 2.f, Simulator::galaxy_diameter / 2.f);
+		result.z = dim::random_float(-Simulator::galaxy_diameter / 2.f, Simulator::galaxy_diameter / 2.f);
+	}
+	while (result.get_norm() > Simulator::galaxy_diameter / 2.f);
+
+	return result;
+}
+
+void Computer::create_galaxy(int i)
+{
+	positions[i].set_norm(pow(positions[i].get_norm() / (Simulator::galaxy_diameter / 2.f), 5) * (Simulator::galaxy_diameter / 2.f));
+	positions[i].y *= Simulator::galaxy_thickness / Simulator::galaxy_diameter;
+	speeds[i] = dim::Vector4(dim::normalize(dim::Vector3(positions[i]) ^ dim::Vector3(0.f, 1.f, 0.f)) * Simulator::stars_speed, 0.f);
+}
+
+void Computer::create_collision(int i)
+{
+	create_galaxy(i);
+
+	if (i % 2)
+		positions[i].x -= Simulator::galaxies_distance / 2.f;
+
+	else
+	{
+		positions[i].x += Simulator::galaxies_distance / 2.f;
+		std::swap(positions[i].y, positions[i].z);
+		std::swap(speeds[i].y, speeds[i].z);
+	}
+
+}
+
+void Computer::create_universe(int i)
+{
+	speeds[i] = positions[i];
+	speeds[i].set_norm((speeds[i].get_norm() / (Simulator::galaxy_diameter / 2.f)) * Simulator::stars_speed);
+}
 
 void Computer::init()
 {
-	textures_size = dim::Vector2int(100, 100);
-	positions.create(textures_size, dim::Texture::Type::RGBA_32f);
-	speeds.create(textures_size, dim::Texture::Type::RGBA_32f);
-	accelerations.create(textures_size, dim::Texture::Type::RGBA_32f);
-	init_positions.load("shaders/compute/init_positions.comp");
-	init_speeds.load("shaders/compute/init_speeds.comp");
-	interactions.load("shaders/compute/interactions.comp");
-	integration.load("shaders/compute/integration.comp");
+	positions.clear();
+	speeds.clear();
+	accelerations.clear();
 
-	positions.bind();
-		positions.clear();
-	positions.unbind();
+	positions.resize(Simulator::nb_stars);
+	speeds.resize(Simulator::nb_stars);
+	accelerations.resize(Simulator::nb_stars, dim::Vector4::null);
 
-	speeds.bind();
-		speeds.clear();
-	speeds.unbind();
+	for (int i = 0; i < Simulator::nb_stars; i++)
+	{
+		positions[i] = dim::Vector4(random_sphere(), 0.f);
 
-	accelerations.bind();
-		accelerations.clear();
-	accelerations.unbind();
+		switch (Simulator::simulation_type)
+		{
+		case SimulationType::Galaxy: create_galaxy(i); break;
+		case SimulationType::Collision: create_collision(i); break;
+		case SimulationType::Universe: create_universe(i); break;
+		default: break;
+		}
+	}
 
-	positions.get_texture().bind_image(0, dim::Texture::Permissions::Write);
-		init_positions.bind();
-			init_positions.send_uniform(1, Simulation::galaxy_diameter);
-			init_positions.send_uniform(2, Simulation::galaxy_thickness);
-			init_positions.launch(10, 10, 1);
-		init_positions.unbind();
-	positions.get_texture().unbind_image(dim::Texture::Permissions::Write);
-
-	positions.get_texture().bind_image(0, dim::Texture::Permissions::Read);
-	speeds.get_texture().bind_image(1, dim::Texture::Permissions::Write);
-		init_speeds.bind();
-			init_speeds.send_uniform(2, Simulation::stars_speed);
-			init_speeds.launch(10, 10, 1);
-		init_speeds.unbind();
-	speeds.get_texture().unbind_image(dim::Texture::Permissions::Write);
-	positions.get_texture().unbind_image(dim::Texture::Permissions::Read);
-}
-
-void Computer::update_accelerations()
-{
-	positions.get_texture().bind_image(0, dim::Texture::Permissions::Read);
-	accelerations.get_texture().bind_image(1, dim::Texture::Permissions::Write);
-		interactions.bind();
-			interactions.send_uniform(2, Simulation::smoothing_length);
-			interactions.send_uniform(3, textures_size);
-			interactions.launch(10, 10, 1);
-		interactions.unbind();
-	accelerations.get_texture().unbind_image(dim::Texture::Permissions::Write);
-	positions.get_texture().unbind_image(dim::Texture::Permissions::Read);
-}
-
-void Computer::update_speeds()
-{
-	speeds.get_texture().bind_image(0, dim::Texture::Permissions::All);
-	accelerations.get_texture().bind_image(1, dim::Texture::Permissions::Read);
-		integration.bind();
-			integration.send_uniform(2, Simulation::step);
-			integration.launch(10, 10, 1);
-		integration.unbind();
-	accelerations.get_texture().unbind_image(dim::Texture::Permissions::Read);
-	speeds.get_texture().unbind_image(dim::Texture::Permissions::All);
-}
-
-void Computer::update_positions()
-{
-	positions.get_texture().bind_image(0, dim::Texture::Permissions::All);
-	speeds.get_texture().bind_image(1, dim::Texture::Permissions::Read);
-		integration.bind();
-			integration.send_uniform(2, Simulation::step);
-			integration.launch(10, 10, 1);
-		integration.unbind();
-	speeds.get_texture().unbind_image(dim::Texture::Permissions::Read);
-	positions.get_texture().unbind_image(dim::Texture::Permissions::All);
+	positions_buffer = ComputeShader::Buffer(positions, Permissions::All);
+	speeds_buffer = ComputeShader::Buffer(speeds, Permissions::All);
+	accelerations_buffer = ComputeShader::Buffer(accelerations, Permissions::All);
+	step_buffer = ComputeShader::Buffer(Simulator::step, Permissions::Read);
+	smoothing_length_buffer = ComputeShader::Buffer(Simulator::smoothing_length, Permissions::Read);
+	interaction_rate_buffer = ComputeShader::Buffer(Simulator::interaction_rate, Permissions::Read);
+	black_hole_mass_buffer = ComputeShader::Buffer(Simulator::black_hole_mass, Permissions::Read);
 }
 
 void Computer::compute()
 {
-	update_accelerations();
-	update_speeds();
-	update_positions();
+	step_buffer = ComputeShader::Buffer(Simulator::step, Permissions::Read);
+	smoothing_length_buffer = ComputeShader::Buffer(Simulator::smoothing_length, Permissions::Read);
+	interaction_rate_buffer = ComputeShader::Buffer(Simulator::interaction_rate, Permissions::Read);
+	black_hole_mass_buffer = ComputeShader::Buffer(Simulator::black_hole_mass, Permissions::Read);
+
+	// The interactions computations.
+	ComputeShader::launch("interactions", { &positions_buffer, &accelerations_buffer, &interaction_rate_buffer,
+		&smoothing_length_buffer, &black_hole_mass_buffer }, cl::NDRange(accelerations.size()));
+	ComputeShader::get_data(accelerations_buffer, accelerations);
+
+	// The integration computation.
+	ComputeShader::launch("integration", { &positions_buffer, &speeds_buffer, &accelerations_buffer, &step_buffer }, cl::NDRange(speeds.size()));
+	ComputeShader::get_data(positions_buffer, positions);
+	ComputeShader::get_data(speeds_buffer, speeds);
 }
