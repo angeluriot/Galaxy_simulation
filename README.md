@@ -8,7 +8,7 @@
 
 <br/>
 
-This repository contains the source code of an n-body type simulation using GPU acceleration. It has a menu to change the settings and a free camera. It is able to simulate galaxies, galaxy collisions and expanding universes.
+This repository contains the source code of an n-body type simulation using GPU acceleration. It is able to simulate galaxies, galaxy collisions and expanding universes. It has a menu to change the settings and an interactive camera.
 
 <br/>
 
@@ -46,7 +46,7 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 
 * A menu to change the settings of the simulation
 
-* A free camera that you can control with your mouse and your wheel
+* A camera that you can control with your mouse and your wheel
 
 * It can simulate a unique galaxy :
 
