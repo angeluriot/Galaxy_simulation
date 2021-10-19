@@ -1,8 +1,8 @@
 #version 430
 precision mediump float;
 
-attribute vec3 a_position;
-attribute vec2 a_texcoord;
+in vec3 a_position;
+in vec2 a_texcoord;
 
 out vec2 v_blur_texcoord[17];
 
