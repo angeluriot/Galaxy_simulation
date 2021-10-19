@@ -79,7 +79,6 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 
 # Install
 
-
 ### Skeleton project install
 
 This repository is based on my [**Graphics skeleton project**](https://github.com/angeluriot/Graphics_skeleton), so go see its [**install**](https://github.com/angeluriot/Graphics_skeleton#install) part first.
