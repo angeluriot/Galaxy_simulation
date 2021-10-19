@@ -29,7 +29,7 @@ dim::Vector3 Computer::random_sphere()
 
 void Computer::create_galaxy(int i)
 {
-	positions[i].set_norm(pow(positions[i].get_norm() / (Simulator::galaxy_diameter / 2.f), 5) * (Simulator::galaxy_diameter / 2.f));
+	positions[i].set_norm(static_cast<float>(pow(positions[i].get_norm() / (Simulator::galaxy_diameter / 2.f), 5)) * (Simulator::galaxy_diameter / 2.f));
 	positions[i].y *= Simulator::galaxy_thickness / Simulator::galaxy_diameter;
 	speeds[i] = dim::Vector4(dim::normalize(dim::Vector3(positions[i]) ^ dim::Vector3(0.f, 1.f, 0.f)) * Simulator::stars_speed, 0.f);
 }
