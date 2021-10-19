@@ -1,4 +1,5 @@
-cmake -G "Unix Makefiles" -B "./build" .
-cd build
-make
-cd ..
+#!/usr/bin/env bash
+
+cmake -S . -B build -G Ninja "$*"
+
+ninja -C build

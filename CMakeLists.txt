@@ -35,6 +35,20 @@ endif()
 add_subdirectory(libraries)
 target_link_libraries(${PROJECT_NAME} PUBLIC Libraries)
 
+if(UNIX)
+	# Find CUDA for OpenCL headers (optional, for Nvidia GPU only)
+	find_package(CUDA 11.0)
+
+	if (CUDA_FOUND)
+		include_directories(${CUDA_INCLUDE_DIRS})
+	endif()
+
+	# Pthreads
+	set(THREADS_PREFER_PTHREAD_FLAG ON)
+	find_package(Threads REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
+endif()
+
 # OpenCL
 find_package(OpenCL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenCL::OpenCL)
@@ -89,3 +103,7 @@ else()
 	include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 	target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::OpenGL GLEW::GLEW)
 endif()
+
+# Copy resources and shaders sur binary directory
+file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY shaders DESTINATION ${CMAKE_BINARY_DIR})

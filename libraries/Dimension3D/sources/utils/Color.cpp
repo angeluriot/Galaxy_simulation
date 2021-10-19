@@ -1,4 +1,4 @@
-#include "dim/Dimension3D.hpp"
+#include "dim/dimension3D.hpp"
 
 namespace dim
 {
