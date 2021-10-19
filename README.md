@@ -23,6 +23,8 @@ This repository contains the source code of an n-body type simulation using GPU 
 * **[Summary](#summary)**
 * **[Video](#video)**
 * **[Features](#features)**
+* **[Build](#build)**
+	* [Linux](#linux)
 * **[Install](#install)**
 	* [Skeleton project install](#skeleton-project-install)
 	* [Additionnal dependecies](#additionnal-dependecies)
@@ -68,7 +70,12 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 
 <br/>
 
+# Build
+
+### Linux
+
 # Install
+
 
 ### Skeleton project install
 
