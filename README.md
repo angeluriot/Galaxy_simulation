@@ -72,7 +72,10 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 
 # Build
 
-### Linux
+## Linux
+```sh
+./unix_launch.sh -D CMAKE_BUILD_TYPE=Release
+```
 
 # Install
 
