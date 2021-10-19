@@ -73,7 +73,7 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 # Build
 
 ## Linux
-You need libraries (OpenCL 2.x, OpenGL ...), also CMake and Ninja, to build under linux.
+You need libraries (OpenCL 2.x, OpenGL...) and also CMake and Ninja, to build under linux.
 
 ```sh
 ./unix_launch.sh -D CMAKE_BUILD_TYPE=Release
