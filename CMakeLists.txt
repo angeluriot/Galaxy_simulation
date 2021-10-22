@@ -103,7 +103,3 @@ else()
 	include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 	target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::OpenGL GLEW::GLEW)
 endif()
-
-# Copy resources and shaders sur binary directory
-file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY shaders DESTINATION ${CMAKE_BINARY_DIR})
