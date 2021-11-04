@@ -109,7 +109,7 @@ public:
 	template <typename T>
 	static void get_data(const cl::Buffer buffer, T& data)
 	{
-		queue.enqueueReadBuffer(buffer, CL_TRUE, 0, sizeof(T), &T);
+		queue.enqueueReadBuffer(buffer, CL_TRUE, 0, sizeof(T), &data);
 	}
 };
 
