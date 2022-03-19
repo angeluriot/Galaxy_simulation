@@ -45,26 +45,26 @@ target_include_directories(${PROJECT_NAME} PUBLIC libraries/Dimension3D/includes
 if(MSVC)
 
 	if(X64_BITS)
-		set(SFML_PATH libraries/SFML-built/VS/x64)
+		set(SFML_PATH libraries/SFML/VS/x64)
 	else()
-		set(SFML_PATH libraries/SFML-built/VS/x86)
+		set(SFML_PATH libraries/SFML/VS/x86)
 	endif()
 
 elseif(MINGW)
 
 	if(X64_BITS)
-		set(SFML_PATH libraries/SFML-built/MinGW/x64)
+		set(SFML_PATH libraries/SFML/MinGW/x64)
 	else()
-		set(SFML_PATH libraries/SFML-built/MinGW/x86)
+		set(SFML_PATH libraries/SFML/MinGW/x86)
 	endif()
 
 elseif(APPLE)
 
-	set(SFML_PATH libraries/SFML-built/Clang/x64)
+	set(SFML_PATH libraries/SFML/Clang/x64)
 
 else()
 
-	set(SFML_PATH libraries/SFML-built/GCC/x64)
+	set(SFML_PATH libraries/SFML/GCC/x64)
 
 endif()
 

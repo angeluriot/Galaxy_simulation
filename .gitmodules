@@ -1,0 +1,15 @@
+[submodule "libraries/Dimension3D"]
+	path = libraries/Dimension3D
+	url = https://github.com/angeluriot/Dimension3D
+[submodule "libraries/GLEW"]
+	path = libraries/GLEW
+	url = https://github.com/Perlmint/glew-cmake
+[submodule "libraries/GLM"]
+	path = libraries/GLM
+	url = https://github.com/g-truc/glm
+[submodule "libraries/SFML"]
+	path = libraries/SFML
+	url = https://github.com/angeluriot/SFML-built
+[submodule "libraries/ImGui"]
+	path = libraries/ImGui
+	url = https://github.com/angeluriot/ImGui-built

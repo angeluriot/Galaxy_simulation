@@ -1,5 +1,5 @@
 # ImGui sources
-file(GLOB_RECURSE IMGUI_SOURCES ImGui-built/imgui.cpp ImGui-built/imgui_widgets.cpp ImGui-built/imgui_draw.cpp ImGui-built/imgui_tables.cpp ImGui-built/imgui-SFML.cpp)
+file(GLOB_RECURSE IMGUI_SOURCES ImGui/imgui.cpp ImGui/imgui_widgets.cpp ImGui/imgui_draw.cpp ImGui/imgui_tables.cpp ImGui/imgui-SFML.cpp)
 
 # Dimension3D sources
 file(GLOB_RECURSE DIM_SOURCES Dimension3D/sources/*.cpp)
@@ -8,7 +8,7 @@ file(GLOB_RECURSE DIM_SOURCES Dimension3D/sources/*.cpp)
 add_library(Libraries STATIC ${IMGUI_SOURCES} ${DIM_SOURCES})
 
 # Includes
-target_include_directories(Libraries PUBLIC ImGui-built)
+target_include_directories(Libraries PUBLIC ImGui)
 target_include_directories(Libraries PUBLIC Dimension3D/includes)
 
 # linker flags
@@ -18,26 +18,26 @@ add_link_options(-lmingw32 -lgdi32 -luser32 -lkernel32 -ladvapi32 -lshell32 -lgc
 if(MSVC)
 
 	if(X64_BITS)
-		set(LIB_SFML_PATH SFML-built/VS/x64)
+		set(LIB_SFML_PATH SFML/VS/x64)
 	else()
-		set(LIB_SFML_PATH SFML-built/VS/x86)
+		set(LIB_SFML_PATH SFML/VS/x86)
 	endif()
 
 elseif(MINGW)
 
 	if(X64_BITS)
-		set(LIB_SFML_PATH SFML-built/MinGW/x64)
+		set(LIB_SFML_PATH SFML/MinGW/x64)
 	else()
-		set(LIB_SFML_PATH SFML-built/MinGW/x86)
+		set(LIB_SFML_PATH SFML/MinGW/x86)
 	endif()
 
 elseif(APPLE)
 
-	set(LIB_SFML_PATH SFML-built/Clang/x64)
+	set(LIB_SFML_PATH SFML/Clang/x64)
 
 else()
 
-	set(LIB_SFML_PATH SFML-built/GCC/x64)
+	set(LIB_SFML_PATH SFML/GCC/x64)
 
 endif()
 
