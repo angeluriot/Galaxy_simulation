@@ -1,15 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project
-project(Galaxy_simulation)
+project(2D_fractals_generator)
 
 # Sources
-file(GLOB_RECURSE SOURCES sources/*.cpp)
-file(GLOB_RECURSE HEADERS includes/*.hpp includes/*.h)
+file(GLOB_RECURSE SOURCES sources/*.cpp sources/*.hpp sources/*.h)
 
-if(MSVC)
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-endif()
+#if(MSVC)
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#endif()
 
 # Executable
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
@@ -18,7 +17,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 # Includes
-target_include_directories(${PROJECT_NAME} PUBLIC includes)
+target_include_directories(${PROJECT_NAME} PUBLIC sources)
 
 # linker flags
 add_link_options(-lmingw32 -lgdi32 -luser32 -lkernel32 -ladvapi32 -lshell32 -lgcc -lmoldname -lmingwex -lmsvcrt -lwinspool -lcomdlg32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32)
@@ -46,26 +45,26 @@ target_include_directories(${PROJECT_NAME} PUBLIC libraries/Dimension3D/includes
 if(MSVC)
 
 	if(X64_BITS)
-		set(SFML_PATH libraries/SFML/VS/x64)
+		set(SFML_PATH libraries/SFML-built/VS/x64)
 	else()
-		set(SFML_PATH libraries/SFML/VS/x86)
+		set(SFML_PATH libraries/SFML-built/VS/x86)
 	endif()
 
 elseif(MINGW)
 
 	if(X64_BITS)
-		set(SFML_PATH libraries/SFML/MinGW/x64)
+		set(SFML_PATH libraries/SFML-built/MinGW/x64)
 	else()
-		set(SFML_PATH libraries/SFML/MinGW/x86)
+		set(SFML_PATH libraries/SFML-built/MinGW/x86)
 	endif()
 
 elseif(APPLE)
 
-	set(SFML_PATH libraries/SFML/Clang/x64)
+	set(SFML_PATH libraries/SFML-built/Clang/x64)
 
 else()
 
-	set(SFML_PATH libraries/SFML/GCC/x64)
+	set(SFML_PATH libraries/SFML-built/GCC/x64)
 
 endif()
 
