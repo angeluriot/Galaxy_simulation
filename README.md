@@ -12,8 +12,12 @@ This repository contains the source code of an n-body type simulation using GPU 
 
 <br/>
 
+⚠️ This repository contains **submodules**, add `--recurse-submodules` when cloning ⚠️
+
+<br/>
+
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_1.png" width="700">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_1.png" width="700">
 </p>
 
 <br/>
@@ -51,19 +55,19 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 * It can simulate a unique galaxy :
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_2.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_2.png" width="500">
 </p>
 
 * It can also simulate a collision between two galaxies :
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_3.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_3.png" width="500">
 </p>
 
 * And it can simulate an entire expanding universe :
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_4.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_4.png" width="500">
 </p>
 
 <br/>
@@ -91,11 +95,11 @@ If you just want to test the program without editing the source code, go see the
 ### A unique galaxy
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_5.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_5.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_6.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_6.png" width="500">
 </p>
 
 <br/>
@@ -103,15 +107,15 @@ If you just want to test the program without editing the source code, go see the
 ### Mixing 2 different types of stars
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_7.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_7.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_8.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_8.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_9.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_9.png" width="500">
 </p>
 
 <br/>
@@ -119,15 +123,15 @@ If you just want to test the program without editing the source code, go see the
 ### Two galaxies colliding
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_10.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_10.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_11.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_11.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_12.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_12.png" width="500">
 </p>
 
 <br/>
@@ -135,11 +139,11 @@ If you just want to test the program without editing the source code, go see the
 ### Universe simulations
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_14.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_14.png" width="500">
 </p>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/images/galaxy_13.png" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/Galaxy_simulation/master/resources/misc/galaxy_13.png" width="500">
 </p>
 
 <br/>
