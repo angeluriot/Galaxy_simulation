@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.10)
 project(Galaxy_simulation)
 
 # Sources
-file(GLOB_RECURSE SOURCES sources/*.cpp includes/*.hpp includes/*.h)
+file(GLOB_RECURSE SOURCES sources/*.cpp)
+file(GLOB_RECURSE HEADERS includes/*.hpp includes/*.h)
 
 if(MSVC)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
