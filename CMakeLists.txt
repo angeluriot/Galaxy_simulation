@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project
-project(2D_fractals_generator)
+project(Galaxy_simulation)
 
 # Sources
-file(GLOB_RECURSE SOURCES sources/*.cpp sources/*.hpp sources/*.h)
+file(GLOB_RECURSE SOURCES sources/*.cpp includes/*.hpp includes/*.h)
 
-#if(MSVC)
-	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#endif()
+if(MSVC)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+endif()
 
 # Executable
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
@@ -17,7 +17,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 # Includes
-target_include_directories(${PROJECT_NAME} PUBLIC sources)
+target_include_directories(${PROJECT_NAME} PUBLIC includes)
 
 # linker flags
 add_link_options(-lmingw32 -lgdi32 -luser32 -lkernel32 -ladvapi32 -lshell32 -lgcc -lmoldname -lmingwex -lmsvcrt -lwinspool -lcomdlg32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32)
