@@ -20,7 +20,7 @@ void main()
 	vec2 result = vec2(0.);
 
 	for (int i = 0; i < 17; i++)
-		result += texture2D(u_texture, v_blur_texcoord[i]).rg * weight[i];
+		result += texture(u_texture, v_blur_texcoord[i]).rg * weight[i];
 
 	frag_color = vec4(result, 0., 1.);
 }

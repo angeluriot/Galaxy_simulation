@@ -81,10 +81,10 @@ void Renderer::init()
 
 	blur_vbo.send_data("blur", dim::Mesh::screen, dim::DataType::Positions | dim::DataType::TexCoords);
 	post_vbo.send_data("post", dim::Mesh::screen, dim::DataType::Positions | dim::DataType::TexCoords);
-	galaxy_fbo_1.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
-	galaxy_fbo_2.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
-	blur_fbo_1.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
-	blur_fbo_2.create(dim::Window::get_size(), dim::Texture::Type::RGB_16f);
+	galaxy_fbo_1.create(dim::Window::get_size(), dim::Texture::Filtering::Linear, dim::Texture::Warpping::MirroredRepeat, dim::Texture::Type::RGB_16f);
+	galaxy_fbo_2.create(dim::Window::get_size(), dim::Texture::Filtering::Linear, dim::Texture::Warpping::MirroredRepeat, dim::Texture::Type::RGB_16f);
+	blur_fbo_1.create(dim::Window::get_size(), dim::Texture::Filtering::Linear, dim::Texture::Warpping::MirroredRepeat, dim::Texture::Type::RGB_16f);
+	blur_fbo_2.create(dim::Window::get_size(), dim::Texture::Filtering::Linear, dim::Texture::Warpping::MirroredRepeat, dim::Texture::Type::RGB_16f);
 
 	update_vbo();
 }

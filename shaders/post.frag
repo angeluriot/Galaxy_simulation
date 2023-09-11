@@ -11,8 +11,8 @@ uniform sampler2D u_blur;
 
 void main()
 {
-	float stars = texture2D(u_galaxy, v_texcoord).r;
-	float glow = texture2D(u_blur, v_texcoord).r * 0.2;
+	float stars = texture(u_galaxy, v_texcoord).r;
+	float glow = texture(u_blur, v_texcoord).r * 0.2;
 	vec3 color_1;
 	vec3 color_2;
 
