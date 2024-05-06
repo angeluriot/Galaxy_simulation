@@ -1,4 +1,4 @@
-# Galaxy simulation
+# 🌌 Galaxy simulation
 
 ![Release](https://img.shields.io/badge/Release-v4.0-blueviolet)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
@@ -22,31 +22,27 @@ This repository contains the source code of an n-body type simulation using GPU 
 
 <br/>
 
-# Summary
+# 📋 Summary
 
-* **[Summary](#summary)**
-* **[Video](#video)**
-* **[Features](#features)**
-* **[Install](#install)**
-	* [Skeleton project install](#skeleton-project-install)
-	* [Additionnal dependecies](#additionnal-dependecies)
-* **[Releases](#releases)**
-* **[Tests](#tests)**
-	* [A unique galaxy](#a-unique-galaxy)
-	* [Mixing 2 different types of stars](#mixing-2-different-types-of-stars)
-	* [Two galaxies colliding](#two-galaxies-colliding)
-	* [Universe simulations](#universe-simulations)
-* **[Credits](#credits)**
+* **[📋 Summary](#-summary)**
+* **[🎥 Video](#-video)**
+* **[✨ Features](#-features)**
+* **[🛠️ Install](#%EF%B8%8F-install)**
+	* [🦴 Skeleton project install](#-skeleton-project-install)
+	* [📦 Additionnal dependecies](#-additionnal-dependecies)
+* **[🗓️ Releases](#%EF%B8%8F-releases)**
+* **[🧪 Tests](#-tests)**
+* **[🙏 Credits](#-credits)**
 
 <br/>
 
-# Video
+# 🎥 Video
 
 Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de Galaxies 🌌**</u>](https://www.youtube.com/watch?v=dFqjqRUWCus).
 
 <br/>
 
-# Features
+# ✨ Features
 
 * A menu to change the settings of the simulation
 
@@ -72,25 +68,27 @@ Here is a video explaining how the algorithm works : [<u>**Simuler 1 000 000 de 
 
 <br/>
 
-# Install
+# 🛠️ Install
 
-### Skeleton project install
+## 🦴 Skeleton project install
 
 This repository is based on my [**Graphics skeleton project**](https://github.com/angeluriot/Graphics_skeleton), so go see its [**install**](https://github.com/angeluriot/Graphics_skeleton#install) part first.
 
-### Additionnal dependecies
+<br/>
+
+## 📦 Additionnal dependecies
 
 Then, you will also need the [**OpenCL**](https://www.khronos.org/opencl/) library.
 
 <br/>
 
-# Releases
+# 🗓️ Releases
 
 If you just want to test the program without editing the source code, go see the [**Releases**](https://github.com/angeluriot/Galaxy_simulation/releases).
 
 <br/>
 
-# Tests
+# 🧪 Tests
 
 ### A unique galaxy
 
@@ -148,6 +146,6 @@ If you just want to test the program without editing the source code, go see the
 
 <br/>
 
-# Credits
+# 🙏 Credits
 
 * [**Angel Uriot**](https://github.com/angeluriot) : Creator of the project.
