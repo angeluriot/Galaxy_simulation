@@ -29,7 +29,7 @@ This repository contains the source code of an n-body type simulation using GPU 
 * **[✨ Features](#-features)**
 * **[🛠️ Install](#%EF%B8%8F-install)**
 	* [🦴 Skeleton project install](#-skeleton-project-install)
-	* [📦 Additionnal dependecies](#-additionnal-dependecies)
+	* [📦 Additionnal dependencies](#-additionnal-dependencies)
 * **[🗓️ Releases](#%EF%B8%8F-releases)**
 * **[🧪 Tests](#-tests)**
 * **[🙏 Credits](#-credits)**
@@ -76,7 +76,7 @@ This repository is based on my [**Graphics skeleton project**](https://github.co
 
 <br/>
 
-## 📦 Additionnal dependecies
+## 📦 Additionnal dependencies
 
 Then, you will also need the [**OpenCL**](https://www.khronos.org/opencl/) library.
 
