@@ -111,6 +111,19 @@ public:
 	{
 		queue.enqueueReadBuffer(buffer, CL_TRUE, 0, sizeof(T), &data);
 	}
+
+	/**
+	 * @brief Write the given data into an OpenCL buffer.
+	 *
+	 * @tparam T the type of data
+	 * @param buffer the OpenCL buffer
+	 * @param data the data
+	 */
+	template <typename T>
+	static void set_data(const cl::Buffer& buffer, const T& data)
+	{
+		queue.enqueueWriteBuffer(buffer, CL_TRUE, 0, sizeof(T), &data);
+	}
 };
 
 #endif

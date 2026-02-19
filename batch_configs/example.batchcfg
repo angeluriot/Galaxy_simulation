@@ -1,0 +1,5 @@
+# Each non-comment line is one simulation job.
+# You can copy/paste SIMCFG lines printed by the app and edit batch_* keys.
+
+SIMCFG simulation_type=Galaxy step=0.001000 smoothing_length=1.000000 interaction_rate=0.050000 nb_stars=30000 galaxy_diameter=100.000000 galaxy_thickness=5.000000 galaxies_distance=75.000000 stars_speed=20.000000 black_hole_mass=1000.000000 negative_attraction_constant=1.000000 repulsion_constant=1.000000 matter_distribution=CoreHalo type_diameter=40.000000 positive_ratio=0.500000 core_extra_negative_density=0.000000 camera_view=isometric batch_steps=3000 snapshots=4 output_dir=outputs/run_core_clean
+SIMCFG simulation_type=Galaxy step=0.001000 smoothing_length=1.000000 interaction_rate=0.050000 nb_stars=30000 galaxy_diameter=100.000000 galaxy_thickness=5.000000 galaxies_distance=75.000000 stars_speed=20.000000 black_hole_mass=1000.000000 negative_attraction_constant=1.000000 repulsion_constant=1.000000 matter_distribution=CoreHalo type_diameter=40.000000 positive_ratio=0.500000 core_extra_negative_density=0.200000 camera_view=top batch_steps=3000 snapshots=4 output_dir=outputs/run_core_mixed

@@ -17,10 +17,10 @@ const float weight[17] = float[]
 
 void main()
 {
-	vec2 result = vec2(0.);
+	vec3 result = vec3(0.);
 
 	for (int i = 0; i < 17; i++)
-		result += texture(u_texture, v_blur_texcoord[i]).rg * weight[i];
+		result += texture(u_texture, v_blur_texcoord[i]).rgb * weight[i];
 
-	frag_color = vec4(result, 0., 1.);
+	frag_color = vec4(result, 1.);
 }

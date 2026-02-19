@@ -1,5 +1,8 @@
 #include "Menu.hpp"
 #include "Simulator.hpp"
+#include <filesystem>
+#include <fstream>
+#include <exception>
 
 bool			Menu::visible			= true;
 bool			Menu::active			= false;
@@ -14,6 +17,13 @@ float			Menu::galaxy_thickness;
 float			Menu::galaxies_distance;
 float			Menu::stars_speed;
 float			Menu::black_hole_mass;
+float			Menu::negative_attraction_constant = 1.0f;
+float			Menu::repulsion_constant = 1.0f;
+float			Menu::type_diameter = 50.0f;
+MatterDistribution	Menu::matter_distribution = MatterDistribution::CoreHalo;
+float			Menu::positive_ratio = 0.5f;
+float			Menu::core_extra_negative_density = 0.0f;
+
 
 void Menu::check_events(const sf::Event& sf_event)
 {
@@ -59,6 +69,13 @@ void Menu::set_default_values()
 	smoothing_length	= 1.f;
 	galaxies_distance	= 75.f;
 	black_hole_mass		= 1000.f;
+	negative_attraction_constant = 1.0f;
+	repulsion_constant = 1.0f;
+	type_diameter = 50.0f;
+	matter_distribution = MatterDistribution::CoreHalo;
+	positive_ratio = 0.5f;
+	core_extra_negative_density = 0.0f;
+
 
 	switch (simulation_type)
 	{
@@ -162,6 +179,8 @@ void Menu::universe()
 void Menu::display()
 {
 	static std::string pause_button = "Pause";
+	static char config_output_path[256] = "batch_configs/user.batchcfg";
+	static std::string config_output_status;
 
 	if (visible)
 	{
@@ -180,7 +199,20 @@ void Menu::display()
 			set_default_values();
 			Simulator::reload = true;
 		}
+		ImGui::NewLine();
 
+		Simulator::CameraView previous_camera_view = Simulator::camera_view;
+		ImGui::Text("Camera view");
+		ImGui::Combo("##camera_view", reinterpret_cast<int*>(&Simulator::camera_view), "Isometric\0Top");
+		if (Simulator::camera_view != previous_camera_view)
+			Simulator::apply_camera_view();
+		ImGui::NewLine();
+
+		// Janus force multipliers (real-time).
+		ImGui::Text("Negative Attraction Constant");
+		ImGui::SliderFloat("##Negative_Attraction_Constant", &negative_attraction_constant, -3.0f, 3.0f);
+		ImGui::Text("Repulsion Constant");
+		ImGui::SliderFloat("##Repulsion_Constant", &repulsion_constant, -3.0f, 3.0f);
 		ImGui::NewLine();
 
 		title("Real time settings");
@@ -206,6 +238,28 @@ void Menu::display()
 
 		ImGui::NewLine();
 
+		ImGui::Text("Matter distribution");
+		ImGui::Combo("##matter_distribution", reinterpret_cast<int*>(&matter_distribution), "Core + halo\0Random mix\0Split on X\0");
+		ImGui::NewLine();
+
+		if (matter_distribution == MatterDistribution::CoreHalo)
+		{
+			ImGui::Text("Positive core diameter");
+			ImGui::SliderFloat("##Type_Diameter", &type_diameter, 0.0f, galaxy_diameter);
+			ImGui::NewLine();
+
+			ImGui::Text("Extra negative density inside core");
+			ImGui::SliderFloat("##Core_Extra_Negative_Density", &core_extra_negative_density, 0.0f, 1.0f, "%.2f");
+			ImGui::TextDisabled("0 = core fully positive, 1 = core fully negative");
+			ImGui::NewLine();
+		}
+		else if (matter_distribution == MatterDistribution::RandomMix)
+		{
+			ImGui::Text("Positive matter ratio");
+			ImGui::SliderFloat("##Positive_Ratio", &positive_ratio, 0.0f, 1.0f, "%.2f");
+			ImGui::NewLine();
+		}
+
 		switch (simulation_type)
 		{
 		case SimulationType::Galaxy: galaxy(); break;
@@ -213,6 +267,35 @@ void Menu::display()
 		case SimulationType::Universe: universe(); break;
 		default: break;
 		}
+
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::Text("Batch config export");
+		ImGui::InputText("##config_output_path", config_output_path, sizeof(config_output_path));
+		if (ImGui::Button("Append current SIMCFG to file"))
+		{
+			try
+			{
+				const std::filesystem::path output_path(config_output_path);
+				if (output_path.has_parent_path())
+					std::filesystem::create_directories(output_path.parent_path());
+
+				std::ofstream out(config_output_path, std::ios::app);
+				if (out)
+				{
+					out << Simulator::configuration_line() << '\n';
+					config_output_status = std::string("Appended to ") + config_output_path;
+				}
+				else
+					config_output_status = std::string("Failed to open ") + config_output_path;
+			}
+			catch (const std::exception& e)
+			{
+				config_output_status = std::string("Export error: ") + e.what();
+			}
+		}
+		if (!config_output_status.empty())
+			ImGui::TextWrapped("%s", config_output_status.c_str());
 
 		ImGui::NewLine();
 

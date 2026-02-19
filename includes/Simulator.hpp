@@ -8,6 +8,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <string>
 
 /**
  * @brief A static class representing the simulation.
@@ -15,6 +16,11 @@
 class Simulator
 {
 public:
+	enum class CameraView : int
+	{
+		Isometric = 0,
+		Top = 1
+	};
 
 	static std::atomic<bool>	computation_done;	// True if the computation is done.
 	static std::atomic<bool>	reload;				// True if the simulation have to restart.
@@ -29,6 +35,7 @@ public:
 	static float				galaxies_distance;	// The distance between the galaxies.
 	static float				stars_speed;		// The initial speed of the stars.
 	static float				black_hole_mass;	// The mass of the black hole.
+	static CameraView			camera_view;		// Camera view preset at startup/config load.
 
 	/**
 	 * @brief Initialize the simulation.
@@ -39,6 +46,18 @@ public:
 	 * @brief Restart the simulation.
 	 */
 	static void restart();
+
+	/**
+	 * @brief Print all simulation parameters in one line.
+	 */
+	static void print_configuration();
+
+	/**
+	 * @brief Build all simulation parameters in one line.
+	 *
+	 * @return the configuration line
+	 */
+	static std::string configuration_line();
 
 	/**
 	 * @brief Update the simulation settings from the menu.
@@ -66,6 +85,11 @@ public:
 	 * @brief Draw the simulation.
 	 */
 	static void draw();
+
+	/**
+	 * @brief Apply the selected camera view preset.
+	 */
+	static void apply_camera_view();
 };
 
 #endif

@@ -59,6 +59,8 @@ void ComputeShader::init(const std::string& path)
 	//std::vector<::size_t> maxWorkItems;
 	//maxWorkItems = device.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>();
 	//std::cout << maxWorkItems[0] << " " << maxWorkItems[1] << " " << maxWorkItems[2] << std::endl;
+
+	queue = cl::CommandQueue(context, device);
 }
 
 void ComputeShader::launch(const std::string& function, const std::vector<cl::Buffer*>& buffers, const cl::NDRange& global, const cl::NDRange& local)
@@ -68,7 +70,6 @@ void ComputeShader::launch(const std::string& function, const std::vector<cl::Bu
 	for (int i = 0; i < buffers.size(); i++)
 		kernel.setArg(i, *(buffers[i]));
 
-	queue = cl::CommandQueue(context, device);
 	queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local);
 }
 
@@ -79,6 +80,5 @@ void ComputeShader::launch(const std::string& function, const std::vector<cl::Bu
 	for (int i = 0; i < buffers.size(); i++)
 		kernel.setArg(i, *(buffers[i]));
 
-	queue = cl::CommandQueue(context, device);
 	queue.enqueueNDRangeKernel(kernel, cl::NullRange, global);
 }
